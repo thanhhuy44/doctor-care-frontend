@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHourglass } from '@fortawesome/free-regular-svg-icons';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import background from '~/assets/images/bookingcare-cover-4.jpg';
 import images from '~/assets';
 
@@ -22,7 +22,7 @@ function Home() {
                     </h1>
                     <div className={cx('search')}>
                         <button className={cx('search-btn')}>
-                            <FontAwesomeIcon icon={faHourglass} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </button>
                         <input className={cx('search-input')} placeholder="Search..." />
                     </div>
