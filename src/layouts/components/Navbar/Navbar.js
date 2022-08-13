@@ -7,19 +7,19 @@ const cx = classNames.bind(styles);
 function Navbar() {
     return (
         <div className={cx('container')}>
-            <NavLink className={cx('item')} to="/chuyen-khoa">
+            <NavLink className={cx('item')} to="/category">
                 <p className={cx('nav')}>Chuyên khoa</p>
                 <p className={cx('sub-nav')}>Tìm bác sĩ theo chuyên khoa</p>
             </NavLink>
-            <NavLink className={cx('item')} to="/co-so-y-te">
+            <NavLink className={cx('item')} to="/category">
                 <p className={cx('nav')}>Cơ sở y tế</p>
                 <p className={cx('sub-nav')}>Chọn bệnh viện phòng khám</p>
             </NavLink>
-            <NavLink className={cx('item')} to="/bac-si">
+            <NavLink className={cx('item')} to="/category">
                 <p className={cx('nav')}>Bác sĩ</p>
                 <p className={cx('sub-nav')}>Chọn bác sĩ giỏi</p>
             </NavLink>
-            <NavLink className={cx('item')} to="/goi-kham">
+            <NavLink className={cx('item')} to="/category">
                 <p className={cx('nav')}>Gói khám</p>
                 <p className={cx('sub-nav')}>Khám sức khỏe tổng quát</p>
             </NavLink>

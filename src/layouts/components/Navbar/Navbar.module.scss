@@ -4,8 +4,11 @@
 }
 .item {
     flex: 1;
-    &:hover {
-        opacity: 0.7;
+    &:hover .nav {
+        color: var(--text-link);
+    }
+    &:hover .sub-nav {
+        color: var(--text-link);
     }
 }
 .nav {
