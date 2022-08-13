@@ -9,8 +9,12 @@
     width: 100%;
     object-fit: cover;
 }
+.background {
+}
+
 .background-img {
     width: 100%;
+    display: block;
 }
 .content {
     position: absolute;

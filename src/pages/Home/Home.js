@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import background from '~/assets/images/bookingcare-cover-4.jpg';
 import images from '~/assets';
+import Section from '~/components/Section';
 
 const cx = classNames.bind(styles);
 
@@ -44,6 +45,12 @@ function Home() {
                     </div>
                 </div>
             </div>
+            <Section numberOfSlide={4} />
+            <Section dots={true} />
+            <Section autoplaySpeed={1000} />
+            <Section />
+            <Section />
+            <Section />
         </div>
     );
 }
