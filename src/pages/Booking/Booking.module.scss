@@ -42,6 +42,8 @@
 }
 
 .feild {
+    display: flex;
+    align-items: center;
     margin-top: 16px;
     width: 100%;
     font-size: 1.6rem;
@@ -53,6 +55,9 @@
 .label {
     padding-right: 12px;
     color: #333;
+}
+.input {
+    flex: 1;
 }
 
 .payment {

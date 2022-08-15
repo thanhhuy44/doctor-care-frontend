@@ -55,25 +55,25 @@ function Booking() {
                     <label htmlFor="userName" className={cx('label')}>
                         <FontAwesomeIcon icon={faPhone} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Họ tên bệnh nhân (bắt buộc)" />
+                    <input className={cx('input')} id="userName" placeholder="Số điện thoại liên hệ (bắt buộc)" />
                 </div>
                 <div className={cx('feild')}>
                     <label htmlFor="userName" className={cx('label')}>
                         <FontAwesomeIcon icon={faCalendar} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Họ tên bệnh nhân (bắt buộc)" />
+                    <input className={cx('input')} id="userName" placeholder="Ngày/tháng/năm sinh (bắt buộc)" />
                 </div>
                 <div className={cx('feild')}>
                     <label htmlFor="userName" className={cx('label')}>
                         <FontAwesomeIcon icon={faLocationDot} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Họ tên bệnh nhân (bắt buộc)" />
+                    <input className={cx('input')} id="userName" placeholder="Địa chỉ (bắt buộc)" />
                 </div>
                 <div className={cx('feild')}>
                     <label htmlFor="userName" className={cx('label')}>
                         <FontAwesomeIcon icon={faCirclePlus} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Họ tên bệnh nhân (bắt buộc)" />
+                    <input className={cx('input')} id="userName" placeholder="Lý do khám" />
                 </div>
                 <div className={cx('payment')}>
                     <span>
@@ -131,7 +131,7 @@ function Booking() {
                     của chúng tôi.
                 </p>
             </div>
-            <Modal btn="OkCancel" onClick={funcs} isHide={hideModal} type="warning" />
+            <Modal btn="OkCancel" onClick={funcs} isHide={hideModal} type="success" message="Are you sure?" />
         </div>
     );
 }

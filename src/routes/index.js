@@ -6,6 +6,9 @@ import UserLayout from '~/layouts/UserLayout';
 import Category from '~/pages/Category/Category';
 import DetailDoctor from '~/pages/DetailDoctor';
 import Booking from '~/pages/Booking';
+import Login from '~/pages/Login';
+import Signup from '~/pages/Signup';
+import SingleLayout from '~/layouts/SingleLayout';
 
 const publicRoutes = [
     {
@@ -32,6 +35,16 @@ const publicRoutes = [
     {
         path: '/booking',
         component: Booking,
+    },
+    {
+        path: '/login',
+        component: Login,
+        layout: SingleLayout,
+    },
+    {
+        path: '/signup',
+        component: Signup,
+        layout: SingleLayout,
     },
 ];
 
