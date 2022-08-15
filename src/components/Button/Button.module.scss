@@ -1,0 +1,19 @@
+.button {
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.primary {
+    font-size: 1.6rem;
+    min-width: 120px;
+    padding: 12px;
+    background-color: #ffc419;
+    color: var(--text-white);
+    &:hover {
+        background-color: rgb(199, 199, 0);
+    }
+}
+
+.full {
+    width: 100%;
+}
