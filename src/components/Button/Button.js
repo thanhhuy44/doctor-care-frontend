@@ -17,7 +17,7 @@ function Button(props) {
     }
     return (
         <Comp className={cx('button', type, size, className)} {...handle}>
-            This is Button
+            {props.children}
         </Comp>
     );
 }

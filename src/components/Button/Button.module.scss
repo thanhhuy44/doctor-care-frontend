@@ -1,17 +1,28 @@
 .button {
+    font-size: 1.6rem;
     border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
+    + .button {
+        margin-left: 12px;
+    }
 }
+//type
 .primary {
-    font-size: 1.6rem;
-    min-width: 120px;
+    min-width: 80px;
     padding: 12px;
     background-color: #ffc419;
     color: var(--text-white);
     &:hover {
         background-color: rgb(199, 199, 0);
     }
+}
+
+.link {
+    display: inline-block;
+    color: var(--text-link);
+    background-color: transparent;
+    text-decoration: underline;
 }
 
 .full {

@@ -3,10 +3,23 @@ import { faCalendar, faCirclePlus, faLocationDot, faPhone, faUser } from '@forta
 import classNames from 'classnames/bind';
 import styles from './Booking.module.scss';
 import Button from '~/components/Button/Button';
+import Modal from '~/components/Modal';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Booking() {
+    const [hideModal, setHideModal] = useState(true);
+    const funcs = {
+        handleClick: () => {
+            setHideModal(!hideModal);
+            console.log(hideModal);
+        },
+        handleExit: () => {
+            setHideModal(!hideModal);
+            console.log(hideModal);
+        },
+    };
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
@@ -102,7 +115,7 @@ function Booking() {
                     </div>
                 </div>
                 <div className={cx('submit')}>
-                    <Button type="primary" className={cx('submit-btn')}>
+                    <Button onClick={funcs.handleClick} type="primary" className={cx('submit-btn')}>
                         Xác nhận đặt khám
                     </Button>
                 </div>
@@ -118,6 +131,7 @@ function Booking() {
                     của chúng tôi.
                 </p>
             </div>
+            <Modal btn="OkCancel" onClick={funcs} isHide={hideModal} type="warning" />
         </div>
     );
 }
