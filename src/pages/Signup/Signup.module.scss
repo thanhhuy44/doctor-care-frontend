@@ -1,0 +1,114 @@
+.container {
+}
+
+.background {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+}
+.background-img {
+    width: 100%;
+}
+
+.content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba($color: #000000, $alpha: 0.3);
+}
+
+.form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.title {
+    font-size: 2.8rem;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.group.password {
+    flex-direction: column;
+    align-items: flex-start;
+    .feild {
+        width: 100%;
+        + .feild {
+            margin-left: 0;
+            margin-top: 20px;
+            flex: 1;
+        }
+    }
+}
+
+.feild {
+    flex: 1;
+    font-size: 1.4rem;
+    + .feild {
+        margin-left: 20px;
+    }
+}
+
+.label {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding-bottom: 8px;
+}
+.input {
+    font-size: 1.6rem;
+    + .input {
+        margin-left: 16px;
+    }
+    padding: 8px 12px;
+    width: 100%;
+    background-color: #ccc;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    &:focus {
+        border-color: #333;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    }
+}
+.radio {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.select {
+    padding: 8px 12px;
+    display: flex;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    + .option {
+        margin-left: 16px;
+    }
+    .input {
+        margin-right: 8px;
+    }
+}
