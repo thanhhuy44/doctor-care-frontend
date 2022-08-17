@@ -9,6 +9,7 @@ import Booking from '~/pages/Booking';
 import Login from '~/pages/Login';
 import Signup from '~/pages/Signup';
 import SingleLayout from '~/layouts/SingleLayout';
+import ManagementLayout from '~/layouts/ManagementLayout';
 
 const publicRoutes = [
     {
@@ -18,11 +19,6 @@ const publicRoutes = [
     {
         path: '/doctor',
         component: Doctor,
-    },
-    {
-        path: '/admin',
-        component: Admin,
-        layout: null,
     },
     {
         path: '/category',
@@ -45,6 +41,11 @@ const publicRoutes = [
         path: '/signup',
         component: Signup,
         layout: SingleLayout,
+    },
+    {
+        path: '/admin',
+        component: Admin,
+        layout: ManagementLayout,
     },
 ];
 
