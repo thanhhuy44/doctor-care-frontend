@@ -1,8 +1,6 @@
 import Home from '~/pages/Home';
 import Doctor from '~/pages/Doctor';
 import Admin from '~/pages/Admin';
-import MainLayout from '~/layouts/MainLayout';
-import UserLayout from '~/layouts/UserLayout';
 import Category from '~/pages/Category/Category';
 import DetailDoctor from '~/pages/DetailDoctor';
 import Booking from '~/pages/Booking';
@@ -10,6 +8,7 @@ import Login from '~/pages/Login';
 import Signup from '~/pages/Signup';
 import SingleLayout from '~/layouts/SingleLayout';
 import ManagementLayout from '~/layouts/ManagementLayout';
+import Hospital from '~/pages/Hospital';
 
 const publicRoutes = [
     {
@@ -27,6 +26,10 @@ const publicRoutes = [
     {
         path: '/detaildoctor',
         component: DetailDoctor,
+    },
+    {
+        path: '/hospital',
+        component: Hospital,
     },
     {
         path: '/booking',
