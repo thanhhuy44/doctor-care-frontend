@@ -1,0 +1,23 @@
+.container {
+    min-height: 100vh;
+    background-color: #6595bf;
+}
+.item {
+    padding: 12px 20px 12px 12px;
+    display: flex;
+    align-items: flex-start;
+    border-left: 4px solid transparent;
+}
+.item.active {
+    background-color: #2477bf;
+    border-color: #333;
+}
+
+.icon {
+    margin-right: 8px;
+    min-width: 32px;
+}
+.text {
+    font-size: 1.6rem;
+    font-weight: 500;
+}

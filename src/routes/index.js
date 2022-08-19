@@ -9,6 +9,7 @@ import Signup from '~/pages/Signup';
 import SingleLayout from '~/layouts/SingleLayout';
 import ManagementLayout from '~/layouts/ManagementLayout';
 import Hospital from '~/pages/Hospital';
+import ManagementDoctor from '~/pages/managements/ManagementDoctor';
 
 const publicRoutes = [
     {
@@ -47,6 +48,26 @@ const publicRoutes = [
     },
     {
         path: '/admin',
+        component: Admin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/management1',
+        component: Admin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/doctors',
+        component: ManagementDoctor,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/management3',
+        component: Admin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/management4',
         component: Admin,
         layout: ManagementLayout,
     },

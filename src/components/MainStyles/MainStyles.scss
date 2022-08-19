@@ -3,6 +3,7 @@
 
 :root {
     --header-height: 80px;
+    --header-management-height: 67px;
     --white-color: #fff;
     --text-primary: #000;
     --text-secondary: #555555;
@@ -67,4 +68,20 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: var(--text-secondary) !important;
+}
+
+select {
+    min-width: 100px;
+    background-color: #6595bf;
+    border-bottom: 1px solid #333;
+    padding: 4px 8px;
+    font-size: 1.6rem;
+}
+
+option {
+    background-color: #6595bf;
+    &:focus {
+        background-color: #6595bf;
+        color: red;
+    }
 }

@@ -1,4 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolder, faHospital, faUser, faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
+import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.scss';
 
 const cx = classNames.bind(styles);
@@ -6,7 +9,22 @@ const cx = classNames.bind(styles);
 function Sidebar() {
     return (
         <div className={cx('container')}>
-            <h1>This is Side bar</h1>
+            <NavLink to="/management1" className={(nav) => cx('item', { active: nav.isActive })}>
+                <FontAwesomeIcon icon={faUser} className={cx('icon')} />
+                <span className={cx('text')}>Thông tin cá nhân</span>
+            </NavLink>
+            <NavLink to="/admin/doctors" className={(nav) => cx('item', { active: nav.isActive })}>
+                <FontAwesomeIcon icon={faUserDoctor} className={cx('icon')} />
+                <span className={cx('text')}>Bác sĩ</span>
+            </NavLink>
+            <NavLink to="/management3" className={(nav) => cx('item', { active: nav.isActive })}>
+                <FontAwesomeIcon icon={faHospital} className={cx('icon')} />
+                <span className={cx('text')}>Bệnh viện</span>
+            </NavLink>
+            <NavLink to="/management4" className={(nav) => cx('item', { active: nav.isActive })}>
+                <FontAwesomeIcon icon={faFolder} className={cx('icon')} />
+                <span className={cx('text')}>Quản trị viên</span>
+            </NavLink>
         </div>
     );
 }

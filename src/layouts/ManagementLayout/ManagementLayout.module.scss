@@ -1,5 +1,20 @@
+.wrapper {
+    background-color: #c9ebf2;
+}
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
 .content {
-    margin-top: var(--header-height);
+    margin-top: var(--header-management-height);
     display: flex;
     align-items: flex-start;
+    background-color: #ccc;
+}
+
+.page {
+    flex: 1;
+    margin: 20px 40px;
 }

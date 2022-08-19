@@ -9,18 +9,20 @@ const cx = classNames.bind(styles);
 
 function ManagementLayout({ children }) {
     return (
-        <div className={cx('container') + ' grid wide'}>
-            <div className={cx('header')}>
-                <HeaderManagement />
-            </div>
-            <div className={cx('content')}>
-                <div className={cx('sidebar')}>
-                    <Sidebar />
+        <div className={cx('wrapper')}>
+            <div className={cx('container') + ' grid wide'}>
+                <div className={cx('header')}>
+                    <HeaderManagement />
                 </div>
-                <div className={cx('page')}>{children}</div>
-            </div>
-            <div className={cx('footer')}>
-                <Footer />
+                <div className={cx('content')}>
+                    <div className={cx('sidebar')}>
+                        <Sidebar />
+                    </div>
+                    <div className={cx('page')}>{children}</div>
+                </div>
+                <div className={cx('footer')}>
+                    <Footer />
+                </div>
             </div>
         </div>
     );
