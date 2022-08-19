@@ -10,6 +10,7 @@ import SingleLayout from '~/layouts/SingleLayout';
 import ManagementLayout from '~/layouts/ManagementLayout';
 import Hospital from '~/pages/Hospital';
 import ManagementDoctor from '~/pages/managements/ManagementDoctor';
+import Form from '~/components/Form';
 
 const publicRoutes = [
     {
@@ -49,6 +50,11 @@ const publicRoutes = [
     {
         path: '/admin',
         component: Admin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/doctor/add',
+        component: Form,
         layout: ManagementLayout,
     },
     {

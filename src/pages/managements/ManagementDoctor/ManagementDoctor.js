@@ -14,7 +14,7 @@ function ManagementDoctor() {
                 <div className={cx('filter')}>
                     <div className={cx('group')}>
                         <label htmlFor="specialtySelect" className={cx('label')}>
-                            Chuyên khoa
+                            Bệnh viện
                         </label>
                         <select id="specialtySelect">
                             <option>Tất cả</option>
@@ -25,7 +25,7 @@ function ManagementDoctor() {
                     </div>
                     <div className={cx('group')}>
                         <label htmlFor="hospitalSelect" className={cx('label')}>
-                            Bệnh viện
+                            Chuyên khoa
                         </label>
                         <select id="hospitalSelect">
                             <option>Tất cả</option>
@@ -55,7 +55,7 @@ function ManagementDoctor() {
                     <ObjectItem />
                 </div>
                 <div className={cx('add')}>
-                    <Button className={cx('add-btn')}>
+                    <Button type="link" to="/admin/doctor/add" className={cx('add-btn')}>
                         <FontAwesomeIcon icon={faPlusCircle} />
                     </Button>
                 </div>
