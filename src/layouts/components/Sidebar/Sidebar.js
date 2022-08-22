@@ -17,11 +17,11 @@ function Sidebar() {
                 <FontAwesomeIcon icon={faUserDoctor} className={cx('icon')} />
                 <span className={cx('text')}>Bác sĩ</span>
             </NavLink>
-            <NavLink to="/management3" className={(nav) => cx('item', { active: nav.isActive })}>
+            <NavLink to="/admin/hospitals" className={(nav) => cx('item', { active: nav.isActive })}>
                 <FontAwesomeIcon icon={faHospital} className={cx('icon')} />
                 <span className={cx('text')}>Bệnh viện</span>
             </NavLink>
-            <NavLink to="/management4" className={(nav) => cx('item', { active: nav.isActive })}>
+            <NavLink to="/admin/quan-ly-admin" className={(nav) => cx('item', { active: nav.isActive })}>
                 <FontAwesomeIcon icon={faFolder} className={cx('icon')} />
                 <span className={cx('text')}>Quản trị viên</span>
             </NavLink>

@@ -11,6 +11,8 @@ import ManagementLayout from '~/layouts/ManagementLayout';
 import Hospital from '~/pages/Hospital';
 import ManagementDoctor from '~/pages/managements/ManagementDoctor';
 import Form from '~/components/Form';
+import ManagementHospital from '~/pages/managements/ManagementHospital';
+import ManagementAdmin from '~/pages/managements/ManagementAdmin';
 
 const publicRoutes = [
     {
@@ -68,8 +70,13 @@ const publicRoutes = [
         layout: ManagementLayout,
     },
     {
-        path: '/management3',
-        component: Admin,
+        path: '/admin/hospitals',
+        component: ManagementHospital,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/quan-ly-admin',
+        component: ManagementAdmin,
         layout: ManagementLayout,
     },
     {

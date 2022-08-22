@@ -13,7 +13,7 @@ function Form() {
     return (
         <div className={cx('container')}>
             <h1 className={cx('title')}>Add Doctor</h1>
-            <div>
+            <div className={cx('editor')}>
                 <SunEditor
                     setOptions={{ buttonList: buttonList.complex }}
                     setContents={content}
