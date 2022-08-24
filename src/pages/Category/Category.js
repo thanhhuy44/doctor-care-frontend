@@ -1,38 +1,41 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
 import styles from './Category.module.scss';
+import Item from '~/components/Item';
 
 const cx = classNames.bind(styles);
 
-const Item = ({ type, data }) => {
-    return (
-        <Link className={cx('item', type)} to="/detaildoctor">
-            <div className={cx('thumb')}>
-                <img
-                    src="https://cdn.bookingcare.vn/fr/w300/2019/12/13/120331-co-xuong-khop.jpg"
-                    alt="chuyen-khoa"
-                    className={cx('thumb-img')}
-                />
-            </div>
-            <div className={cx('info')}>
-                <h4 className={cx('name')}>Category</h4>
-            </div>
-        </Link>
-    );
-};
-
 function Category() {
-    return (
-        <div className={cx('container')}>
-            <h1 className={cx('title')}>Chuyen khoa</h1>
-            <div className={cx('content')}>
-                <Item type="doctor" />
-                <Item />
-                <Item />
-                <Item />
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/type-packages').then((res) => {
+            const result = res.data.data;
+
+            setData(result);
+        });
+    }, []);
+    useEffect(() => {
+        setIsLoading(false);
+        console.log(data);
+    }, [data]);
+    if (isLoading) {
+        return <h1>Loading</h1>;
+    } else {
+        return (
+            <div className={cx('container')}>
+                <h1 className={cx('title')}>Chuyen khoa</h1>
+                <div className={cx('content')}>
+                    {data.map((item) => (
+                        <Item key={item._id} data={item} />
+                    ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default Category;

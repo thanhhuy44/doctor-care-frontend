@@ -14,11 +14,7 @@ function Form() {
         <div className={cx('container')}>
             <h1 className={cx('title')}>Add Doctor</h1>
             <div className={cx('editor')}>
-                <SunEditor
-                    setOptions={{ buttonList: buttonList.complex }}
-                    setContents={content}
-                    onChange={setContent}
-                />
+                <SunEditor setContents={content} onChange={setContent} />
             </div>
             <Button type="primary" onClick={() => console.log(content)}>
                 Submit
