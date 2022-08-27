@@ -1,3 +1,17 @@
 .editor {
     z-index: 0 !important;
+    background-color: red;
+    padding: 20px;
+}
+
+.group {
+    font-size: 1.6rem;
+}
+.label {
+    margin-right: 12px;
+}
+.input {
+    font-size: 1.6rem;
+    padding: 4px 8px;
+    border-radius: 4px;
 }
