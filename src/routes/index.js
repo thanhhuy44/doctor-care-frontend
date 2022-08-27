@@ -13,6 +13,7 @@ import ManagementDoctor from '~/pages/managements/ManagementDoctor';
 import Form from '~/components/Form';
 import ManagementHospital from '~/pages/managements/ManagementHospital';
 import ManagementAdmin from '~/pages/managements/ManagementAdmin';
+import DoctorForm from '~/components/Form/DoctorForm';
 
 const publicRoutes = [
     {
@@ -56,7 +57,7 @@ const publicRoutes = [
     },
     {
         path: '/admin/doctor/add',
-        component: Form,
+        component: DoctorForm,
         layout: ManagementLayout,
     },
     {

@@ -5,8 +5,8 @@ import styles from './Button.module.scss';
 const cx = classNames.bind(styles);
 
 function Button(props) {
-    const { type, size, className, to, href, onClick, ...passProps } = props;
-    const handle = { onClick, ...passProps };
+    const { type, size, className, to, href, onClick, disable, title, ...passProps } = props;
+    const handle = { onClick, disable, title, ...passProps };
     var Comp = 'button';
     if (to) {
         Comp = Link;
