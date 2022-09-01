@@ -9,6 +9,11 @@
     --text-secondary: #555555;
     --text-link: #337ab7;
     --text-white: #fff;
+    --main-color-1: #2477bf;
+    --main-color-2: #6595bf;
+    --main-color-3: #9ac7d9;
+    --main-color-4: #c9ebf2;
+    --main-color-5: #397373;
 }
 
 * {
@@ -17,6 +22,7 @@
 
 html {
     font-size: 62.5%;
+    letter-spacing: 1px;
 }
 
 body {
@@ -76,12 +82,9 @@ select {
     border-bottom: 1px solid #333;
     padding: 4px 8px;
     font-size: 1.6rem;
+    cursor: pointer;
 }
 
 option {
-    background-color: #6595bf;
-    &:focus {
-        background-color: #6595bf;
-        color: red;
-    }
+    background-color: var(--main-color-3);
 }
