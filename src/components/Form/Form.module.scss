@@ -5,11 +5,11 @@
 
 .form-info,
 .form-image {
-    flex: 1;
     margin: 20px 0;
 }
 
 .form-info {
+    flex: 6;
     padding-right: 20px;
 }
 
@@ -36,7 +36,19 @@
     }
 }
 
+.input.error {
+    border-color: red;
+}
+
+.err-mess {
+    margin-top: 8px;
+    color: red;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
 .form-image {
+    flex: 4;
     margin-top: 150px;
     display: flex;
     flex-direction: column;
@@ -54,8 +66,12 @@
     justify-content: center;
     margin-bottom: 20px;
 }
+.image-upload.error {
+    border: 1px solid red;
+}
 
 .image-preview {
+    object-fit: cover;
     display: block;
     width: 100%;
     height: 100%;
