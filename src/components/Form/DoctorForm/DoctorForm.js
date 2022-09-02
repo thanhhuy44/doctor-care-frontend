@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
@@ -26,18 +26,12 @@ function DoctorForm() {
         if (e.target.files && e.target.files.length > 0) {
             setImageUrl(e.target.files[0]);
         }
-        let fileImage = e.target.files[0];
     };
 
     const handleClickBtn = (data) => {
         console.log(data);
         let values = getValues();
         console.log(values.image);
-    };
-
-    const handleChange = async (content) => {
-        console.log(content); //Get Content Inside Editor
-        console.log(descValue);
     };
     return (
         <div className={cx('container')}>
@@ -176,24 +170,27 @@ function DoctorForm() {
                         <label htmlFor="description" className={cx('label')}>
                             Description
                         </label>
-                        <SunEditor
-                            name="my-editor"
-                            onChange={(value) => {
-                                setDescValue(value);
-                                console.log(descValue);
-                            }}
-                            setContents={descValue}
-                            setOptions={{
-                                buttonList: [
-                                    // default
-                                    ['undo', 'redo'],
-                                    ['bold', 'underline', 'italic', 'list'],
-                                    ['table', 'link'],
-                                    ['fullScreen'],
-                                ],
-                            }}
+                        <Controller
+                            name="description"
+                            control={control}
+                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                                <SunEditor
+                                    setContents={value}
+                                    onChange={onChange}
+                                    setOptions={{
+                                        buttonList: [
+                                            // default
+                                            ['undo', 'redo'],
+                                            ['bold', 'underline', 'italic', 'list'],
+                                            ['table', 'link'],
+                                            ['fullScreen'],
+                                        ],
+                                    }}
+                                />
+                            )}
                         />
-                        <input
+                        {/* <input
+                            value={descValue}
                             name="description"
                             {...register('description', {
                                 required: true,
@@ -202,7 +199,7 @@ function DoctorForm() {
                             id="description"
                             placeholder="Type description..."
                             className={cx('input', errors.description && 'error')}
-                        />
+                        /> */}
                         {errors.description && <p className={cx('err-mess')}>Feild is required!</p>}
                     </div>
                     <div className={cx('form-group')}>
