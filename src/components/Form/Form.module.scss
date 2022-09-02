@@ -58,7 +58,7 @@
 
 .image-upload {
     position: relative;
-    width: 50%;
+    width: 70%;
     aspect-ratio: 1/1;
     background-color: var(--main-color-1);
     display: flex;
@@ -87,4 +87,10 @@
     color: var(--text-white);
     font-size: 4rem;
     cursor: pointer;
+}
+
+.editor {
+    position: fixed;
+    top: 0;
+    right: 0;
 }

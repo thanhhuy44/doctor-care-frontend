@@ -103,7 +103,7 @@ function DoctorForm() {
                                 required: true,
                             })}
                             type="date"
-                            className={cx('input')}
+                            className={cx('input', errors.birthDay && 'error')}
                             id="birth"
                             placeholder=""
                         />
@@ -173,15 +173,16 @@ function DoctorForm() {
                         <Controller
                             name="description"
                             control={control}
+                            rules={{ required: true }}
                             render={({ field: { onChange, onBlur, value, ref } }) => (
                                 <SunEditor
                                     setContents={value}
-                                    onChange={onChange}
+                                    onChange={(value) => (value === '<p><br></p>' ? onChange('') : onChange(value))}
                                     setOptions={{
                                         buttonList: [
                                             // default
-                                            ['undo', 'redo'],
-                                            ['bold', 'underline', 'italic', 'list'],
+                                            ['undo', 'redo', 'removeFormat'],
+                                            ['bold', 'underline', 'italic', 'list', 'outdent', 'indent'],
                                             ['table', 'link'],
                                             ['fullScreen'],
                                         ],
