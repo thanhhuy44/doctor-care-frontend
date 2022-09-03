@@ -1,18 +1,27 @@
 .wrapper {
     background-color: #c9ebf2;
+    position: relative;
 }
 .header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 999;
+    z-index: 1;
+}
+.sidebar {
+    background-color: var(--main-color-2);
+    min-height: 100vh;
+    overflow-y: hidden;
 }
 .content {
     margin-top: var(--header-management-height);
     display: flex;
     align-items: flex-start;
     background-color: #ccc;
+    overflow-y: auto;
+    position: relative;
+    z-index: 0;
 }
 
 .page {

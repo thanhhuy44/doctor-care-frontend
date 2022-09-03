@@ -1,3 +1,4 @@
+import 'suneditor/dist/css/suneditor.min.css';
 import './MainStyles.scss';
 
 function MainStyles({ children }) {

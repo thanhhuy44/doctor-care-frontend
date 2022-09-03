@@ -44,7 +44,7 @@ function ManagementHospital() {
                     <ObjectItem />
                 </div>
                 <div className={cx('add')}>
-                    <Button type="link" to="/admin/doctor/add" className={cx('add-btn')}>
+                    <Button type="link" to="/admin/hospital/add" className={cx('add-btn')}>
                         <FontAwesomeIcon icon={faPlusCircle} />
                     </Button>
                 </div>

@@ -6,7 +6,9 @@ import classNames from 'classnames/bind';
 import Button from '~/components/Button/Button';
 import styles from '../../Form/Form.module.scss';
 import SunEditor, { buttonList } from 'suneditor-react';
-import 'suneditor/dist/css/suneditor.min.css';
+import { Link } from 'react-router-dom';
+import Popup from '~/components/Popup/Popup';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -30,8 +32,29 @@ function DoctorForm() {
 
     const handleClickBtn = (data) => {
         console.log(data);
-        let values = getValues();
-        console.log(values.image);
+        console.log(data.image[0]);
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' },
+        };
+        axios
+            .post(
+                'http://localhost:3030/api/doctor/create',
+                {
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    birthDay: data.birthDay,
+                    phoneNumber: data.phoneNumber,
+                    email: data.email,
+                    hospital: data.hospital,
+                    specialty: data.specialty,
+                    price: data.price,
+                    description: data.description,
+                    shortDescription: data.shortDescription,
+                    image: data.image[0],
+                },
+                config,
+            )
+            .then((res) => console.log(res.data.message));
     };
     return (
         <div className={cx('container')}>
@@ -39,17 +62,30 @@ function DoctorForm() {
             <form onSubmit={handleSubmit(handleClickBtn)} className={cx('form')}>
                 <div className={cx('form-info')}>
                     <div className={cx('form-group')}>
-                        <label htmlFor="name" className={cx('label')}>
-                            Name
+                        <label htmlFor="firstName" className={cx('label')}>
+                            First Name
                         </label>
                         <input
-                            name="name"
-                            {...register('name', { required: true })}
+                            name="firstName"
+                            {...register('firstName', { required: true })}
                             className={cx('input', errors.name && 'error')}
-                            id="name"
+                            id="firstName"
                             placeholder="Name of doctor..."
                         />
-                        {errors.name?.type === 'required' && <p className={cx('err-mess')}>Feild is required!</p>}
+                        {errors.firstName?.type === 'required' && <p className={cx('err-mess')}>Feild is required!</p>}
+                    </div>
+                    <div className={cx('form-group')}>
+                        <label htmlFor="lastName" className={cx('label')}>
+                            Last Name
+                        </label>
+                        <input
+                            name="lastName"
+                            {...register('lastName', { required: true })}
+                            className={cx('input', errors.name && 'error')}
+                            id="lastName"
+                            placeholder="Name of doctor..."
+                        />
+                        {errors.lastName?.type === 'required' && <p className={cx('err-mess')}>Feild is required!</p>}
                     </div>
                     <div className={cx('form-group')}>
                         <label htmlFor="phoneNumber" className={cx('label')}>
@@ -66,7 +102,7 @@ function DoctorForm() {
                             })}
                             className={cx('input', errors.phoneNumber && 'error')}
                             id="phoneNumber"
-                            placeholder=""
+                            placeholder="Phone number..."
                         />
                         {errors.phoneNumber?.type === 'required' && (
                             <p className={cx('err-mess')}>Feild is required!</p>
@@ -122,10 +158,10 @@ function DoctorForm() {
                             className={cx('input', errors.specialty && 'error')}
                         >
                             <option value="">-- Chon chuyen khoa --</option>
-                            <option value="1">Chuyen khoa 1</option>
-                            <option value="2">Chuyen khoa 2</option>
-                            <option value="3">Chuyen khoa 3</option>
-                            <option value="4">Chuyen khoa 4</option>
+                            <option value="6308bd86a8c5328bb7300f87">Chuyen khoa 1</option>
+                            <option value="6308bd86a8c5328bb7300f87">Chuyen khoa 2</option>
+                            <option value="6308bd86a8c5328bb7300f87">Chuyen khoa 3</option>
+                            <option value="6308bd86a8c5328bb7300f87">Chuyen khoa 4</option>
                             <option>Them chuyen khoa</option>
                         </select>
                         {errors.specialty?.type === 'required' && <p className={cx('err-mess')}>Feild is required!</p>}
@@ -138,16 +174,25 @@ function DoctorForm() {
                             name="hospital"
                             {...register('hospital', {
                                 required: true,
+                                onChange: (e) => {
+                                    if (e.target.value.startsWith('/')) {
+                                        window.open(e.target.value);
+                                    } else {
+                                        return;
+                                    }
+                                },
                             })}
                             id="hospital"
                             className={cx('input', errors.hospital && 'error')}
                         >
                             <option value="">-- Chon benh vien --</option>
-                            <option value="Benh vien 1">Benh vien 1</option>
-                            <option value="Benh vien 2">Benh vien 2</option>
-                            <option value="Benh vien 3">Benh vien 3</option>
-                            <option value="Benh vien 4">Benh vien 4</option>
-                            <option>Them Benh vien</option>
+                            <option value="6308bd86a8c5328bb7300f87">Benh vien 1</option>
+                            <option value="6308bd86a8c5328bb7300f87">Benh vien 2</option>
+                            <option value="6308bd86a8c5328bb7300f87">Benh vien 3</option>
+                            <option value="6308bd86a8c5328bb7300f87">Benh vien 4</option>
+                            <option value="/admin">
+                                <Link to="/admin">Them Benh vien</Link>
+                            </option>
                         </select>
                         {errors.hospital?.type === 'required' && <p className={cx('err-mess')}>Feild is required!</p>}
                     </div>
@@ -155,7 +200,31 @@ function DoctorForm() {
                         <label htmlFor="shortDescription" className={cx('label')}>
                             Short Description
                         </label>
-                        <input
+                        <div className={cx('editor', errors.shortDescription && 'error')}>
+                            <Controller
+                                name="shortDescription"
+                                control={control}
+                                rules={{ required: true }}
+                                render={({ field: { onChange, onBlur, value, ref } }) => (
+                                    <SunEditor
+                                        setDefaultStyle="font-size: 16px;height: 90px; position: relative ;z-index: 9999"
+                                        setContents={value}
+                                        onChange={(value) => (value === '<p><br></p>' ? onChange('') : onChange(value))}
+                                        setOptions={{
+                                            buttonList: [
+                                                // default
+                                                ['undo', 'redo'],
+                                                ['bold', 'underline', 'italic'],
+                                                ['list', 'outdent', 'indent'],
+                                                // ['table', 'link'],
+                                                // ['fullScreen'],
+                                            ],
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
+                        {/* <input
                             name="shortDescription"
                             {...register('shortDescription', {
                                 required: true,
@@ -163,33 +232,46 @@ function DoctorForm() {
                             id="shortDescription"
                             placeholder="Type description..."
                             className={cx('input', errors.shortDescription && 'error')}
-                        />
+                        /> */}
                         {errors.shortDescription && <p className={cx('err-mess')}>Feild is required!</p>}
                     </div>
                     <div className={cx('form-group')}>
                         <label htmlFor="description" className={cx('label')}>
                             Description
                         </label>
-                        <Controller
-                            name="description"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field: { onChange, onBlur, value, ref } }) => (
-                                <SunEditor
-                                    setContents={value}
-                                    onChange={(value) => (value === '<p><br></p>' ? onChange('') : onChange(value))}
-                                    setOptions={{
-                                        buttonList: [
-                                            // default
-                                            ['undo', 'redo', 'removeFormat'],
-                                            ['bold', 'underline', 'italic', 'list', 'outdent', 'indent'],
-                                            ['table', 'link'],
-                                            ['fullScreen'],
-                                        ],
-                                    }}
-                                />
-                            )}
-                        />
+                        <div className={cx('editor', errors.description && 'error')}>
+                            <Controller
+                                name="description"
+                                control={control}
+                                rules={{ required: true }}
+                                render={({ field: { onChange, onBlur, value, ref } }) => (
+                                    <SunEditor
+                                        setDefaultStyle="font-size: 16px;height: 300px; position: relative ;z-index: 9999"
+                                        setContents={value}
+                                        onChange={(value) => (value === '<p><br></p>' ? onChange('') : onChange(value))}
+                                        setOptions={{
+                                            buttonList: [
+                                                // default
+                                                ['undo', 'redo'],
+                                                [
+                                                    // ':p-More Paragraph-default.more_paragraph',
+                                                    // 'font',
+                                                    // 'fontSize',
+                                                    'formatBlock',
+                                                    // 'paragraphStyle',
+                                                    // 'blockquote',
+                                                ],
+
+                                                ['bold', 'underline', 'italic'],
+                                                ['list', 'outdent', 'indent'],
+                                                // ['table', 'link'],
+                                                // ['fullScreen'],
+                                            ],
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
                         {/* <input
                             value={descValue}
                             name="description"
@@ -247,7 +329,7 @@ function DoctorForm() {
                         )}
                     </div>
                     {errors.image && <p className={cx('err-mess')}>Image is required!</p>}
-                    <Button htmlFor="imageUpload" type="primary">
+                    <Button className={cx('add-image-btn')} htmlFor="imageUpload" type="primary">
                         Add Image
                     </Button>
                 </div>
