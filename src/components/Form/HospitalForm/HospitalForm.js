@@ -1,15 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from '../Form.module.scss';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import SunEditor, { buttonList } from 'suneditor-react';
-import { Link } from 'react-router-dom';
-import Popup from '~/components/Popup/Popup';
 import axios from 'axios';
 
 const cx = classNames.bind(styles);
@@ -38,10 +36,8 @@ function HospitalForm() {
         }
     };
 
-    const handleDeleteDescImage = (index) => {
-        console.log(index);
-        let newDescImages = descImages.filter((img) => img !== descImages[index]);
-        setDescImages(newDescImages);
+    const handleDeleteDescImage = async (index) => {
+        await setDescImages(() => descImages.filter((img) => img !== descImages[index]));
     };
 
     const handleClickBtn = (data) => {
@@ -241,12 +237,13 @@ function HospitalForm() {
                         </div>
                         {errors.image && <p className={cx('err-mess')}>Image is required!</p>}
 
-                        <Button className={cx('add-image-btn')} htmlFor="imageUpload" type="primary">
-                            Add Image
+                        <Button className={cx('add-image-btn')} htmlFor="avatar" type="primary">
+                            Add Avatar
                         </Button>
                     </div>
 
-                    <div className={cx('image-desc')}>
+                    <div className={cx('image-desc', errors.descImage && 'error')}>
+                        <h2 className={cx('image-desc-title')}>Thêm ảnh mô tả</h2>
                         <input
                             type="file"
                             name="filefield"
@@ -254,7 +251,10 @@ function HospitalForm() {
                             id="imageDesc"
                             hidden
                             accept="image/png, image/jpeg"
-                            onChange={(e) => descImageChange(e)}
+                            {...register('descImage', {
+                                required: true,
+                                onChange: (e) => descImageChange(e),
+                            })}
                         />
                         {/* {imageUrl !== '' && (
                             <img
@@ -283,6 +283,7 @@ function HospitalForm() {
                             ))}
                         </div>
                     </div>
+                    {errors.descImage?.type === 'required' && <p className={cx('err-mess')}>Feild is required!!!</p>}
                 </div>
             </div>
             <Button onClick={handleSubmit(handleClickBtn)} size="full" type="primary">

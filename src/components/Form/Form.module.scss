@@ -93,14 +93,24 @@
 }
 
 .image-desc {
+    display: block;
+    border: 1px solid transparent;
+    margin-top: 50px;
     background-color: var(--main-color-5);
     padding: 8px;
 }
 
+.image-desc-title {
+    margin-bottom: 16px;
+    color: #fff;
+}
+
 .image-desc-img {
+    display: block;
     width: 100px !important;
     aspect-ratio: 1/1;
     margin-right: 8px;
+    object-fit: cover;
 }
 
 // .desc-image-preview {
@@ -121,6 +131,9 @@
     background-color: var(--main-color-3);
     margin-right: 8px;
     cursor: pointer;
+    &:hover {
+        color: #fff;
+    }
 }
 
 .upload-label {
@@ -140,10 +153,11 @@
 }
 
 .desc-img-delete {
+    color: var(--main-color-3);
     font-size: 2rem;
     aspect-ratio: 1/1;
     top: 0px;
-    right: 0;
+    right: 0px;
     position: absolute;
     &:hover {
         color: rgb(255, 0, 0);
