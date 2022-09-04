@@ -1,5 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
-import FeildInput from '~/components/Form/components/FeildInput/FeildInput';
+import FeildInput from '~/components/Form/components/FeildInput';
+import Select from '~/components/Form/components/Select';
+import FileInput from '~/components/Form/components/FileInput';
 function Test() {
     const {
         handleSubmit,
@@ -14,19 +16,21 @@ function Test() {
             <h1 style={errors.name && { color: 'red' }}>hi</h1>
             <Controller
                 control={control}
-                name="name"
+                name="select"
                 rules={{
                     required: true,
                 }}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
-                    <FeildInput
-                        error={errors.name}
-                        type="file"
-                        onChange={onChange}
+                    <FileInput
+                        error={errors.select}
+                        onChange={(e) =>
+                            e.target.value.startsWith('/') ? window.open(e.target.value) : onChange(e.target.value)
+                        }
                         onBlur={onBlur}
                         selected={value}
-                        name="Thanh Huy"
-                        id="firstName"
+                        name="Avatar"
+                        id="image"
+                        multiple
                     />
                 )}
             />
