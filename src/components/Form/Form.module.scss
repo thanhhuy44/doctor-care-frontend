@@ -56,9 +56,11 @@
 }
 
 .form-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex: 4;
     margin-top: 150px;
-    overflow-x: auto;
 }
 
 .avatar {
@@ -69,6 +71,7 @@
 }
 
 .image-upload {
+    min-width: 244px;
     position: relative;
     width: 70%;
     aspect-ratio: 1/1;
@@ -143,6 +146,7 @@
 }
 
 .image-desc-preview-list {
+    max-width: 333px;
     display: flex;
     align-items: center;
     overflow-x: auto;

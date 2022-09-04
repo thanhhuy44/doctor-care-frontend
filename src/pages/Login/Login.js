@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import background from '~/assets/images/bookingcare-cover-4.jpg';
@@ -9,6 +11,19 @@ import { faEnvelope, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-sv
 const cx = classNames.bind(styles);
 
 function Login() {
+    const {
+        register,
+        getValues,
+        handleSubmit,
+        control,
+        watch,
+        formState: { errors },
+    } = useForm();
+    const [hidePass, setHidePass] = useState(true);
+
+    const handleLogin = (data) => {
+        console.log(data);
+    };
     return (
         <div className={cx('container' + ' row')}>
             <div className={cx('background')}>
@@ -17,23 +32,50 @@ function Login() {
             <div className={cx('content')}>
                 <div className={cx('form')}>
                     <h3 className={cx('title')}>Login</h3>
-                    <div className={cx('feild')}>
-                        <label htmlFor="email">
-                            <FontAwesomeIcon icon={faEnvelope} />
-                        </label>
-                        <input type="text" id="email" className={cx('input')} placeholder="Email" />
-                    </div>
-                    <div className={cx('feild')}>
-                        <label htmlFor="password">
-                            <FontAwesomeIcon icon={faKey} />
-                        </label>
-                        <input id="password" type="password" className={cx('input')} placeholder="Password" />
-                        <Button className={cx('seepass-btn')}>
-                            <FontAwesomeIcon icon={faEye} />
-                        </Button>
+                    <div className={cx('form-group')}>
+                        <div className={cx('feild', errors.email && 'error')}>
+                            <label className={cx('label')} htmlFor="email">
+                                <FontAwesomeIcon icon={faEnvelope} />
+                            </label>
+                            <input
+                                {...register('email', {
+                                    required: true,
+                                })}
+                                type="text"
+                                id="email"
+                                className={cx('input')}
+                                placeholder="Email"
+                            />
+                        </div>
+                        {errors.email && <p className={cx('error-mess')}>Feild is required!!!</p>}
                     </div>
 
-                    <Button type="primary" size="full" className={cx('login-btn')}>
+                    <div className={cx('form-group')}>
+                        <div className={cx('feild', errors.password && 'error')}>
+                            <label className={cx('label')} htmlFor="password">
+                                <FontAwesomeIcon icon={faKey} />
+                            </label>
+                            <input
+                                {...register('password', {
+                                    required: true,
+                                })}
+                                id="password"
+                                type={hidePass ? 'password' : 'text'}
+                                className={cx('input')}
+                                placeholder="Password"
+                            />
+                            <Button onClick={() => setHidePass(!hidePass)} className={cx('seepass-btn')}>
+                                {hidePass ? (
+                                    <FontAwesomeIcon className={cx('btn-icon')} icon={faEye} />
+                                ) : (
+                                    <FontAwesomeIcon className={cx('btn-icon')} icon={faEyeSlash} />
+                                )}
+                            </Button>
+                        </div>
+                        {errors.password && <p className={cx('error-mess')}>Feild is required!!!</p>}
+                    </div>
+
+                    <Button onClick={handleSubmit(handleLogin)} type="primary" size="full" className={cx('login-btn')}>
                         LOGIN
                     </Button>
                     <div className={cx('social-login')}>

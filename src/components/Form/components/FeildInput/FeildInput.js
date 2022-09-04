@@ -5,24 +5,18 @@ import { useForm } from 'react-hook-form';
 const cx = classNames.bind(styles);
 
 function FeildInput(props) {
-    const { name, placeholder, required } = props;
-    const {
-        register,
-        getValues,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm();
+    const { id, name, type, placeholder, onChange, error } = props;
 
     return (
         <div className={cx('form-group')}>
-            <label className={cx('label')} htmlFor={name}>
+            <label className={cx('label')} htmlFor={id}>
                 {name}
             </label>
             <input
-                {...register(name, { required: required })}
-                id={name}
-                className={cx('input')}
+                type={type}
+                onChange={onChange}
+                id={id}
+                className={cx('input', error && 'error')}
                 placeholder={placeholder}
             />
         </div>

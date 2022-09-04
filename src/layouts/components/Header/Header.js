@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion, faUser } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../Navbar';
 import images from '~/assets';
 
@@ -20,10 +20,10 @@ function Header() {
                 <div className={cx('nav')}>
                     <Navbar />
                 </div>
-                <div className={cx('option')}>
-                    <Link className={cx('help-link')} to="/help">
-                        <span className={cx('text')}>Hỗ trợ</span>
-                        <FontAwesomeIcon className={cx('icon')} icon={faCircleQuestion} />
+                <div className={cx('login')}>
+                    <Link className={cx('login-link')} to="/login">
+                        {/* <span className={cx('text')}>Hỗ trợ</span> */}
+                        <FontAwesomeIcon className={cx('icon')} icon={faUser} />
                     </Link>
                 </div>
             </div>
