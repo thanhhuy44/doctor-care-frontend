@@ -263,16 +263,14 @@ function HospitalForm() {
                         <h2 className={cx('image-desc-title')}>Thêm ảnh mô tả</h2>
                         <input
                             type="file"
-                            multiple
+                            name="filefield"
+                            multiple="multiple"
                             id="imageDesc"
                             hidden
                             accept="image/png, image/jpeg"
-                            {...register('descImages', {
+                            {...register('descImage', {
                                 required: true,
-                                onChange: (e) => {
-                                    descImageChange(e);
-                                    console.log(e.target.files);
-                                },
+                                onChange: (e) => descImageChange(e),
                             })}
                         />
                         {/* {imageUrl !== '' && (
