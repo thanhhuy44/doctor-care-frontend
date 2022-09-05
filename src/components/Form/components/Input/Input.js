@@ -1,11 +1,10 @@
 import classNames from 'classnames/bind';
 import styles from '../../Form.module.scss';
-import { useForm } from 'react-hook-form';
 
 const cx = classNames.bind(styles);
 
 function FeildInput(props) {
-    const { id, name, type, placeholder, onChange, error } = props;
+    const { id, name, type, step, placeholder, onChange, error, defaultValue } = props;
 
     return (
         <div className={cx('form-group')}>
@@ -18,6 +17,8 @@ function FeildInput(props) {
                 id={id}
                 className={cx('input', error && 'error')}
                 placeholder={placeholder}
+                step={step}
+                defaultValue={defaultValue}
             />
             {error?.type === 'required' && <p className={cx('err-mess')}>Yêu cầu nhập trường này!!!</p>}
             {error?.message && <p className={cx('err-mess')}>{error.message}</p>}

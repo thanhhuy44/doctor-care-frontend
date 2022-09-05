@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './Signup.module.scss';
 import background from '~/assets/images/bookingcare-cover-4.jpg';
 import Button from '~/components/Button/Button';
+import { emailRegex, phoneNumberRegex } from '~/regex';
 
 const cx = classNames.bind(styles);
 
@@ -11,9 +12,11 @@ function Signup() {
         register,
         formState: { errors },
         handleSubmit,
+        watch,
     } = useForm();
     const handleSignUp = (data) => {
         console.log(data);
+        alert(data);
     };
     return (
         <div className={cx('container')}>
@@ -34,6 +37,9 @@ function Signup() {
                                 type="text"
                                 placeholder="First name"
                             />
+                            {errors.firstName?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
                         </div>
                         <div className={cx('feild')}>
                             <label className={cx('label')}>Last name</label>
@@ -45,6 +51,9 @@ function Signup() {
                                 type="text"
                                 placeholder="Last name"
                             />
+                            {errors.lastName?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
                         </div>
                     </div>
                     <div className={cx('group')}>
@@ -57,34 +66,29 @@ function Signup() {
                                 className={cx('input', errors.birthDay && 'error')}
                                 type="date"
                             />
+                            {errors.birthDay?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
                         </div>
                         <div className={cx('feild')}>
                             <p className={cx('label')}>Gendar</p>
-                            <div className={cx('select')}>
-                                <span className={cx('option', errors.sex && 'error')}>
-                                    <input
-                                        defaultValue={'nam'}
-                                        type="radio"
-                                        {...register('sex', {
-                                            required: true,
-                                        })}
-                                        name="sex"
-                                        className={cx('input')}
-                                    />
-                                    <label>Male</label>
-                                </span>
-                                <span className={cx('option', errors.sex && 'error')}>
-                                    <input
-                                        {...register('sex', {
-                                            required: true,
-                                        })}
-                                        type="radio"
-                                        name="sex"
-                                        className={cx('input')}
-                                    />
-                                    <label>Female</label>
-                                </span>
-                            </div>
+                            <select
+                                defaultValue={1}
+                                {...register('sex', {
+                                    required: true,
+                                })}
+                                className={cx('select', errors.sex && 'error')}
+                            >
+                                <option className={cx('option')} value="1">
+                                    Nam
+                                </option>
+                                <option className={cx('option')} value="0">
+                                    Nữ
+                                </option>
+                            </select>
+                            {errors.sex?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
                         </div>
                     </div>
                     <div className={cx('group')}>
@@ -94,14 +98,18 @@ function Signup() {
                                 {...register('email', {
                                     required: true,
                                     pattern: {
-                                        value: '/^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/',
+                                        value: emailRegex,
                                         message: 'Please enter valid email !!!',
                                     },
                                 })}
-                                className={cx('input')}
+                                className={cx('input', errors.email && 'error')}
                                 type="text"
                                 placeholder="Email"
                             />
+                            {errors.email?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
+                            {errors.email && <p className={cx('error-mess')}>{errors.email.message}</p>}
                         </div>
                         <div className={cx('feild')}>
                             <label className={cx('label')}>Phone number</label>
@@ -109,24 +117,56 @@ function Signup() {
                                 {...register('phoneNumber', {
                                     required: true,
                                     pattern: {
-                                        value: '/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/',
+                                        value: phoneNumberRegex,
                                         message: 'Please enter valid number phone!!!',
                                     },
                                 })}
-                                className={cx('input')}
+                                className={cx('input', errors.phoneNumber && 'error')}
                                 type="tel"
                                 placeholder="Phone number"
                             />
+                            {errors.phoneNumber?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
+                            {errors.phoneNumber && <p className={cx('error-mess')}>{errors.phoneNumber.message}</p>}
                         </div>
                     </div>
                     <div className={cx('group', 'password')}>
                         <div className={cx('feild')}>
                             <label className={cx('label')}>Password</label>
-                            <input className={cx('input')} type="password" placeholder="Password" />
+                            <input
+                                {...register('password', {
+                                    required: true,
+                                })}
+                                className={cx('input', errors.password && 'error')}
+                                type="password"
+                                placeholder="Password"
+                            />
+                            {errors.password?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
                         </div>
                         <div className={cx('feild')}>
                             <label className={cx('label')}>Verify Password</label>
-                            <input className={cx('input')} type="password" placeholder="Verify Password" />
+                            <input
+                                {...register('verify_password', {
+                                    required: true,
+                                    validate: (value) => {
+                                        if (watch('password') !== value) {
+                                            return 'Your passwords do no match';
+                                        }
+                                    },
+                                })}
+                                className={cx('input', errors.verify_password && 'error')}
+                                type="password"
+                                placeholder="Verify Password"
+                            />
+                            {errors.verify_password?.type === 'required' && (
+                                <p className={cx('error-mess')}>Feild is required !!!</p>
+                            )}
+                            {errors.verify_password && (
+                                <p className={cx('error-mess')}>{errors.verify_password.message}</p>
+                            )}
                         </div>
                     </div>
                     <div className={cx('group')}>

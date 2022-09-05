@@ -4,18 +4,11 @@
     z-index: 99999;
 }
 
-.form-info,
-.form-image {
-    margin: 20px 0;
-}
-
-.form-info {
-    flex: 6;
-    padding-right: 20px;
-}
-
 .form-group {
+    width: 100%;
     margin-top: 16px;
+    display: flex;
+    flex-direction: column;
 }
 
 .label {
@@ -23,6 +16,13 @@
     margin-bottom: 4px;
     font-size: 2rem;
     font-weight: 500;
+}
+
+.label-img {
+    cursor: pointer;
+    &:hover {
+        color: #fff;
+    }
 }
 
 .input {
@@ -38,6 +38,10 @@
     }
 }
 
+.editor {
+    border: 1px solid transparent;
+}
+
 .error {
     border-color: red !important;
     animation: shake 0.5s;
@@ -45,128 +49,40 @@
 }
 
 .err-mess {
-    margin-top: 8px;
+    margin: 8px;
     color: red;
     font-size: 1.2rem;
     font-weight: 500;
 }
 
-.editor {
-    border: 1px solid transparent;
-}
-
-.form-image {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 4;
-    margin-top: 150px;
-}
-
-.avatar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.image-upload {
-    min-width: 244px;
+.preview {
+    display: block;
     position: relative;
-    width: 70%;
+    width: 200px;
     aspect-ratio: 1/1;
-    background-color: var(--main-color-1);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid transparent;
-}
-
-.image-preview {
-    object-fit: cover;
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
-}
-
-.image-desc {
-    display: block;
-    border: 1px solid transparent;
-    margin-top: 50px;
+    padding: 20px;
+    font-size: 4rem;
     background-color: var(--main-color-5);
-    padding: 8px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.image-desc-title {
-    margin-bottom: 16px;
-    color: #fff;
-}
-
-.image-desc-img {
+.preview-img {
     display: block;
-    width: 100px !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
     aspect-ratio: 1/1;
-    margin-right: 8px;
     object-fit: cover;
 }
-
-// .desc-image-preview {
-//     display: block;
-//     width: 100px;
-//     height: 100px;
-//     overflow: hidden;
-//     aspect-ratio: 1/1;
-// }
-
-.image-desc-label {
-    min-width: 100px !important;
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    background-color: var(--main-color-3);
-    margin-right: 8px;
-    cursor: pointer;
-    &:hover {
-        color: #fff;
-    }
-}
-
-.upload-label {
-    color: var(--text-white);
-    font-size: 4rem;
-    cursor: pointer;
-}
-
-.image-desc-preview-list {
-    max-width: 333px;
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-}
-
 .add-image-btn {
-    margin: 20px 0;
-}
-
-.desc-img-delete {
-    color: var(--main-color-3);
-    font-size: 2rem;
-    aspect-ratio: 1/1;
-    top: 0px;
-    right: 0px;
-    position: absolute;
-    &:hover {
-        color: rgb(255, 0, 0);
-        cursor: pointer;
-    }
+    width: 200px;
+    text-align: center;
 }
 
 @keyframes shake {
@@ -203,4 +119,48 @@
     100% {
         transform: translate(1px, -2px) rotate(-1deg);
     }
+}
+
+//multipleImages
+
+.container {
+    display: flex;
+    align-items: center;
+    background-color: var(--main-color-3);
+    padding: 8px;
+    overflow-x: auto;
+    border: 1px solid #ccc;
+}
+.descImage-label,
+.descImage-preview {
+    width: 100px;
+    height: 100px;
+    aspect-ratio: 1/1;
+    position: relative;
+    margin-right: 12px;
+}
+
+.descImage-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background-color: #fff;
+    label {
+        cursor: pointer;
+    }
+}
+
+.descImage-preview-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.del-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
 }

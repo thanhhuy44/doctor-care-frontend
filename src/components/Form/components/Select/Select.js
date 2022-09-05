@@ -10,7 +10,14 @@ function Select(props) {
             <label className={cx('label')} htmlFor={id}>
                 {name}
             </label>
-            <select className={cx('input', error && 'error')} onChange={onChange} id={id} name={name}>
+            <select
+                className={cx('input', error && 'error')}
+                onChange={(e) =>
+                    e.target.value.startsWith('/') ? window.open(e.target.value) : onChange(e.target.value)
+                }
+                id={id}
+                name={name}
+            >
                 {options.map((option, index) => (
                     <option key={index} value={option.value}>
                         {option.name}

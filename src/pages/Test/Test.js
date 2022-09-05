@@ -1,7 +1,8 @@
 import { useForm, Controller } from 'react-hook-form';
-import FeildInput from '~/components/Form/components/FeildInput';
 import Select from '~/components/Form/components/Select';
 import FileInput from '~/components/Form/components/FileInput';
+import MultipleImage from '~/components/Form/components/MultipleImage';
+import Editor from '~/components/Form/components/Editor';
 function Test() {
     const {
         handleSubmit,
@@ -13,27 +14,26 @@ function Test() {
     };
     return (
         <div>
-            <h1 style={errors.name && { color: 'red' }}>hi</h1>
+            <h1 style={errors.descImages && { color: 'red' }}>hi</h1>
             <Controller
                 control={control}
-                name="select"
+                name="descImages"
                 rules={{
                     required: true,
                 }}
-                render={({ field: { onChange, onBlur, value, ref } }) => (
-                    <FileInput
-                        error={errors.select}
-                        onChange={(e) =>
-                            e.target.value.startsWith('/') ? window.open(e.target.value) : onChange(e.target.value)
-                        }
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <Editor
+                        error={errors.descImages}
+                        onChange={onChange}
                         onBlur={onBlur}
                         selected={value}
-                        name="Avatar"
+                        name="descImages"
                         id="image"
                         multiple
                     />
                 )}
             />
+
             <button onClick={handleSubmit(handleClick)}>Shit</button>
         </div>
     );

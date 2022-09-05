@@ -7,6 +7,7 @@ import Button from '~/components/Button/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { emailRegex } from '~/regex';
 
 const cx = classNames.bind(styles);
 
@@ -40,6 +41,10 @@ function Login() {
                             <input
                                 {...register('email', {
                                     required: true,
+                                    pattern: {
+                                        value: emailRegex,
+                                        message: 'Please enter valid email !!!',
+                                    },
                                 })}
                                 type="text"
                                 id="email"
@@ -47,7 +52,8 @@ function Login() {
                                 placeholder="Email"
                             />
                         </div>
-                        {errors.email && <p className={cx('error-mess')}>Feild is required!!!</p>}
+                        {errors.email?.type === 'required' && <p className={cx('error-mess')}>Feild is required!!!</p>}
+                        {errors.email && <p className={cx('error-mess')}>{errors.email.message}</p>}
                     </div>
 
                     <div className={cx('form-group')}>
