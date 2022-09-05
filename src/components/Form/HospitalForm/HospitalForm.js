@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
-import SunEditor, { buttonList } from 'suneditor-react';
+import SunEditor from 'suneditor-react';
 import axios from 'axios';
 
 const cx = classNames.bind(styles);
@@ -41,7 +41,24 @@ function HospitalForm() {
     };
 
     const handleClickBtn = (data) => {
-        console.log(data);
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('description', data.description);
+        formData.append('strengths', data.strengths);
+        formData.append('equipments', data.equipments);
+        formData.append('address', data.address);
+        formData.append('procedure', data.procedure);
+        formData.append('image', data.image[0]);
+        descImages.forEach((img) => formData.append('descImages', img));
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' },
+        };
+        axios({
+            method: 'post',
+            url: 'http://localhost:3030/api/hospital/create',
+            data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' },
+        }).then((res) => console.log(res.data.message));
     };
     return (
         <div className={cx('container')}>
@@ -246,14 +263,16 @@ function HospitalForm() {
                         <h2 className={cx('image-desc-title')}>Thêm ảnh mô tả</h2>
                         <input
                             type="file"
-                            name="filefield"
-                            multiple="multiple"
+                            multiple
                             id="imageDesc"
                             hidden
                             accept="image/png, image/jpeg"
-                            {...register('descImage', {
+                            {...register('descImages', {
                                 required: true,
-                                onChange: (e) => descImageChange(e),
+                                onChange: (e) => {
+                                    descImageChange(e);
+                                    console.log(e.target.files);
+                                },
                             })}
                         />
                         {/* {imageUrl !== '' && (
