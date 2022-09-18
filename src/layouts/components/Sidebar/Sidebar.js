@@ -8,8 +8,8 @@ const cx = classNames.bind(styles);
 
 function Sidebar() {
     return (
-        <div className={cx('container')}>
-            <NavLink to="/management1" className={(nav) => cx('item', { active: nav.isActive })}>
+        <div className={cx('sidebar')}>
+            <NavLink to="/admin" replace className={(nav) => cx('item', { active: nav.isActive })}>
                 <FontAwesomeIcon icon={faUser} className={cx('icon')} />
                 <span className={cx('text')}>Thông tin cá nhân</span>
             </NavLink>
@@ -25,6 +25,7 @@ function Sidebar() {
                 <FontAwesomeIcon icon={faFolder} className={cx('icon')} />
                 <span className={cx('text')}>Quản trị viên</span>
             </NavLink>
+            <div className="flex-1"></div>
         </div>
     );
 }

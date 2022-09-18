@@ -1,15 +1,6 @@
-.container {
-    display: flex;
-    align-items: center;
-}
 .item {
     flex: 1;
-    &:hover .nav {
-        color: var(--text-link);
-    }
-    &:hover .sub-nav {
-        color: var(--text-link);
-    }
+    color: var(--text-link) !important;
 }
 .nav {
     font-size: 2rem;

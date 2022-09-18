@@ -5,7 +5,7 @@ import styles from '../../Form.module.scss';
 const cx = classNames.bind(styles);
 
 function Editor(props) {
-    const { id, name, type, placeholder, onChange, error, className } = props;
+    const { id, name, type, placeholder, onChange, error, className, height } = props;
     return (
         <div className={cx('form-group')}>
             <label className={cx('label')} htmlFor={id}>
@@ -13,6 +13,7 @@ function Editor(props) {
             </label>
             <div className={cx('editor', className, error && 'error')}>
                 <SunEditor
+                    height={height}
                     type={type}
                     onChange={(e) => (e === '<p><br></p>' ? onChange('') : onChange(e))}
                     setOptions={{

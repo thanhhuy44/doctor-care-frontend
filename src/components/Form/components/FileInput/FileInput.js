@@ -12,7 +12,7 @@ function Input(props) {
     const [previewSrc, setPreviewSrc] = useState('');
 
     return (
-        <div className={cx('form-group')}>
+        <div className={cx('form-group') + ' flex items-center justify-center'}>
             <div className={cx('preview', error && 'error')}>
                 <label className={cx('label-img')} htmlFor={id}>
                     <FontAwesomeIcon icon={faFileUpload} />

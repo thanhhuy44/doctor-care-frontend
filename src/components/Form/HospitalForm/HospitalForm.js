@@ -61,10 +61,10 @@ function HospitalForm() {
         }).then((res) => console.log(res.data.message));
     };
     return (
-        <div className={cx('container')}>
-            <h1 className={cx('title')}>Add Hospital</h1>
-            <div className={cx('form')}>
-                <div className={cx('form-info')}>
+        <div className="block">
+            <h1 className="text-3xl uppercase font-semibold">Add Hospital</h1>
+            <div className="block">
+                <div className="block">
                     <div className={cx('form-group')}>
                         <label htmlFor="name" className={cx('label')}>
                             Name
@@ -91,7 +91,6 @@ function HospitalForm() {
                         />
                         {errors.adress?.type === 'required' && <p className={cx('err-mess')}>Feild is required!</p>}
                     </div>
-
                     <div className={cx('form-group')}>
                         <label htmlFor="description" className={cx('label')}>
                             Giới Thiệu

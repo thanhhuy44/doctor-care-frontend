@@ -1,8 +1,5 @@
 import { Link } from 'react-router-dom';
-import classNames from 'classnames/bind';
-import styles from './Button.module.scss';
-
-const cx = classNames.bind(styles);
+import './Button.css';
 
 function Button(props) {
     const { type, size, className, to, href, onClick, disable, title, htmlFor, ...passProps } = props;
@@ -19,7 +16,7 @@ function Button(props) {
         handle.htmlFor = htmlFor;
     }
     return (
-        <Comp className={cx('button', type, size, className)} {...handle}>
+        <Comp className={`button ${type} ${size} ${className}`} {...handle}>
             {props.children}
         </Comp>
     );

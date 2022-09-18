@@ -26,7 +26,7 @@ function Login() {
         console.log(data);
     };
     return (
-        <div className={cx('container' + ' row')}>
+        <div>
             <div className={cx('background')}>
                 <img className={cx('background-img')} src={background} alt="bg" />
             </div>
@@ -70,7 +70,10 @@ function Login() {
                                 className={cx('input')}
                                 placeholder="Password"
                             />
-                            <Button onClick={() => setHidePass(!hidePass)} className={cx('seepass-btn')}>
+                            <Button
+                                onClick={() => setHidePass(!hidePass)}
+                                className={cx('seepass-btn') + ' min-w-[28px] text-center'}
+                            >
                                 {hidePass ? (
                                     <FontAwesomeIcon className={cx('btn-icon')} icon={faEye} />
                                 ) : (

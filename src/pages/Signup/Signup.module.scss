@@ -36,7 +36,7 @@
 }
 
 .title {
-    font-size: 2.8rem;
+    font-size: 28px;
     text-transform: uppercase;
     margin-bottom: 32px;
     text-align: center;
@@ -63,7 +63,7 @@
 
 .feild {
     flex: 1;
-    font-size: 1.4rem;
+    font-size: 14px;
     + .feild {
         margin-left: 20px;
     }
@@ -72,12 +72,12 @@
 
 .label {
     display: block;
-    font-size: 1.2rem;
+    font-size: 12px;
     font-weight: 500;
     padding-bottom: 8px;
 }
 .input {
-    font-size: 1.6rem;
+    font-size: 16px;
     + .input {
         margin-left: 16px;
     }
@@ -113,7 +113,7 @@
 .error-mess {
     padding-left: 12px;
     margin-top: 8px;
-    font-size: 1.2rem;
+    font-size: 12px;
     font-weight: 500;
     color: red;
 }

@@ -10,18 +10,18 @@ const cx = classNames.bind(styles);
 
 function Header() {
     return (
-        <div className={cx('container')}>
-            <div className={cx('header')}>
-                <div className={cx('logo')}>
-                    <Link to="/" className={cx('logo-link')}>
-                        <img className={cx('logo-img')} src={images.logo} alt="logo" />
+        <div className="fixed top-0 right-0 left-0 z-50 bg-white border-b border-gray-700">
+            <div className="container mx-auto flex items-center  h-20">
+                <div className="w-52 h-full">
+                    <Link to="/" className="w-full h-full">
+                        <img className="w-full h-full" src={images.logo} alt="logo" />
                     </Link>
                 </div>
-                <div className={cx('nav')}>
+                <div className="mx-12 flex-1">
                     <Navbar />
                 </div>
-                <div className={cx('login')}>
-                    <Link className={cx('login-link')} to="/login">
+                <div className="cursor-pointer text-2xl px-3 hover:text-cyan-600">
+                    <Link to="/login">
                         {/* <span className={cx('text')}>Hỗ trợ</span> */}
                         <FontAwesomeIcon className={cx('icon')} icon={faUser} />
                     </Link>

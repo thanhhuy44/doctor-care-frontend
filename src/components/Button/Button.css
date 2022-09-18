@@ -1,0 +1,21 @@
+.button {
+    @apply text-base rounded font-semibold cursor-pointer;
+}
+.button + .button {
+    @apply ml-3;
+}
+
+.primary {
+    @apply min-w-[80px] p-3 bg-[#ffc419] text-white;
+}
+.primary:hover {
+    background-color: rgb(199, 199, 0);
+}
+
+.link {
+    @apply inline-block text-blue-600 bg-transparent underline;
+}
+
+.full {
+    @apply w-full;
+}

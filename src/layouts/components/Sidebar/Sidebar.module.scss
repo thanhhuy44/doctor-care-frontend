@@ -1,21 +1,16 @@
-.container {
+.sidebar {
+    @apply min-h-full flex flex-col;
 }
 .item {
-    padding: 12px 20px 12px 12px;
-    display: flex;
-    align-items: flex-start;
-    border-left: 4px solid transparent;
+    @apply py-3 pr-5 pl-3 flex items-start border-l-[4px] border-transparent;
 }
 .item.active {
-    background-color: #2477bf;
-    border-color: #333;
+    @apply border-gray-600 bg-blue-400;
 }
 
 .icon {
-    margin-right: 8px;
-    min-width: 32px;
+    @apply mr-2 min-w-[32px];
 }
 .text {
-    font-size: 1.6rem;
-    font-weight: 500;
+    @apply text-base font-medium;
 }

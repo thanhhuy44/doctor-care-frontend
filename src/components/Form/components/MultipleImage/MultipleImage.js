@@ -17,7 +17,10 @@ function MultipleImage(props) {
     };
 
     return (
-        <div className={cx('form-group')}>
+        <div className={cx('form-group') + ' flex items-center justify-center'}>
+            <label className={cx('label') + ' block w-full text-left'} htmlFor={id}>
+                {name}
+            </label>
             <div className={cx('container', className, error && 'error')}>
                 <div className={cx('descImage-label')}>
                     <label htmlFor={id}>

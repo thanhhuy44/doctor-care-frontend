@@ -1,51 +1,50 @@
-import classNames from 'classnames/bind';
-import styles from './Home.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import background from '~/assets/images/bookingcare-cover-4.jpg';
 import images from '~/assets';
 import Section from '~/components/Section';
-
-const cx = classNames.bind(styles);
+import SlideShow from '~/components/SlideShow';
 
 function Home() {
     return (
-        <div className={cx('container')}>
-            <div className={cx('main-content')}>
-                <div className={cx('background')}>
-                    <img className={cx('background-img')} src={background} alt="background" />
+        <div>
+            <div className="block  relative w-full object-cover">
+                <div className="block">
+                    <img className="w-full block" src={background} alt="background" />
                 </div>
-                <div className={cx('content')}>
-                    <h1 className={cx('title')}>
+                <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center bg-black/30 ">
+                    <h1 className="text-center text-4xl text-white uppercase drop-shadow mb-5 leading-16">
                         NỀN TẢNG Y TẾ
                         <br />
                         CHĂM SÓC SỨC KHỎE TOÀN DIỆN
                     </h1>
-                    <div className={cx('search')}>
-                        <button className={cx('search-btn')}>
+                    <div className="flex items-center mt-3 bg-yellow-400 rounded-3xl overflow-hidden shadow-2xl">
+                        <button className="bg-transparent text-2xl py-3 px-4 cursor-pointer hover:opacity-75">
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </button>
-                        <input className={cx('search-input')} placeholder="Search..." />
+                        <input className="bg-transparent text-xl min-w-[500px]" placeholder="Search..." />
                     </div>
-                    <div className={cx('download')}>
+                    <div className="mt-5 flex items-center">
                         <a
-                            className={cx('download-link')}
+                            className="mx-9"
                             href="https://play.google.com/store/apps/details?id=vn.bookingcare.bookingcare"
                             target="blank"
                         >
-                            <img className={cx('download-img')} src={images.googleplay} alt="google-play" />
+                            <img className="bloc w-[160px]" src={images.googleplay} alt="google-play" />
                         </a>
                         <a
-                            className={cx('download-link')}
+                            className="mx-9"
                             href="https://apps.apple.com/vn/app/bookingcare/id1347700144"
                             target="blank"
                         >
-                            <img className={cx('download-img')} target="blank" src={images.appstore} alt="app-store" />
+                            <img className="bloc w-[160px]" target="blank" src={images.appstore} alt="app-store" />
                         </a>
                     </div>
                 </div>
             </div>
-            <Section numberOfSlide={4} />
+            <Section bgColor="#ccc" numberOfSlide={4}>
+                <SlideShow className="-mx-4" />
+            </Section>
             <Section dots={true} />
             <Section autoplaySpeed={1000} />
             <Section />

@@ -1,63 +1,57 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays } from '@fortawesome/free-regular-svg-icons';
-import classNames from 'classnames/bind';
-import styles from './DetailDoctor.module.scss';
-
-const cx = classNames.bind(styles);
-
 const Item = () => {
     return (
-        <div className={cx('item')}>
-            <h4 className={cx('user-name')}>Trần Duy Thanh</h4>
-            <p className={cx('feedback-content')}> Mọi thứ đều rất tốt. Bác sĩ hỏi kỹ càng, chu đáo và nhẹ nhàng</p>
+        <div className="py-2 border-b-[0.5px] border-gray-300">
+            <h4 className="text-base mb-1 font-semibold">Trần Duy Thanh</h4>
+            <p className="text-sm font-normal text-gray-600">
+                {' '}
+                Mọi thứ đều rất tốt. Bác sĩ hỏi kỹ càng, chu đáo và nhẹ nhàng
+            </p>
         </div>
     );
 };
 
 function DetailDoctor() {
     return (
-        <div className={cx('container')}>
-            <div className={cx('intro')}>
-                <div className={cx('thumb')}>
+        <div className="container mx-auto py-8">
+            <div className="flex items-start">
+                <div className="max-w-[200px] aspect-square rounded-full overflow-hidden shadow-md">
                     <img
-                        className={cx('thumb-img')}
+                        className="block w-full"
                         src="https://cdn.bookingcare.vn/fr/w200/2021/01/18/105401-bsckii-tran-minh-khuyen.jpg"
                         alt="doctor"
                     />
                 </div>
-                <div className={cx('info')}>
-                    <h3 className={cx('name')}>Bác sĩ Chuyên khoa II Trần Minh Khuyên</h3>
-                    <p className={cx('short-desc')}>
+                <div className="m-5">
+                    <h3 className="mb-3 text-2xl font-semibold">Bác sĩ Chuyên khoa II Trần Minh Khuyên</h3>
+                    <p className="text-sm font-normal leading-6">
                         Nguyên Trưởng khoa lâm sàng, Bệnh tâm thần Thành phố Hồ Chí Minh <br /> Tốt nghiệp Tâm lý trị
                         liệu, trường Tâm lý Thực hành Paris (Psychology practique de Paris) <br /> Bác sĩ nhận khám từ
                         16 tuổi trở lên
                     </p>
                 </div>
             </div>
-            <div className={cx('booking')}>
-                <div className={cx('schedule')}>
-                    <h5 className={cx('schedule-title')}>Lịch khám</h5>
-                    <select className={cx('date')}>
+            <div className="my-10 flex items-start">
+                <div className="flex-1">
+                    <h5 className="uppercase text-xl text-blue-700 font-semibold">Lịch khám</h5>
+                    <select className="p-2 text-base font-semibold border-b border-gray-700 min-w-[200px]">
                         <option>13/08</option>
                         <option>14/08</option>
                         <option>15/08</option>
                         <option>16/08</option>
                     </select>
-                    <div className={cx('time')}></div>
                 </div>
-                <div className={cx('booking-info')}>
-                    <div className={cx('address')}>
-                        <h4 className={cx('title')}>ĐỊA CHỈ KHÁM</h4>
-                        <p className={cx('hospital')}>Phòng khám Bệnh viện Đại học Y Dược 1</p>
-                        <p className={cx('hospital-address')}>20-22 Dương Quang Trung, Phường 12, Quận 10, Tp. HCM</p>
+                <div className="pl-5 border-l-[0.5px] border-gray-500">
+                    <div>
+                        <p className="mb-2 uppercase text-xl font-medium">ĐỊA CHỈ KHÁM</p>
+                        <p className="font-semibold text-xl">Phòng khám Bệnh viện Đại học Y Dược 1</p>
+                        <p className="text-base">20-22 Dương Quang Trung, Phường 12, Quận 10, Tp. HCM</p>
                     </div>
-                    <div className={cx('price')}>
-                        <h4 className={cx('title')}>GIÁ KHÁM: </h4>
-                        <p className={cx('price-detail')}> 250.000đ - 500.000đ</p>
+                    <div className="mt-2 flex items-end ">
+                        <p className="font-base font-normal"> Giá khám: 250.000 đ</p>
                     </div>
                 </div>
             </div>
-            <div className={cx('desc')}>
+            <div className="border-t border-gray-300 py-4">
                 Bác sĩ Chuyên khoa II Trần Minh Khuyên Nguyên Trưởng khoa lâm sàng, Bệnh tâm thần Thành phố Hồ Chí Minh
                 Tốt nghiệp Tâm lý trị liệu, trường Tâm lý Thực hành Paris (Psychology practique de Paris) Bác sĩ nhận
                 khám từ 16 tuổi trở lên Quá trình đào tạo Tốt nghiệp Bác sĩ Đa khoa, Trường Đại học y dược thành phố Hồ
@@ -74,9 +68,9 @@ function DetailDoctor() {
                 bị tội,... Rối loạn ảo giác Các rối loạn liên quan đến stress Rối loạn khí sắc Rối loạn cảm xúc phân
                 liệt Rối loạn đa nhân cách Các bệnh lý loạn thần do sử dụng chất (ma túy đá, cần sa, heroin..)...
             </div>
-            <div className={cx('comments')}>
-                <h3 className={cx('comments-title')}>Phản hồi của bệnh nhân sau khi đi khám</h3>
-                <div className={cx('comments-list')}>
+            <div className="border-t border-gray-300 py-4">
+                <p className="mb-4 text-2xl font-semibold">Phản hồi của bệnh nhân sau khi đi khám</p>
+                <div className="">
                     <Item />
                     <Item />
                     <Item />

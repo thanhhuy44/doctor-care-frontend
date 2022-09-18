@@ -1,26 +1,21 @@
-import classNames from 'classnames/bind';
 import Footer from '../components/Footer';
 import Sidebar from '../components/Sidebar';
-import styles from './ManagementLayout.module.scss';
-import '../components/gridsystem.scss';
 import HeaderManagement from '../components/HeaderManagement';
-
-const cx = classNames.bind(styles);
 
 function ManagementLayout({ children }) {
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('container') + ' grid wide'}>
-                <div className={cx('header')}>
+        <div className="bg-slate-300 relative">
+            <div className="container mx-auto">
+                <div className="fixed top-0 left-0 right-0 z-[999]">
                     <HeaderManagement />
                 </div>
-                <div className={cx('content')}>
-                    <div className={cx('sidebar')}>
+                <div className="mt-[80px] flex items-start bg-slate-300 overflow-y-auto relative z-0 min-h-[100vh]">
+                    <div className="overflow-hidden min-h-[100vh] bg-gray-300">
                         <Sidebar />
                     </div>
-                    <div className={cx('page')}>{children}</div>
+                    <div className="flex-1 my-5 mx-10 z-0">{children}</div>
                 </div>
-                <div className={cx('footer')}>
+                <div className="footer">
                     <Footer />
                 </div>
             </div>

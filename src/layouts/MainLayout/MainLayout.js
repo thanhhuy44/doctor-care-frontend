@@ -9,11 +9,11 @@ const cx = classNames.bind(styles);
 
 function MainLayout({ children }) {
     return (
-        <div className="grid wide">
-            <div className={cx('header')}>
+        <div className="overflow-hidden">
+            <div className="bg-white">
                 <Header />
             </div>
-            <div className={cx('page')}>{children}</div>
+            <div className="mt-[80px]">{children}</div>
             <div className={cx('footer')}>
                 <Footer />
             </div>

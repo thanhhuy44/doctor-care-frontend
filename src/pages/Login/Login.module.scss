@@ -28,19 +28,21 @@
     padding: 12px;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    min-width: 400px;
 }
 .title {
     margin: 28px 0;
     text-align: center;
     text-transform: uppercase;
-    font-size: 2.4rem;
+    font-size: 24px;
+    font-weight: 600;
 }
 .form-group {
     margin-bottom: 20px;
 }
 
 .feild {
-    font-size: 2rem;
+    font-size: 20px;
     margin-bottom: 12px;
     background-color: #ccc;
     padding: 8px 16px;
@@ -58,7 +60,7 @@
 .error-mess {
     padding-left: 12px;
     margin-top: 8px;
-    font-size: 1.2rem;
+    font-size: 12px;
     font-weight: 500;
     color: red;
 }
@@ -70,7 +72,7 @@
 .input {
     flex: 1;
     background-color: #ccc;
-    font-size: 2rem;
+    font-size: 20px;
     margin-left: 8px;
     color: var(--text-secondary);
 }
@@ -100,8 +102,8 @@
 }
 
 .signup {
-    margin-top: 60px;
-    font-size: 1.4rem;
+    margin-top: 40px;
+    font-size: 14px;
     text-align: center;
     font-weight: 400;
 }

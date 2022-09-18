@@ -7,7 +7,6 @@ import Button from '~/components/Button/Button';
 import styles from '../../Form/Form.module.scss';
 import SunEditor, { buttonList } from 'suneditor-react';
 import { Link } from 'react-router-dom';
-import Popup from '~/components/Popup/Popup';
 import axios from 'axios';
 
 const cx = classNames.bind(styles);

@@ -1,106 +1,85 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faCirclePlus, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
-import classNames from 'classnames/bind';
-import styles from './Booking.module.scss';
 import Button from '~/components/Button/Button';
-import Modal from '~/components/Modal';
 import { useState } from 'react';
 
-const cx = classNames.bind(styles);
-
 function Booking() {
-    const [hideModal, setHideModal] = useState(true);
-    const funcs = {
-        handleClick: () => {
-            setHideModal(!hideModal);
-            console.log(hideModal);
-        },
-        handleExit: () => {
-            setHideModal(!hideModal);
-            console.log(hideModal);
-        },
-    };
     return (
-        <div className={cx('container')}>
-            <div className={cx('intro')}>
-                <div className={cx('thumb')}>
+        <div className="py-5 max-w-[700px] mx-auto">
+            <div className="flex items-start">
+                <div className="block max-w-[200px] aspect-square rounded-full overflow-hidden">
                     <img
-                        className={cx('thumb-img')}
+                        className=""
                         src="https://cdn.bookingcare.vn/fr/w100/2021/01/18/105401-bsckii-tran-minh-khuyen.jpg"
                         alt="alt"
                     />
                 </div>
-                <div className={cx('info')}>
-                    <p className={cx('title')}>ĐẶT LỊCH KHÁM</p>
-                    <h4 className={cx('name')}>Bác sĩ Chuyên khoa II Trần Minh Khuyên</h4>
-                    <p className={cx('time')}>08:30 - 09:00 - Thứ 2 - 15/08/2022</p>
+                <div className="py-2 px-4">
+                    <p className="text-base leading-4">ĐẶT LỊCH KHÁM</p>
+                    <h4 className="text-xl mb-2">Bác sĩ Chuyên khoa II Trần Minh Khuyên</h4>
+                    <p className="text-sm font-normal lowercase">08:30 - 09:00 - Thứ 2 - 15/08/2022</p>
                 </div>
             </div>
-            <div className={cx('form')}>
-                <div className={cx('type')}>
-                    <span>
+            <div className="mt-10">
+                <div>
+                    <span className="mr-4">
                         <input type="radio" value="HI" name="type" /> Đặt cho chính mình
                     </span>
-                    <span>
+                    <span className="mr-4">
                         <input type="radio" value="hi 1" name="type" /> Đặt cho người thân
                     </span>
                 </div>
-                <div className={cx('feild')}>
-                    <label htmlFor="userName" className={cx('label')}>
+                <div className="flex items-center mt-4 w-full text-base p-[10px] rounded border border-gray-500">
+                    <label htmlFor="userName" className="pr-3 text-gray-700">
                         <FontAwesomeIcon icon={faUser} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Họ tên bệnh nhân (bắt buộc)" />
+                    <input className="flex-1" id="userName" placeholder="Họ tên bệnh nhân (bắt buộc)" />
                 </div>
-                <div className={cx('feild')}>
-                    <label htmlFor="userName" className={cx('label')}>
+                <div className="flex items-center mt-4 w-full text-base p-[10px] rounded border border-gray-500">
+                    <label htmlFor="userName" className="pr-3 text-gray-700">
                         <FontAwesomeIcon icon={faPhone} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Số điện thoại liên hệ (bắt buộc)" />
+                    <input className="flex-1" id="userName" placeholder="Số điện thoại liên hệ (bắt buộc)" />
                 </div>
-                <div className={cx('feild')}>
-                    <label htmlFor="userName" className={cx('label')}>
+                <div className="flex items-center mt-4 w-full text-base p-[10px] rounded border border-gray-500">
+                    <label htmlFor="userName" className="pr-3 text-gray-700">
                         <FontAwesomeIcon icon={faCalendar} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Ngày/tháng/năm sinh (bắt buộc)" />
+                    <input className="flex-1" id="userName" placeholder="Ngày/tháng/năm sinh (bắt buộc)" />
                 </div>
-                <div className={cx('feild')}>
-                    <label htmlFor="userName" className={cx('label')}>
+                <div className="flex items-center mt-4 w-full text-base p-[10px] rounded border border-gray-500">
+                    <label htmlFor="userName" className="pr-3 text-gray-700">
                         <FontAwesomeIcon icon={faLocationDot} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Địa chỉ (bắt buộc)" />
+                    <input className="flex-1" id="userName" placeholder="Địa chỉ (bắt buộc)" />
                 </div>
-                <div className={cx('feild')}>
-                    <label htmlFor="userName" className={cx('label')}>
+                <div className="flex items-center mt-4 w-full text-base p-[10px] rounded border border-gray-500">
+                    <label htmlFor="userName" className="pr-3 text-gray-700">
                         <FontAwesomeIcon icon={faCirclePlus} />
                     </label>
-                    <input className={cx('input')} id="userName" placeholder="Lý do khám" />
+                    <input className="flex-1" id="userName" placeholder="Lý do khám" />
                 </div>
-                <div className={cx('payment')}>
-                    <span>
-                        <input type="radio" value="payment" name="type" checked /> Thanh toán sau tại cơ sở y tế
-                    </span>
-                </div>
-                <div className={cx('cost')}>
-                    <p className={cx('line', 'price')}>
+                <div className="rounded overflow-hidden p-4 mt-3 bg-[#f6f6f6] text-base leading-4 text-gray-900">
+                    <p className="my-1 flex items-center justify-between">
                         <span>Giá khám</span>
                         <span>250.000đ</span>
                     </p>
-                    <p className={cx('line', 'extra-fee')}>
+                    <p className="my-1 flex items-center justify-between">
                         <span>Phí đặt lịch</span>
                         <span>Miễn phí</span>
                     </p>
-                    <p className={cx('line', 'total-cost')}>
+                    <p className="my-1 flex items-center justify-between pt-3 border-t border-red-600 text-red-600 font-semibold">
                         <span>Tổng cộng</span>
                         <span>250.000đ</span>
                     </p>
                 </div>
-                <div className={cx('warning')}>
+                <div className="p-3 text-sm text-center text-gray-900">
                     <p>Quý khách vui lòng điền đầy đủ thông tin để tiết kiệm thời gian làm thủ tục khám</p>
                 </div>
-                <div className={cx('notice')}>
-                    <h3 className={cx('title-notice')}>LƯU Ý</h3>
-                    <div className={cx('content-notice')}>
-                        <p className={cx('rule')}>
+                <div className="p-4 bg-[#d4effc] rounded">
+                    <h3 className="text-xl uppercase font-semibold">LƯU Ý</h3>
+                    <div>
+                        <p className="mt-3 text-sm">
                             1. Thông tin bạn cung cấp sẽ được sử dụng làm hồ sơ khám bệnh. Vì vậy khi điền thông tin,
                             bạn vui lòng lưu ý:
                             <ul>
@@ -108,21 +87,21 @@ function Booking() {
                                 <li>Điền đầy đủ, đúng và kiểm tra lại thông tin trước khi ấn "Xác nhận đặt khám"</li>
                             </ul>
                         </p>
-                        <p className={cx('rule')}>
+                        <p className="mt-3 text-sm">
                             2. Tuân thủ quy định phòng chống dịch (đeo khẩu trang, khử khuẩn, khai báo dịch tễ) khi đến
                             khám.
                         </p>
                     </div>
                 </div>
-                <div className={cx('submit')}>
-                    <Button onClick={funcs.handleClick} type="primary" className={cx('submit-btn')}>
+                <div className="my-3">
+                    <Button type="primary" className="table mx-auto">
                         Xác nhận đặt khám
                     </Button>
                 </div>
-                <p className={cx('confirm')}>
+                <p className="text-sm">
                     Bằng việc xác nhận đặt khám, bạn đã hoàn toàn đồng ý với{' '}
                     <a
-                        className={cx('confirm-link')}
+                        className="inline-block font-medium text-blue-600"
                         href="https://bookingcare.vn/thong-tin/dieu-khoan-su-dung-p7"
                         target="blank"
                     >
@@ -131,7 +110,6 @@ function Booking() {
                     của chúng tôi.
                 </p>
             </div>
-            <Modal btn="OkCancel" onClick={funcs} isHide={hideModal} type="success" message="Are you sure?" />
         </div>
     );
 }
