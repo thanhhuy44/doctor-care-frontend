@@ -7,7 +7,7 @@ import Button from '~/components/Button/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { emailRegex } from '~/regex';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -24,6 +24,7 @@ function Login() {
 
     const handleLogin = (data) => {
         console.log(data);
+        axios.post('http://localhost:3030/api/admin/login', data).then((res) => console.log(res.data.data));
     };
     return (
         <div>
@@ -34,17 +35,13 @@ function Login() {
                 <div className={cx('form')}>
                     <h3 className={cx('title')}>Login</h3>
                     <div className={cx('form-group')}>
-                        <div className={cx('feild', errors.email && 'error')}>
+                        <div className={cx('feild', errors.userName && 'error')}>
                             <label className={cx('label')} htmlFor="email">
                                 <FontAwesomeIcon icon={faEnvelope} />
                             </label>
                             <input
-                                {...register('email', {
+                                {...register('userName', {
                                     required: true,
-                                    pattern: {
-                                        value: emailRegex,
-                                        message: 'Please enter valid email !!!',
-                                    },
                                 })}
                                 type="text"
                                 id="email"
@@ -52,8 +49,9 @@ function Login() {
                                 placeholder="Email"
                             />
                         </div>
-                        {errors.email?.type === 'required' && <p className={cx('error-mess')}>Feild is required!!!</p>}
-                        {errors.email && <p className={cx('error-mess')}>{errors.email.message}</p>}
+                        {errors.userName?.type === 'required' && (
+                            <p className={cx('error-mess')}>Feild is required!!!</p>
+                        )}
                     </div>
 
                     <div className={cx('form-group')}>

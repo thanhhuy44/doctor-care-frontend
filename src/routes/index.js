@@ -18,11 +18,31 @@ import Test from '~/pages/Test';
 import MainLayout from '~/layouts/MainLayout';
 import AddDoctor from '~/pages/managements/doctors/AddDoctor';
 import AddHospital from '~/pages/managements/hospitals/AddHospital';
+import AllDoctors from '~/pages/AllDoctors';
+import AllHospitals from '~/pages/AllHospitals';
+import AllSpecialties from '~/pages/AllSpecialties';
+import AllPackages from '~/pages/AllPackages';
 
 const publicRoutes = [
     {
         path: '/',
         component: Home,
+    },
+    {
+        path: '/doctors',
+        component: AllDoctors,
+    },
+    {
+        path: '/hospitals',
+        component: AllHospitals,
+    },
+    {
+        path: '/specialties',
+        component: AllSpecialties,
+    },
+    {
+        path: '/packages',
+        component: AllPackages,
     },
     {
         path: '/doctor',

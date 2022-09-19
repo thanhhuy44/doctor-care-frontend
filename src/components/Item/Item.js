@@ -11,7 +11,7 @@ const Item = ({ type, data }) => {
                     <img src={data.image} alt="chuyen-khoa" className="w-full" />
                 </div>
                 <div className="m-4">
-                    <h4 className="text-xl font-normal">{data.name}</h4>
+                    <h4 className="text-xl font-normal">{data.name || data.firstName}</h4>
                 </div>
             </Link>
         </div>
