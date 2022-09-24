@@ -23,7 +23,6 @@ function Login() {
     const [hidePass, setHidePass] = useState(true);
 
     const handleLogin = (data) => {
-        console.log(data);
         axios.post('http://localhost:3030/api/admin/login', data).then((res) => console.log(res.data.data));
     };
     return (

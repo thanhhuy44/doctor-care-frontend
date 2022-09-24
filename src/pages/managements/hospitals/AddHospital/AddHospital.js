@@ -32,7 +32,6 @@ function AddHospital() {
             data: formData,
             headers: { 'Content-Type': 'multipart/form-data' },
         }).then((res) => console.log(res.data.message));
-        console.log(data);
     };
     return (
         <div className="w-full overflow-hidden">

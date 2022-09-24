@@ -32,7 +32,6 @@ function HospitalForm() {
         if (e.target.files && e.target.files.length > 0) {
             let fileList = [...e.target.files];
             await setDescImages([...descImages, ...fileList]);
-            console.log(descImages);
         }
     };
 

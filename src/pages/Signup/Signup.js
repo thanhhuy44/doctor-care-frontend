@@ -15,7 +15,6 @@ function Signup() {
         watch,
     } = useForm();
     const handleSignUp = (data) => {
-        console.log(data);
         alert(data);
     };
     return (

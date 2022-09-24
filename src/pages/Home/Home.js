@@ -13,18 +13,18 @@ function Home() {
                     <img className="w-full block" src={background} alt="background" />
                 </div>
                 <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center bg-black/30 ">
-                    <h1 className="text-center text-4xl text-white uppercase drop-shadow mb-5 leading-16">
+                    <h1 className="text-center text-2xl sm:text-4xl leading-6 font-semibold text-white uppercase drop-shadow sm:mb-5 leading-16">
                         NỀN TẢNG Y TẾ
                         <br />
                         CHĂM SÓC SỨC KHỎE TOÀN DIỆN
                     </h1>
-                    <div className="flex items-center mt-3 bg-yellow-400 rounded-3xl overflow-hidden shadow-2xl">
-                        <button className="bg-transparent text-2xl py-3 px-4 cursor-pointer hover:opacity-75">
+                    <div className="flex items-center mt-3 mx-2 sm:mx-0  bg-yellow-400 rounded-3xl overflow-hidden shadow-2xl">
+                        <button className="bg-transparent text-xl sm:text-2xl p-2 sm:py-3 sm:px-4  cursor-pointer hover:opacity-75">
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </button>
-                        <input className="bg-transparent text-xl min-w-[500px]" placeholder="Search..." />
+                        <input className="bg-transparent text-xl w-full sm:w-[500px]" placeholder="Search..." />
                     </div>
-                    <div className="mt-5 flex items-center">
+                    <div className="mt-5 sm:flex items-center hidden ">
                         <a
                             className="mx-9"
                             href="https://play.google.com/store/apps/details?id=vn.bookingcare.bookingcare"

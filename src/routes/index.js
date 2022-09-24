@@ -1,5 +1,4 @@
 import Home from '~/pages/Home';
-import Doctor from '~/pages/Doctor';
 import Admin from '~/pages/Admin';
 import Category from '~/pages/Category';
 import DetailDoctor from '~/pages/DetailDoctor';
@@ -12,8 +11,6 @@ import Hospital from '~/pages/Hospital';
 import ManagementDoctor from '~/pages/managements/ManagementDoctor';
 import ManagementHospital from '~/pages/managements/ManagementHospital';
 import ManagementAdmin from '~/pages/managements/ManagementAdmin';
-import DoctorForm from '~/components/Form/DoctorForm';
-import HospitalForm from '~/components/Form/HospitalForm';
 import Test from '~/pages/Test';
 import MainLayout from '~/layouts/MainLayout';
 import AddDoctor from '~/pages/managements/doctors/AddDoctor';
@@ -22,6 +19,8 @@ import AllDoctors from '~/pages/AllDoctors';
 import AllHospitals from '~/pages/AllHospitals';
 import AllSpecialties from '~/pages/AllSpecialties';
 import AllPackages from '~/pages/AllPackages';
+import Package from '~/pages/Package';
+import Specialty from '~/pages/Specialty';
 
 const publicRoutes = [
     {
@@ -43,10 +42,6 @@ const publicRoutes = [
     {
         path: '/packages',
         component: AllPackages,
-    },
-    {
-        path: '/doctor',
-        component: Doctor,
     },
     {
         path: '/category',
@@ -112,6 +107,28 @@ const publicRoutes = [
     {
         path: '/test/form',
         component: Test,
+        layout: MainLayout,
+    },
+
+    //page detail
+    {
+        path: '/hospital/:name/:id',
+        component: Hospital,
+        layout: MainLayout,
+    },
+    {
+        path: '/doctor/:name/:id',
+        component: DetailDoctor,
+        layout: MainLayout,
+    },
+    {
+        path: '/package/:name/:id',
+        component: Package,
+        layout: MainLayout,
+    },
+    {
+        path: '/specialty/:name/:id',
+        component: Specialty,
         layout: MainLayout,
     },
 ];

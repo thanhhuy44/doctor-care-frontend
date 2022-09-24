@@ -30,7 +30,6 @@ function MultipleImage(props) {
                         onChange={(e) => {
                             setPreviewImg([...previewImg, ...e.target.files]);
                             onChange([...previewImg, ...e.target.files]);
-                            console.log(previewImg);
                         }}
                         id={id}
                         accept="image/png, image/gif, image/jpeg"

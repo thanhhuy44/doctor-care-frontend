@@ -15,7 +15,6 @@ function Category() {
     }, []);
     useEffect(() => {
         setIsLoading(false);
-        console.log(data);
     }, [data]);
     if (isLoading) {
         return <h1>Loading</h1>;

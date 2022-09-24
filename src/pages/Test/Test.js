@@ -9,9 +9,7 @@ function Test() {
         control,
         formState: { errors },
     } = useForm();
-    const handleClick = (data) => {
-        console.log(data);
-    };
+    const handleClick = (data) => {};
     return (
         <div>
             <h1 style={errors.descImages && { color: 'red' }}>hi</h1>

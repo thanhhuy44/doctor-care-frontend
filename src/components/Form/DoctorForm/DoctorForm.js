@@ -30,8 +30,6 @@ function DoctorForm() {
     };
 
     const handleClickBtn = (data) => {
-        console.log(data);
-        console.log(data.image[0]);
         const config = {
             headers: { 'content-type': 'multipart/form-data' },
         };

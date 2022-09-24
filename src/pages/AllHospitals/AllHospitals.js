@@ -15,14 +15,13 @@ function AllHospitals() {
     }, []);
     useEffect(() => {
         setIsLoading(false);
-        console.log(data);
     }, [data]);
     if (isLoading) {
         return <h1>Loading</h1>;
     } else {
         return (
             <div className="container mx-auto">
-                <h1 className="mb-5">Chuyen khoa</h1>
+                <h1 className="p-5 mb-3 leading-5 text-3xl font-semibold">Cơ sở y tế</h1>
                 <div>
                     {data.map((item) => (
                         <Item key={item._id} data={item} />

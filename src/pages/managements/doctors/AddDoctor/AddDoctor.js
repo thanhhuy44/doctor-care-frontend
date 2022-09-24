@@ -42,7 +42,6 @@ function AddDoctor() {
                 },
             )
             .then((res) => console.log(res.data.message));
-        console.log(data);
     };
 
     return (
