@@ -33,13 +33,13 @@ function DetailDoctor() {
             <div className="container mx-auto py-8">
                 <div className="flex items-start flex-col md:flex-row">
                     <div className="text-center max-w-[200px] aspect-square rounded-full overflow-hidden shadow-md object-contain">
-                        <img className="block w-full" src={data.image} alt="doctor" />
+                        <img className="block w-full h-full object-cover" src={data.image} alt="doctor" />
                     </div>
                     <div className="m-5">
                         <h3 className="mb-3 text-2xl font-semibold">Bác sĩ {`${data.firstName} ${data.lastName}`}</h3>
                         <p
                             className="text-sm font-normal leading-6"
-                            dangerouslySetInnerHTML={{ __html: data.description }}
+                            dangerouslySetInnerHTML={{ __html: data.shortDescription }}
                         ></p>
                     </div>
                 </div>
@@ -64,7 +64,10 @@ function DetailDoctor() {
                         </div>
                     </div>
                 </div>
-                <div className="border-t border-gray-300 py-4">{data.description}</div>
+                <div
+                    className="border-t border-gray-300 py-4"
+                    dangerouslySetInnerHTML={{ __html: data.description }}
+                ></div>
                 <div className="border-t border-gray-300 py-4">
                     <p className="mb-4 text-2xl font-semibold">Phản hồi của bệnh nhân sau khi đi khám</p>
                     <div className="">

@@ -7,7 +7,7 @@ function AllPackages() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/packages').then((res) => {
+        axios.get('http://localhost:3030/api/type-packages').then((res) => {
             const result = res.data.data;
 
             setData(result);
