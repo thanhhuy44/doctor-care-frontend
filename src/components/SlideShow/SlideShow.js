@@ -7,7 +7,7 @@ const Item = ({ border, data }) => {
     return (
         <div className="block mx-4">
             <div className={border && 'p-2 border-[0.2px] border-gray-600'}>
-                <Link to={data.link} className="block w-full rounded-xl overflow-hidden">
+                <Link to={data.link} className="block w-full rounded overflow-hidden shadow-sm">
                     <img
                         className="w-full block h-[240px] object-cover"
                         alt={data.alias}

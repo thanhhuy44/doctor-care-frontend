@@ -59,9 +59,9 @@ function Home() {
                 </div>
 
                 {data.map((section, index) => (
-                    <Section key={index} bgColor="#ccc" numberOfSlide={4}>
+                    <Section key={index} numberOfSlide={4}>
                         <h1 className="font-bold text-3xl my-4">{section.title}</h1>
-                        <SlideShow numberOfSlide={3} data={section.data} className="-mx-4" />
+                        <SlideShow numberOfSlide={4} data={section.data} className="-mx-4" />
                     </Section>
                 ))}
 
