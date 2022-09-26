@@ -9,7 +9,7 @@
     @apply min-w-[80px] p-3 bg-[#ffc419] text-white;
 }
 .primary:hover {
-    background-color: rgb(199, 199, 0);
+    @apply bg-[#ffc419] lg:bg-[#c7c700];
 }
 
 .link {

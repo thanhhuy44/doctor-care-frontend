@@ -25,7 +25,7 @@ function Home() {
             <div>
                 <div className="block  relative w-full object-cover">
                     <div className="block">
-                        <img className="w-full block" src={background} alt="background" />
+                        <img className="w-full block max-h-[100vh] object-cover" src={background} alt="background" />
                     </div>
                     <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center bg-black/30 ">
                         <h1 className="text-center text-2xl sm:text-4xl leading-6 font-semibold text-white uppercase drop-shadow sm:mb-5 leading-16">
