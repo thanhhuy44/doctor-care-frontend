@@ -1,6 +1,4 @@
 import { useForm, Controller } from 'react-hook-form';
-import classNames from 'classnames/bind';
-import styles from '../doctor.module.scss';
 import Input from '~/components/Form/components/Input';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 import Select from '~/components/Form/components/Select';
@@ -8,16 +6,29 @@ import Editor from '~/components/Form/components/Editor';
 import FileInput from '~/components/Form/components/FileInput';
 import Button from '~/components/Button/Button';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-const cx = classNames.bind(styles);
+function AddDoctor({ doctor }) {
+    const [hospitals, setHospital] = useState([]);
+    const [specialties, setSpecialties] = useState([]);
 
-function AddDoctor() {
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/hospitals').then((res) => {
+            setHospital(res.data.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/specialties').then((res) => {
+            setSpecialties(res.data.data);
+        });
+    }, []);
+
     const {
         handleSubmit,
         control,
         formState: { errors },
     } = useForm();
-
     const handleClick = (data) => {
         axios
             .post(
@@ -45,9 +56,28 @@ function AddDoctor() {
     };
 
     return (
-        <div className={cx('container')}>
-            <h1 className={cx('title')}>Thêm bác sĩ</h1>
-            <div className={cx('form')}>
+        <div>
+            <h1 className="text-3xl font-bold">Thêm bác sĩ</h1>
+            <div>
+                <div className="flex justify-center items-center w-full my-3">
+                    <Controller
+                        control={control}
+                        name="image"
+                        rules={{
+                            required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <FileInput
+                                error={errors.image}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                selected={value}
+                                name="Image"
+                                id="image"
+                            />
+                        )}
+                    />
+                </div>
                 <div className="grid grid-cols-2">
                     <div className="mr-2">
                         <Controller
@@ -179,11 +209,8 @@ function AddDoctor() {
                                     id="specialty"
                                     options={[
                                         { name: '---Chọn chuyên khoa---', value: '' },
-                                        { name: 'Chuyên khoa 1', value: '63144ba48401ff567eb0af96' },
-                                        { name: 'Chuyên khoa 2', value: '63144ba48401ff567eb0af96' },
-                                        { name: 'Chuyên khoa 3', value: '63144ba48401ff567eb0af96' },
-                                        { name: 'Chuyên khoa 4', value: '63144ba48401ff567eb0af96' },
-                                        { name: '---Thêm chuyên khoa---', value: '/admin' },
+                                        ...specialties,
+                                        { name: '---Thêm chuyên khoa---', value: '/specialty/add' },
                                     ]}
                                 />
                             )}
@@ -206,11 +233,8 @@ function AddDoctor() {
                                     id="hospital"
                                     options={[
                                         { name: '---Chọn bệnh viện---', value: '' },
-                                        { name: 'Bệnh viện 1', value: '63144ba48401ff567eb0af96' },
-                                        { name: 'Bệnh viện 2', value: '63144ba48401ff567eb0af96' },
-                                        { name: 'Bệnh viện 3', value: '63144ba48401ff567eb0af96' },
-                                        { name: 'Bệnh viện 4', value: '63144ba48401ff567eb0af96' },
-                                        { name: '---Thêm bệnh viện---', value: '/admin' },
+                                        ...hospitals,
+                                        { name: '---Thêm bệnh viện---', value: '/hospital/add' },
                                     ]}
                                 />
                             )}
@@ -272,26 +296,8 @@ function AddDoctor() {
                         />
                     )}
                 />
-                <div className="flex justify-center items-center w-full my-3">
-                    <Controller
-                        control={control}
-                        name="image"
-                        rules={{
-                            required: true,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <FileInput
-                                error={errors.image}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                selected={value}
-                                name="Image"
-                                id="image"
-                            />
-                        )}
-                    />
-                </div>
-                <Button onClick={handleSubmit(handleClick)} type="primary" size="full">
+
+                <Button className="my-10" onClick={handleSubmit(handleClick)} type="primary" size="full">
                     Submit
                 </Button>
             </div>

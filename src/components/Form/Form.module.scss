@@ -19,7 +19,7 @@
 }
 
 .editor {
-    @apply border border-transparent;
+    @apply border border-transparent focus-within:border-sky-700 focus-within:shadow-sm;
 }
 
 .error {
@@ -39,7 +39,7 @@
     @apply block absolute left-0 top-0 w-full aspect-square object-cover;
 }
 .add-image-btn {
-    @apply w-[200px] text-center;
+    @apply w-[200px] text-center mt-3;
 }
 
 @keyframes shake {

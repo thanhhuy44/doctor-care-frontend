@@ -41,7 +41,7 @@ function Input(props) {
             {error?.type === 'required' && <p className={cx('err-mess')}>Yêu cầu nhập trường này!!!</p>}
             {error?.message && <p className={cx('err-mess')}>{error.message}</p>}
             <Button type="primary" className={cx('add-image-btn')} htmlFor={id}>
-                Thêm ảnh đại diện
+                Thêm ảnh
             </Button>
         </div>
     );

@@ -85,6 +85,11 @@ const publicRoutes = [
         layout: ManagementLayout,
     },
     {
+        path: '/admin/doctor/update/:id',
+        component: AddDoctor,
+        layout: ManagementLayout,
+    },
+    {
         path: '/admin/hospitals',
         component: ManagementHospital,
         layout: ManagementLayout,
@@ -121,6 +126,7 @@ const publicRoutes = [
         component: DetailDoctor,
         layout: MainLayout,
     },
+
     {
         path: '/package/:name/:id',
         component: Package,
