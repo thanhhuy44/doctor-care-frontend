@@ -30,13 +30,6 @@ function Hospital() {
         return (
             <div className="block">
                 <div className="container mx-auto block">
-                    <div className="h-[230px] relative">
-                        <img
-                            className="absolute bottom-0 block w-full object-cover rounded-b-[4px]"
-                            src={data.image}
-                            alt={data.alias}
-                        />
-                    </div>
                     <div className="flex items-center">
                         <div className="py-3 mr-3">
                             <img className="block max-w-[120px] h-[60px]" src={data.image} alt={data.alias} />

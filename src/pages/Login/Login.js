@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import classNames from 'classnames/bind';
-import styles from './Login.module.scss';
 import background from '~/assets/images/bookingcare-cover-4.jpg';
 import Button from '~/components/Button/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-
-const cx = classNames.bind(styles);
 
 function Login() {
     const {
@@ -27,35 +23,42 @@ function Login() {
     };
     return (
         <div>
-            <div className={cx('background')}>
-                <img className={cx('background-img')} src={background} alt="bg" />
+            <div className="hidden xl:block fixed top-0 right-0 bottom-0 left-0 z-0">
+                <img className="w-full object-cover" src={background} alt="bg" />
             </div>
-            <div className={cx('content')}>
-                <div className={cx('form')}>
-                    <h3 className={cx('title')}>Login</h3>
-                    <div className={cx('form-group')}>
-                        <div className={cx('feild', errors.userName && 'error')}>
-                            <label className={cx('label')} htmlFor="email">
+            <div className="z-[1] fixed top-0 right-0 bottom-0 left-0 bg-white md:bg-black/25 flex items-center justify-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm w-full max-w-[400px] sm:w-[400px]">
+                    <h3 className="my-7 text-center uppercase text-2xl font-semibold">Login</h3>
+                    <div className="mb-5">
+                        <div
+                            className={`text-xl mb-3 bg-gray-300 py-2 px-4 rounded flex items-center text-gray-900 border ${
+                                errors.userName && 'border-red-600'
+                            }`}
+                        >
+                            <label className="cursor-pointer" htmlFor="email">
                                 <FontAwesomeIcon icon={faEnvelope} />
                             </label>
                             <input
                                 {...register('userName', {
                                     required: true,
                                 })}
-                                type="text"
+                                type="email"
                                 id="email"
-                                className={cx('input')}
+                                className="flex-1 w-full bg-transparent ml-2 text-xl text-gray-900 px-1"
                                 placeholder="Email"
                             />
                         </div>
                         {errors.userName?.type === 'required' && (
-                            <p className={cx('error-mess')}>Feild is required!!!</p>
+                            <p className="pl-3 mt-2 text-xs font-medium text-red-500">Feild is required!!!</p>
                         )}
                     </div>
-
-                    <div className={cx('form-group')}>
-                        <div className={cx('feild', errors.password && 'error')}>
-                            <label className={cx('label')} htmlFor="password">
+                    <div className="mb-5">
+                        <div
+                            className={`w-full text-xl mb-3 bg-gray-300 py-2 px-4 rounded flex items-center text-gray-900 border ${
+                                errors.password && 'border-red-600'
+                            }`}
+                        >
+                            <label className="cursor-pointer" htmlFor="password">
                                 <FontAwesomeIcon icon={faKey} />
                             </label>
                             <input
@@ -64,27 +67,21 @@ function Login() {
                                 })}
                                 id="password"
                                 type={hidePass ? 'password' : 'text'}
-                                className={cx('input')}
+                                className="flex-1 w-full bg-transparent ml-2 text-xl text-gray-900 px-1"
                                 placeholder="Password"
                             />
-                            <Button
-                                onClick={() => setHidePass(!hidePass)}
-                                className={cx('seepass-btn') + ' min-w-[28px] text-center'}
-                            >
-                                {hidePass ? (
-                                    <FontAwesomeIcon className={cx('btn-icon')} icon={faEye} />
-                                ) : (
-                                    <FontAwesomeIcon className={cx('btn-icon')} icon={faEyeSlash} />
-                                )}
+                            <Button onClick={() => setHidePass(!hidePass)} className={'block min-w-[28px] text-center'}>
+                                {hidePass ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
                             </Button>
                         </div>
-                        {errors.password && <p className={cx('error-mess')}>Feild is required!!!</p>}
+                        {errors.password && (
+                            <p className="pl-3 mt-2 text-xs font-medium text-red-500">Feild is required!!!</p>
+                        )}
                     </div>
-
-                    <Button onClick={handleSubmit(handleLogin)} type="primary" size="full" className={cx('login-btn')}>
+                    <Button onClick={handleSubmit(handleLogin)} type="primary" size="full" className="mt-12">
                         LOGIN
                     </Button>
-                    <div className={cx('social-login')}>
+                    {/* <div className={cx('social-login')}>
                         <p className={cx('social-login-title')}>Or login with</p>
                         <div className={cx('social-button')}>
                             <Button size="full" className={cx('social-login-button')} type="primary">
@@ -94,10 +91,10 @@ function Login() {
                                 Google
                             </Button>
                         </div>
-                    </div>
-                    <p className={cx('signup')}>
-                        <span className={cx('signup-text')}>Not a member?</span>{' '}
-                        <Link to="/signup" className={cx('signup-link')} target="_blank">
+                    </div> */}
+                    <p className="mt-10 text-sm text-center font-normal">
+                        <span>Not a member?</span>{' '}
+                        <Link to="/signup" className="inline-block underline font-medium" target="_blank">
                             Sign up now
                         </Link>
                     </p>
