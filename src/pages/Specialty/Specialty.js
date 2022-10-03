@@ -1,5 +1,15 @@
+import BookingItem from '~/components/BookingItem';
+
 function Specialty() {
-    return <h1>this is Specialty Page</h1>;
+    return (
+        <div className="container mx-auto pt-5">
+            <BookingItem />
+            <BookingItem />
+            <BookingItem />
+            <BookingItem />
+            <BookingItem />
+        </div>
+    );
 }
 
 export default Specialty;

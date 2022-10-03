@@ -37,12 +37,7 @@ function Specialty() {
                 </div>
             </div>
             <div className={cx('content')}>
-                <div>
-                    <ObjectItem />
-                    <ObjectItem />
-                    <ObjectItem />
-                    <ObjectItem />
-                </div>
+                <div></div>
                 <div className={cx('add')}>
                     <Button type="link" to="/admin/hospital/add" className={cx('add-btn')}>
                         <FontAwesomeIcon icon={faPlusCircle} />

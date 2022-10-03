@@ -7,6 +7,7 @@ import FileInput from '~/components/Form/components/FileInput';
 import Button from '~/components/Button/Button';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 function AddDoctor({ doctor }) {
     const [hospitals, setHospital] = useState([]);
@@ -52,12 +53,22 @@ function AddDoctor({ doctor }) {
                     },
                 },
             )
-            .then((res) => console.log(res.data.message));
+            .then((res) => alert(res.data.message));
+
+        emailjs.send(
+            'service_ckio5yp',
+            'template_bvunjlr',
+            {
+                name: `${data.firstName} ${data.lastName}`,
+                email: data.email,
+            },
+            '90Nvocv4SDDR7hpMr',
+        );
     };
 
     return (
         <div>
-            <h1 className="text-3xl font-bold">Thêm bác sĩ</h1>
+            <h1 className="text-3xl font-bold text-center md:text-left">Thêm bác sĩ</h1>
             <div>
                 <div className="flex justify-center items-center w-full my-3">
                     <Controller
@@ -78,8 +89,8 @@ function AddDoctor({ doctor }) {
                         )}
                     />
                 </div>
-                <div className="grid grid-cols-2">
-                    <div className="mr-2">
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="md:mr-2">
                         <Controller
                             control={control}
                             name="firstName"
@@ -100,7 +111,7 @@ function AddDoctor({ doctor }) {
                             )}
                         />
                     </div>
-                    <div className="ml-2">
+                    <div className="md:ml-2">
                         <Controller
                             control={control}
                             name="lastName"
@@ -122,8 +133,8 @@ function AddDoctor({ doctor }) {
                         />
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2">
-                    <div className="mr-2">
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="md:mr-2">
                         <Controller
                             control={control}
                             name="email"
@@ -148,7 +159,7 @@ function AddDoctor({ doctor }) {
                             )}
                         />
                     </div>
-                    <div className="ml-2">
+                    <div className="md:ml-2">
                         <Controller
                             control={control}
                             name="phoneNumber"
@@ -173,26 +184,28 @@ function AddDoctor({ doctor }) {
                         />
                     </div>
                 </div>
-                <Controller
-                    control={control}
-                    name="birthDay"
-                    rules={{
-                        required: true,
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Input
-                            error={errors.birthDay}
-                            type="date"
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            selected={value}
-                            name="Birth Day"
-                            id="birthDay"
-                        />
-                    )}
-                />
-                <div className="grid grid-cols-1 sm:grid-cols-2">
-                    <div className="sm:mr-2">
+                <div>
+                    <Controller
+                        control={control}
+                        name="birthDay"
+                        rules={{
+                            required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <Input
+                                error={errors.birthDay}
+                                type="date"
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                selected={value}
+                                name="Birth Day"
+                                id="birthDay"
+                            />
+                        )}
+                    />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="md:mr-2">
                         <Controller
                             control={control}
                             name="specialty"
@@ -216,7 +229,7 @@ function AddDoctor({ doctor }) {
                             )}
                         />
                     </div>
-                    <div className="sm:ml-2">
+                    <div className="mds:ml-2">
                         <Controller
                             control={control}
                             name="hospital"

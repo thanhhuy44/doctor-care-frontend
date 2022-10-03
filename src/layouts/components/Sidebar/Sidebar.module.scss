@@ -2,7 +2,7 @@
     @apply min-h-full flex flex-col;
 }
 .item {
-    @apply py-3 pr-5 pl-3 flex items-start border-l-[4px] border-transparent;
+    @apply py-3 pr-5 pl-3 flex items-center border-l-[4px] border-transparent;
 }
 .item.active {
     @apply border-gray-600 bg-blue-400;

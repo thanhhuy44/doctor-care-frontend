@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import styles from './MainLayout.module.scss';
-import './gridsystem.scss';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';

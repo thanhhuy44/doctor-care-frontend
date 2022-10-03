@@ -17,7 +17,6 @@ function ManagementDoctor() {
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/doctors').then((res) => {
-            console.log(res.data.data);
             setData(res.data.data);
             setIsLoading(false);
         });
@@ -37,10 +36,10 @@ function ManagementDoctor() {
     } else {
         return (
             <div className={cx('container')}>
-                <div className={cx('control')}>
-                    <div className={cx('filter')}>
-                        <div className={cx('group')}>
-                            <label htmlFor="specialtySelect" className={cx('label')}>
+                <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
+                    <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
+                        <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
+                            <label htmlFor="specialtySelect" className="font-medium mr-3">
                                 Bệnh viện
                             </label>
                             <select id="specialtySelect">
@@ -50,8 +49,8 @@ function ManagementDoctor() {
                                 <option>3</option>
                             </select>
                         </div>
-                        <div className={cx('group')}>
-                            <label htmlFor="hospitalSelect" className={cx('label')}>
+                        <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
+                            <label htmlFor="hospitalSelect" className="font-medium mr-3">
                                 Chuyên khoa
                             </label>
                             <select id="hospitalSelect">
@@ -62,19 +61,23 @@ function ManagementDoctor() {
                             </select>
                         </div>
                     </div>
-                    <div className={cx('search')}>
-                        <label className={cx('label')} htmlFor="searchInput">
+                    <div className="flex items-center md:justify-end w-full flex-1">
+                        <label className="font-medium mr-3  hidden md:block" htmlFor="searchInput">
                             Tìm kiếm
                         </label>
-                        <div className={cx('search-area')}>
-                            <input id="searchInput" className={cx('search-input')} placeholder="Nhập tên bác sĩ..." />
-                            <Button className={cx('search-btn')}>
+                        <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
+                            <input
+                                id="searchInput"
+                                className="bg-transparent flex-1"
+                                placeholder="Nhập tên bác sĩ..."
+                            />
+                            <Button className="bg-transparent">
                                 <FontAwesomeIcon icon={faSearch} />
                             </Button>
                         </div>
                     </div>
                 </div>
-                <div className={cx('content')}>
+                <div className="mt-5">
                     {data.map((doctor) => (
                         <ObjectItem
                             update={() => {
@@ -85,8 +88,12 @@ function ManagementDoctor() {
                             data={doctor}
                         />
                     ))}
-                    <div className={cx('add')}>
-                        <Button type="link" to="/admin/doctor/add" className={cx('add-btn')}>
+                    <div className="py-3 flex">
+                        <Button
+                            type="link"
+                            to="/admin/doctor/add"
+                            className="bg-transparent mx-auto text-[40px] text-orange-900 hover:text-cyan-700"
+                        >
                             <FontAwesomeIcon icon={faPlusCircle} />
                         </Button>
                     </div>

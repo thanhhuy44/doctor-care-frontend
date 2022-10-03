@@ -21,6 +21,8 @@ import AllSpecialties from '~/pages/AllSpecialties';
 import AllPackages from '~/pages/AllPackages';
 import Package from '~/pages/Package';
 import Specialty from '~/pages/Specialty';
+import ManagementSpecialty from '~/pages/managements/ManagementSpecialty';
+import ManagementPackage from '~/pages/managements/ManagementPackage';
 
 const publicRoutes = [
     {
@@ -100,8 +102,13 @@ const publicRoutes = [
         layout: ManagementLayout,
     },
     {
-        path: '/management4',
-        component: Admin,
+        path: '/admin/specialties',
+        component: ManagementSpecialty,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/packages',
+        component: ManagementPackage,
         layout: ManagementLayout,
     },
     {

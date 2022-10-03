@@ -19,7 +19,7 @@ function Select(props) {
                 name={name}
             >
                 {options.map((option, index) => (
-                    <option key={index} value={option.value || option._id}>
+                    <option key={index} value={option.value || option._id || option.id}>
                         {option.name}
                     </option>
                 ))}
