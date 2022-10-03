@@ -12,8 +12,13 @@ const cx = classNames.bind(styles);
 
 function ManagementDoctor() {
     const navigate = useNavigate();
+    const [hospital, setHospital] = useState([]);
+    const [specialty, setSpecialty] = useState([]);
+    const [curHospital, setCurHospital] = useState('');
+    const [curSpecialty, setCurSpecialty] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/doctors').then((res) => {
@@ -21,6 +26,42 @@ function ManagementDoctor() {
             setIsLoading(false);
         });
     }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/hospitals').then((res) => {
+            setHospital(res.data.data);
+        });
+    }, []);
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/specialties').then((res) => {
+            setSpecialty(res.data.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        curHospital === '' &&
+            curSpecialty === '' &&
+            axios.get('http://localhost:3030/api/doctors').then((res) => {
+                setData(res.data.data);
+            });
+        curHospital !== '' &&
+            curSpecialty === '' &&
+            axios.get(`http://localhost:3030/api/doctors?hospital=${curHospital}`).then((res) => {
+                setData(res.data.data);
+            });
+        curHospital === '' &&
+            curSpecialty !== '' &&
+            axios.get(`http://localhost:3030/api/doctors?specialty=${curSpecialty}`).then((res) => {
+                setData(res.data.data);
+            });
+        curHospital !== '' &&
+            curSpecialty !== '' &&
+            axios
+                .get(`http://localhost:3030/api/doctors?hospital=${curHospital}&specialty=${curSpecialty}`)
+                .then((res) => {
+                    setData(res.data.data);
+                });
+    }, [curHospital, curSpecialty]);
 
     const handleUpdate = (id) => {
         console.log('update');
@@ -31,6 +72,14 @@ function ManagementDoctor() {
         console.log('remove');
     };
 
+    const handleSearch = () => {
+        axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
+            setData(res.data.data);
+        });
+        setCurHospital('');
+        setCurSpecialty('');
+    };
+
     if (isLoading) {
         return <h1>Is Loading</h1>;
     } else {
@@ -39,25 +88,35 @@ function ManagementDoctor() {
                 <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
                     <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
-                            <label htmlFor="specialtySelect" className="font-medium mr-3">
+                            <label htmlFor="hospitalSelect" className="font-medium mr-3">
                                 Bệnh viện
                             </label>
-                            <select id="specialtySelect">
-                                <option>Tất cả</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            <select
+                                value={curHospital}
+                                onChange={(e) => {
+                                    setCurHospital(e.target.value);
+                                }}
+                                id="hospitalSelect"
+                            >
+                                <option value="">Tất cả</option>
+                                {hospital &&
+                                    hospital.map((option) => <option value={option._id}>{option.name}</option>)}
                             </select>
                         </div>
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
-                            <label htmlFor="hospitalSelect" className="font-medium mr-3">
+                            <label htmlFor="specialtySelect" className="font-medium mr-3">
                                 Chuyên khoa
                             </label>
-                            <select id="hospitalSelect">
-                                <option>Tất cả</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            <select
+                                value={curSpecialty}
+                                onChange={(e) => {
+                                    setCurSpecialty(e.target.value);
+                                }}
+                                id="specialtySelect"
+                            >
+                                <option value="">Tất cả</option>
+                                {specialty &&
+                                    specialty.map((option) => <option value={option._id}>{option.name}</option>)}
                             </select>
                         </div>
                     </div>
@@ -67,11 +126,15 @@ function ManagementDoctor() {
                         </label>
                         <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
                             <input
+                                value={searchValue}
+                                onChange={(e) => {
+                                    setSearchValue(e.target.value);
+                                }}
                                 id="searchInput"
                                 className="bg-transparent flex-1"
                                 placeholder="Nhập tên bác sĩ..."
                             />
-                            <Button className="bg-transparent">
+                            <Button onClick={handleSearch} className="bg-transparent">
                                 <FontAwesomeIcon icon={faSearch} />
                             </Button>
                         </div>
