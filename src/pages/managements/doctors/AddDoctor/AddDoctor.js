@@ -67,7 +67,7 @@ function AddDoctor({ doctor }) {
     };
 
     return (
-        <div>
+        <div className="mx-auto max-w-[1000px]">
             <h1 className="text-3xl font-bold text-center md:text-left">Thêm bác sĩ</h1>
             <div>
                 <div className="flex justify-center items-center w-full my-3">
@@ -176,9 +176,9 @@ function AddDoctor({ doctor }) {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     selected={value}
-                                    name="Phone Number"
+                                    name="Số điện thoại"
                                     id="phoneNumber"
-                                    placeholder="Phone Number..."
+                                    placeholder="Số điện thoại..."
                                 />
                             )}
                         />
@@ -198,7 +198,7 @@ function AddDoctor({ doctor }) {
                                 onChange={onChange}
                                 onBlur={onBlur}
                                 selected={value}
-                                name="Birth Day"
+                                name="Ngày sinh"
                                 id="birthDay"
                             />
                         )}
@@ -218,7 +218,7 @@ function AddDoctor({ doctor }) {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     selected={value}
-                                    name="Specialty"
+                                    name="Chuyên khoa"
                                     id="specialty"
                                     options={[
                                         { name: '---Chọn chuyên khoa---', value: '' },
@@ -229,7 +229,7 @@ function AddDoctor({ doctor }) {
                             )}
                         />
                     </div>
-                    <div className="mds:ml-2">
+                    <div className="md:ml-2">
                         <Controller
                             control={control}
                             name="hospital"
@@ -242,7 +242,7 @@ function AddDoctor({ doctor }) {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     selected={value}
-                                    name="Hospital"
+                                    name="Bệnh viện"
                                     id="hospital"
                                     options={[
                                         { name: '---Chọn bệnh viện---', value: '' },
@@ -266,7 +266,7 @@ function AddDoctor({ doctor }) {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Short Description"
+                            name="Giới thiệu ngắn"
                             id="shortDescription"
                         />
                     )}
@@ -283,7 +283,7 @@ function AddDoctor({ doctor }) {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Description"
+                            name="Thông tin chi tiết"
                             id="description"
                         />
                     )}
@@ -304,7 +304,7 @@ function AddDoctor({ doctor }) {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Price"
+                            name="Giá"
                             id="price"
                         />
                     )}

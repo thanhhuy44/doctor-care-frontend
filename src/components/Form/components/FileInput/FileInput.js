@@ -8,7 +8,7 @@ import Button from '~/components/Button/Button';
 const cx = classNames.bind(styles);
 
 function Input(props) {
-    const { id, name, multiple, error, onChange } = props;
+    const { id, name, multiple, error, onChange, defaultValue } = props;
     const [previewSrc, setPreviewSrc] = useState('');
 
     return (
@@ -22,7 +22,7 @@ function Input(props) {
                     onLoad={(event) => (event.target.style.display = 'block')}
                     className={cx('preview-img')}
                     alt="preview-img"
-                    src={previewSrc}
+                    src={previewSrc || defaultValue}
                 />
             </div>
             <input
@@ -41,7 +41,7 @@ function Input(props) {
             {error?.type === 'required' && <p className={cx('err-mess')}>Yêu cầu nhập trường này!!!</p>}
             {error?.message && <p className={cx('err-mess')}>{error.message}</p>}
             <Button type="primary" className={cx('add-image-btn')} htmlFor={id}>
-                Thêm ảnh
+                Thêm ảnh đại diện
             </Button>
         </div>
     );

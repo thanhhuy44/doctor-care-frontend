@@ -1,13 +1,9 @@
-import classNames from 'classnames/bind';
-import styles from './ManagementHospital.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const cx = classNames.bind(styles);
 
 function ManagementHospital() {
     const [data, setData] = useState([]);
@@ -24,11 +20,11 @@ function ManagementHospital() {
         <h1>Is Loading</h1>;
     } else {
         return (
-            <div className={cx('container')}>
-                <div className={cx('control')}>
-                    <div className={cx('filter')}>
-                        <div className={cx('group')}>
-                            <label htmlFor="specialtySelect" className={cx('label')}>
+            <div>
+                <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
+                    <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
+                        <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
+                            <label htmlFor="specialtySelect" className="text-base font-medium mr-3">
                                 Địa điểm
                             </label>
                             <select id="specialtySelect">
@@ -39,28 +35,32 @@ function ManagementHospital() {
                             </select>
                         </div>
                     </div>
-                    <div className={cx('search')}>
-                        <label className={cx('label')} htmlFor="searchInput">
+                    <div className="flex items-center md:justify-end w-full flex-1">
+                        <label className="font-medium mr-3  hidden md:block" htmlFor="searchInput">
                             Tìm kiếm
                         </label>
-                        <div className={cx('search-area')}>
+                        <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
                             <input
                                 id="searchInput"
-                                className={cx('search-input')}
+                                className="bg-transparent flex-1"
                                 placeholder="Nhập tên bệnh viện..."
                             />
-                            <Button className={cx('search-btn')}>
+                            <Button className="bg-transparent">
                                 <FontAwesomeIcon icon={faSearch} />
                             </Button>
                         </div>
                     </div>
                 </div>
-                <div className={cx('content')}>
+                <div className="mt-5">
                     {data.map((hospital) => (
                         <ObjectItem data={hospital} key={hospital._id} />
                     ))}
-                    <div className={cx('add')}>
-                        <Button type="link" to="/admin/hospital/add" className={cx('add-btn')}>
+                    <div className="py-3 flex">
+                        <Button
+                            type="link"
+                            to="/admin/hospital/add"
+                            className="bg-transparent mx-auto text-[40px] text-orange-900 hover:text-cyan-700"
+                        >
                             <FontAwesomeIcon icon={faPlusCircle} />
                         </Button>
                     </div>

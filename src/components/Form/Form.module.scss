@@ -23,7 +23,7 @@
 }
 
 .error {
-    @apply border-red-600;
+    border-color: red !important;
     animation: shake 0.5s;
 }
 

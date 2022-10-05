@@ -38,8 +38,25 @@ function AddHospital() {
     };
     return (
         <div className="w-full overflow-hidden">
-            <h2 className="text-3xl font-semibold text-center md:text-left">Add Hospital</h2>
-            <div>
+            <h2 className="text-3xl font-semibold text-center md:text-left">Thêm mới bệnh viện</h2>
+            <div className="mt-5 mb-10">
+                <Controller
+                    control={control}
+                    name="image"
+                    rules={{
+                        required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <FileInput
+                            error={errors.image}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            selected={value}
+                            name="Ảnh đại diện"
+                            id="image"
+                        />
+                    )}
+                />
                 <Controller
                     control={control}
                     name="name"
@@ -53,9 +70,9 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Name"
+                            name="Tên bệnh viện"
                             id="name"
-                            placeholder="Name..."
+                            placeholder="Tên bệnh viện..."
                         />
                     )}
                 />
@@ -72,9 +89,9 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Address"
+                            name="Địa chỉ"
                             id="address"
-                            placeholder="Address..."
+                            placeholder="Địa chỉ..."
                         />
                     )}
                 />
@@ -99,9 +116,9 @@ function AddHospital() {
                                     }}
                                     onBlur={onBlur}
                                     selected={value}
-                                    name="Province"
+                                    name="Tỉnh/Thành"
                                     id="province"
-                                    options={[{ name: '---Chọn bệnh viện---', value: '' }, ...location]}
+                                    options={[{ name: '---Chọn tỉnh thành---', value: '' }, ...location]}
                                 />
                             )}
                         />
@@ -125,10 +142,10 @@ function AddHospital() {
                                     }}
                                     onBlur={onBlur}
                                     selected={value}
-                                    name="District"
+                                    name="Quận/Huyện"
                                     id="district"
                                     options={[
-                                        { name: '---Chọn bệnh viện---', value: '' },
+                                        { name: '---Chọn quận huyện---', value: '' },
                                         ...(curProvince ? curProvince.districts : ''),
                                     ]}
                                 />
@@ -154,10 +171,10 @@ function AddHospital() {
                                     }}
                                     onBlur={onBlur}
                                     selected={value}
-                                    name="Wards"
+                                    name="Phường/Xã"
                                     id="wards"
                                     options={[
-                                        { name: '---Chọn bệnh viện---', value: '' },
+                                        { name: '---Chọn phường xã---', value: '' },
                                         ...(curDistrict.wards ? curDistrict.wards : ''),
                                     ]}
                                 />
@@ -177,7 +194,7 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Description"
+                            name="Mô tả"
                             id="description"
                         />
                     )}
@@ -194,7 +211,7 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Strengths"
+                            name="Điểm mạnh"
                             id="strengths"
                         />
                     )}
@@ -212,7 +229,7 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Equipments"
+                            name="Trang thiết bị"
                             id="equipments"
                         />
                     )}
@@ -230,28 +247,12 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Procedure"
+                            name="Quy trình khám bệnh"
                             id="procedure"
                         />
                     )}
                 />
-                <Controller
-                    control={control}
-                    name="image"
-                    rules={{
-                        required: true,
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <FileInput
-                            error={errors.image}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            selected={value}
-                            name="Image"
-                            id="image"
-                        />
-                    )}
-                />
+
                 <Controller
                     control={control}
                     name="descImages"
@@ -264,15 +265,15 @@ function AddHospital() {
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
-                            name="Desc Images"
+                            name="Hình ảnh mô tả"
                             id="descImages"
                         />
                     )}
                 />
-                <Button onClick={handleSubmit(handleClick)} type="primary" size="full">
-                    Submit
-                </Button>
             </div>
+            <Button onClick={handleSubmit(handleClick)} type="primary" size="full">
+                Submit
+            </Button>
         </div>
     );
 }

@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 
 function Select(props) {
     const navigate = useNavigate();
-    const { id, name, options, type, placeholder, onChange, error } = props;
+    const { id, name, options, type, placeholder, onChange, error, defaultValue } = props;
     return (
         <div className={cx('form-group')}>
             <label className={cx('label')} htmlFor={id}>
@@ -17,6 +17,7 @@ function Select(props) {
                 onChange={(e) => (e.target.value.startsWith('/') ? navigate(e.target.value) : onChange(e.target.value))}
                 id={id}
                 name={name}
+                defaultValue={defaultValue}
             >
                 {options.map((option, index) => (
                     <option key={index} value={option.value || option._id || option.id}>

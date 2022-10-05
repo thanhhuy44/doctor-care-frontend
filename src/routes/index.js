@@ -23,6 +23,7 @@ import Package from '~/pages/Package';
 import Specialty from '~/pages/Specialty';
 import ManagementSpecialty from '~/pages/managements/ManagementSpecialty';
 import ManagementPackage from '~/pages/managements/ManagementPackage';
+import UpdateDoctor from '~/pages/managements/doctors/UpdateDoctor';
 
 const publicRoutes = [
     {
@@ -88,7 +89,7 @@ const publicRoutes = [
     },
     {
         path: '/admin/doctor/update/:id',
-        component: AddDoctor,
+        component: UpdateDoctor,
         layout: ManagementLayout,
     },
     {

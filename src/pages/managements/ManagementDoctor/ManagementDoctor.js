@@ -1,14 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import classNames from 'classnames/bind';
 import Button from '~/components/Button/Button';
-import styles from './ManagementDoctor.module.scss';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const cx = classNames.bind(styles);
 
 function ManagementDoctor() {
     const navigate = useNavigate();
@@ -68,8 +64,18 @@ function ManagementDoctor() {
         navigate(`/admin/doctor/update/${id}`);
     };
 
-    const handleRemove = () => {
-        console.log('remove');
+    const handleRemove = (id) => {
+        axios.post(`http://localhost:3030/api/doctor/delete/${id}`).then((res) => {
+            if (res.data.errCode === 0) {
+                alert(res.data.message);
+                const newData = data.filter((doctor) => {
+                    return doctor._id !== id;
+                });
+                setData(newData);
+            } else {
+                alert(res.data.message);
+            }
+        });
     };
 
     const handleSearch = () => {
@@ -84,7 +90,7 @@ function ManagementDoctor() {
         return <h1>Is Loading</h1>;
     } else {
         return (
-            <div className={cx('container')}>
+            <div>
                 <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
                     <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
@@ -95,6 +101,7 @@ function ManagementDoctor() {
                                 value={curHospital}
                                 onChange={(e) => {
                                     setCurHospital(e.target.value);
+                                    setSearchValue('');
                                 }}
                                 id="hospitalSelect"
                             >
@@ -111,6 +118,7 @@ function ManagementDoctor() {
                                 value={curSpecialty}
                                 onChange={(e) => {
                                     setCurSpecialty(e.target.value);
+                                    setSearchValue('');
                                 }}
                                 id="specialtySelect"
                             >
@@ -146,7 +154,9 @@ function ManagementDoctor() {
                             update={() => {
                                 handleUpdate(doctor._id);
                             }}
-                            remove={handleRemove}
+                            remove={() => {
+                                handleRemove(doctor._id);
+                            }}
                             key={doctor._id}
                             data={doctor}
                         />
