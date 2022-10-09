@@ -17,7 +17,7 @@ function MultipleImage(props) {
     };
 
     return (
-        <div className={cx('form-group') + ' flex items-center justify-center'}>
+        <div className={cx('form-group')}>
             <label className={cx('label') + ' block w-full text-left'} htmlFor={id}>
                 {name}
             </label>
@@ -54,6 +54,8 @@ function MultipleImage(props) {
                     </div>
                 ))}
             </div>
+            {error?.type === 'required' && <p className={cx('err-mess')}>Yêu cầu nhập trường này!!!</p>}
+            {error?.message && <p className={cx('err-mess')}>{error.message}</p>}
         </div>
     );
 }

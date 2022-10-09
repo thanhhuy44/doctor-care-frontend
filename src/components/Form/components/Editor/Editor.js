@@ -14,7 +14,7 @@ function Editor(props) {
             <div className={cx('editor', className, error && 'error')}>
                 <SunEditor
                     defaultValue={defaultValue}
-                    height={height}
+                    height={height || '200px'}
                     type={type}
                     onChange={(e) => (e === '<p><br></p>' ? onChange('') : onChange(e))}
                     setOptions={{

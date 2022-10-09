@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
 import { publicRoutes } from '~/routes';
 import MainLayout from '~/layouts/MainLayout';
+import 'antd/dist/antd.min.css';
+import 'react-quill/dist/quill.snow.css';
 function App() {
     return (
         <Router>

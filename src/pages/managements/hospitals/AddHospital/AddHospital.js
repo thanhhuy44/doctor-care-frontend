@@ -37,7 +37,7 @@ function AddHospital() {
         }).then((res) => console.log(res.data.message));
     };
     return (
-        <div className="w-full overflow-hidden">
+        <div className="w-full overflow-hidden mx-auto max-w-[1000px]">
             <h2 className="text-3xl font-semibold text-center md:text-left">Thêm mới bệnh viện</h2>
             <div className="mt-5 mb-10">
                 <Controller

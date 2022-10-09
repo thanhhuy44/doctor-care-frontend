@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 function Input(props) {
     const { id, name, multiple, error, onChange, defaultValue } = props;
-    const [previewSrc, setPreviewSrc] = useState('');
+    const [previewSrc, setPreviewSrc] = useState(defaultValue ? defaultValue : '');
 
     return (
         <div className={cx('form-group') + ' flex items-center justify-center'}>
@@ -22,7 +22,7 @@ function Input(props) {
                     onLoad={(event) => (event.target.style.display = 'block')}
                     className={cx('preview-img')}
                     alt="preview-img"
-                    src={previewSrc || defaultValue}
+                    src={previewSrc}
                 />
             </div>
             <input

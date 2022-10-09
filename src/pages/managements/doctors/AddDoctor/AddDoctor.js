@@ -1,321 +1,277 @@
-import { useForm, Controller } from 'react-hook-form';
-import Input from '~/components/Form/components/Input';
-import { emailRegex, phoneNumberRegex } from '~/regex';
-import Select from '~/components/Form/components/Select';
-import Editor from '~/components/Form/components/Editor';
-import FileInput from '~/components/Form/components/FileInput';
-import Button from '~/components/Button/Button';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import emailjs from '@emailjs/browser';
+import { AutoComplete, Button, Cascader, Checkbox, Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import location from '~/assets/location/local.json';
+import { phoneNumberRegex } from '~/regex';
 
-function AddDoctor({ doctor }) {
-    const [hospitals, setHospital] = useState([]);
-    const [specialties, setSpecialties] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setHospital(res.data.data);
-        });
-    }, []);
-
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
-            setSpecialties(res.data.data);
-        });
-    }, []);
-
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-    } = useForm();
-    const handleClick = (data) => {
-        axios
-            .post(
-                'http://localhost:3030/api/doctor/create',
-                {
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    email: data.email,
-                    phoneNumber: data.phoneNumber,
-                    birthDay: data.birthDay,
-                    specialty: data.specialty,
-                    hospital: data.hospital,
-                    price: data.price,
-                    shortDescription: data.shortDescription,
-                    description: data.description,
-                    image: data.image,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                },
-            )
-            .then((res) => alert(res.data.message));
-
-        emailjs.send(
-            'service_ckio5yp',
-            'template_bvunjlr',
+const { Option } = Select;
+const residences = [
+    {
+        value: 'zhejiang',
+        label: 'Zhejiang',
+        children: [
             {
-                name: `${data.firstName} ${data.lastName}`,
-                email: data.email,
+                value: 'hangzhou',
+                label: 'Hangzhou',
+                children: [
+                    {
+                        value: 'xihu',
+                        label: 'West Lake',
+                    },
+                ],
             },
-            '90Nvocv4SDDR7hpMr',
-        );
+        ],
+    },
+    {
+        value: 'jiangsu',
+        label: 'Jiangsu',
+        children: [
+            {
+                value: 'nanjing',
+                label: 'Nanjing',
+                children: [
+                    {
+                        value: 'zhonghuamen',
+                        label: 'Zhong Hua Men',
+                    },
+                ],
+            },
+        ],
+    },
+];
+
+const options = location.map((item) => {
+    return {
+        value: item.name,
+        label: item.name,
+        children: item.districts.map((district) => {
+            return {
+                value: district.name,
+                label: district.name,
+                children: district.wards.map((ward) => {
+                    return {
+                        value: ward.name,
+                        label: ward.name,
+                    };
+                }),
+            };
+        }),
+    };
+});
+
+const formItemLayout = {
+    labelCol: {
+        xs: {
+            span: 24,
+        },
+        sm: {
+            span: 8,
+        },
+        md: {
+            span: 4,
+        },
+    },
+    wrapperCol: {
+        xs: {
+            span: 24,
+        },
+        sm: {
+            span: 16,
+        },
+        md: {
+            span: 18,
+        },
+    },
+};
+const tailFormItemLayout = {
+    wrapperCol: {
+        xs: {
+            span: 24,
+            offset: 0,
+        },
+        sm: {
+            span: 16,
+            offset: 8,
+        },
+    },
+};
+
+const App = () => {
+    const [form] = Form.useForm();
+
+    const onFinish = (values) => {
+        console.log('Received values of form: ', values);
     };
 
-    return (
-        <div className="mx-auto max-w-[1000px]">
-            <h1 className="text-3xl font-bold text-center md:text-left">Thêm bác sĩ</h1>
-            <div>
-                <div className="flex justify-center items-center w-full my-3">
-                    <Controller
-                        control={control}
-                        name="image"
-                        rules={{
-                            required: true,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <FileInput
-                                error={errors.image}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                selected={value}
-                                name="Image"
-                                id="image"
-                            />
-                        )}
-                    />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                    <div className="md:mr-2">
-                        <Controller
-                            control={control}
-                            name="firstName"
-                            rules={{
-                                required: true,
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Input
-                                    error={errors.firstName}
-                                    type="text"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="First Name"
-                                    id="firstName"
-                                    placeholder="First Name..."
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="md:ml-2">
-                        <Controller
-                            control={control}
-                            name="lastName"
-                            rules={{
-                                required: true,
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Input
-                                    error={errors.lastName}
-                                    type="text"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Last Name"
-                                    id="lastName"
-                                    placeholder="Last Name..."
-                                />
-                            )}
-                        />
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                    <div className="md:mr-2">
-                        <Controller
-                            control={control}
-                            name="email"
-                            rules={{
-                                required: true,
-                                pattern: {
-                                    value: emailRegex,
-                                    message: 'Please enter valid email !!!',
-                                },
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Input
-                                    error={errors.email}
-                                    type="email"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Email"
-                                    id="email"
-                                    placeholder="Email..."
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="md:ml-2">
-                        <Controller
-                            control={control}
-                            name="phoneNumber"
-                            rules={{
-                                required: true,
-                                pattern: {
-                                    value: phoneNumberRegex,
-                                    message: 'Please enter valid Phone Number !!!',
-                                },
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Input
-                                    error={errors.phoneNumber}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Số điện thoại"
-                                    id="phoneNumber"
-                                    placeholder="Số điện thoại..."
-                                />
-                            )}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <Controller
-                        control={control}
-                        name="birthDay"
-                        rules={{
-                            required: true,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <Input
-                                error={errors.birthDay}
-                                type="date"
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                selected={value}
-                                name="Ngày sinh"
-                                id="birthDay"
-                            />
-                        )}
-                    />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                    <div className="md:mr-2">
-                        <Controller
-                            control={control}
-                            name="specialty"
-                            rules={{
-                                required: true,
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Select
-                                    error={errors.specialty}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Chuyên khoa"
-                                    id="specialty"
-                                    options={[
-                                        { name: '---Chọn chuyên khoa---', value: '' },
-                                        ...specialties,
-                                        { name: '---Thêm chuyên khoa---', value: '/specialty/add' },
-                                    ]}
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="md:ml-2">
-                        <Controller
-                            control={control}
-                            name="hospital"
-                            rules={{
-                                required: true,
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Select
-                                    error={errors.hospital}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Bệnh viện"
-                                    id="hospital"
-                                    options={[
-                                        { name: '---Chọn bệnh viện---', value: '' },
-                                        ...hospitals,
-                                        { name: '---Thêm bệnh viện---', value: '/hospital/add' },
-                                    ]}
-                                />
-                            )}
-                        />
-                    </div>
-                </div>
-                <Controller
-                    control={control}
-                    name="shortDescription"
-                    rules={{
-                        required: true,
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Editor
-                            error={errors.shortDescription}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            selected={value}
-                            name="Giới thiệu ngắn"
-                            id="shortDescription"
-                        />
-                    )}
-                />
-                <Controller
-                    control={control}
-                    name="description"
-                    rules={{
-                        required: true,
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Editor
-                            error={errors.description}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            selected={value}
-                            name="Thông tin chi tiết"
-                            id="description"
-                        />
-                    )}
-                />
-                <Controller
-                    control={control}
-                    name="price"
-                    rules={{
-                        required: true,
-                    }}
-                    defaultValue={200000}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Input
-                            defaultValue={200000}
-                            error={errors.price}
-                            type="number"
-                            step={50000}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            selected={value}
-                            name="Giá"
-                            id="price"
-                        />
-                    )}
-                />
+    const suffixSelector = (
+        <Form.Item name="suffix" noStyle>
+            <Select
+                style={{
+                    width: 70,
+                }}
+            >
+                <Option value="USD">$</Option>
+                <Option value="CNY">¥</Option>
+            </Select>
+        </Form.Item>
+    );
+    const [autoCompleteResult, setAutoCompleteResult] = useState([]);
 
-                <Button className="my-10" onClick={handleSubmit(handleClick)} type="primary" size="full">
-                    Submit
-                </Button>
-            </div>
+    const onWebsiteChange = (value) => {
+        if (!value) {
+            setAutoCompleteResult([]);
+        } else {
+            setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
+        }
+    };
+
+    const websiteOptions = autoCompleteResult.map((website) => ({
+        label: website,
+        value: website,
+    }));
+    return (
+        <div className="max-w-[1000px] mx-auto">
+            <Form
+                title="Thêm bác sĩ"
+                {...formItemLayout}
+                form={form}
+                name="register"
+                onFinish={onFinish}
+                initialValues={{
+                    prefix: '86',
+                }}
+                scrollToFirstError
+            >
+                <Form.Item
+                    name="name"
+                    label="Họ và tên"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Trường này là bắt buộc!',
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    label="E-mail"
+                    rules={[
+                        {
+                            type: 'email',
+                            message: 'The input is not valid E-mail!',
+                        },
+                        {
+                            required: true,
+                            message: 'Please input your E-mail!',
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    name="phoneNumber"
+                    label="Số điện thoại"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Trường này là bắt buộc!',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || phoneNumberRegex.test(value)) {
+                                    return Promise.resolve();
+                                } else {
+                                    return Promise.reject(new Error('Vui lòng nhập đúng số điện thoại!'));
+                                }
+                            },
+                        }),
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    name="address"
+                    label="Địa chỉ"
+                    rules={[
+                        {
+                            type: 'array',
+                            required: true,
+                            message: 'Trường này là bắt buộc!',
+                        },
+                    ]}
+                >
+                    <Cascader placeholder="Chọn địa chỉ" options={options} />
+                </Form.Item>
+
+                <Form.Item
+                    name="price"
+                    label="Giá"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Trường này là bắt buộc!',
+                        },
+                    ]}
+                    initialValue={200000}
+                >
+                    <InputNumber
+                        // defaultValue={200000}
+                        step={50000}
+                        addonAfter={'VNĐ'}
+                        style={{
+                            width: '100%',
+                        }}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    name="intro"
+                    label="Intro"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Trường này là bắt buộc',
+                        },
+                    ]}
+                >
+                    <ReactQuill
+                        theme="snow"
+                        style={{
+                            height: '250px',
+                            backgroundColor: 'white',
+                        }}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    name="gender"
+                    label="Gender"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please select gender!',
+                        },
+                    ]}
+                >
+                    <Select placeholder="select your gender">
+                        <Option value="male">Male</Option>
+                        <Option value="female">Female</Option>
+                        <Option value="other">Other</Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item {...tailFormItemLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Register
+                    </Button>
+                </Form.Item>
+            </Form>
         </div>
     );
-}
+};
 
-export default AddDoctor;
+export default App;

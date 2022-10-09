@@ -14,13 +14,18 @@ function Select(props) {
             </label>
             <select
                 className={cx('input', error && 'error')}
-                onChange={(e) => (e.target.value.startsWith('/') ? navigate(e.target.value) : onChange(e.target.value))}
+                onChange={(e) => {
+                    e.target.value.startsWith('/') ? navigate(e.target.value) : onChange(e.target.value);
+                }}
                 id={id}
                 name={name}
                 defaultValue={defaultValue}
             >
                 {options.map((option, index) => (
-                    <option key={index} value={option.value || option._id || option.id}>
+                    <option
+                        key={index}
+                        value={type === 'address' ? option.name : option.value || option._id || option.id}
+                    >
                         {option.name}
                     </option>
                 ))}

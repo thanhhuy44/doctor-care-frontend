@@ -56,7 +56,9 @@ function UpdateDoctor() {
             )
             .then((res) => {
                 alert(res.data.message);
-                navigate('/admin/doctors');
+                if (res.data.errCode === 0) {
+                    navigate('/admin/doctors');
+                }
             });
     };
     if (isLoading) {
@@ -64,7 +66,7 @@ function UpdateDoctor() {
     } else {
         return (
             <div className="mx-auto max-w-[1000px]">
-                <h1 className="text-3xl font-bold text-center md:text-left">Thêm bác sĩ</h1>
+                <h1 className="text-3xl font-bold text-center md:text-left">Chỉnh sửa thông tin bác sĩ</h1>
                 <div>
                     <div className="flex justify-center items-center w-full my-3">
                         <Controller
@@ -87,53 +89,28 @@ function UpdateDoctor() {
                             )}
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2">
-                        <div className="md:mr-2">
-                            <Controller
-                                control={control}
-                                name="firstName"
-                                rules={{
-                                    required: true,
-                                }}
-                                defaultValue={data.firstName}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Input
-                                        defaultValue={data.firstName}
-                                        error={errors.firstName}
-                                        type="text"
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        selected={value}
-                                        name="First Name"
-                                        id="firstName"
-                                        placeholder="First Name..."
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div className="md:ml-2">
-                            <Controller
-                                control={control}
-                                name="lastName"
-                                rules={{
-                                    required: true,
-                                }}
-                                defaultValue={data.lastName}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Input
-                                        defaultValue={data.lastName}
-                                        error={errors.lastName}
-                                        type="text"
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        selected={value}
-                                        name="Last Name"
-                                        id="lastName"
-                                        placeholder="Last Name..."
-                                    />
-                                )}
-                            />
-                        </div>
+                    <div>
+                        <Controller
+                            control={control}
+                            name="name"
+                            rules={{
+                                required: true,
+                            }}
+                            defaultValue={data.name}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    defaultValue={data.name}
+                                    error={errors.name}
+                                    type="text"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    selected={value}
+                                    name="Họ và tên"
+                                    id="name"
+                                    placeholder="Họ và tên..."
+                                />
+                            )}
+                        />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2">
                         <div className="md:mr-2">
