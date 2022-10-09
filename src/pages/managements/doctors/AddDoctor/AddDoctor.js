@@ -1,277 +1,309 @@
-import { AutoComplete, Button, Cascader, Checkbox, Col, Form, Input, InputNumber, Row, Select } from 'antd';
-import React, { useState } from 'react';
+import { Form, Input, InputNumber, Select, Upload, Button, DatePicker } from 'antd';
 import ReactQuill from 'react-quill';
-import location from '~/assets/location/local.json';
-import { phoneNumberRegex } from '~/regex';
-
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { emailRegex, phoneNumberRegex } from '~/regex';
+import { PlusOutlined } from '@ant-design/icons';
 const { Option } = Select;
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
 
-const options = location.map((item) => {
-    return {
-        value: item.name,
-        label: item.name,
-        children: item.districts.map((district) => {
-            return {
-                value: district.name,
-                label: district.name,
-                children: district.wards.map((ward) => {
-                    return {
-                        value: ward.name,
-                        label: ward.name,
-                    };
-                }),
-            };
-        }),
-    };
-});
-
-const formItemLayout = {
-    labelCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 8,
-        },
-        md: {
-            span: 4,
-        },
-    },
-    wrapperCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 16,
-        },
-        md: {
-            span: 18,
-        },
-    },
-};
-const tailFormItemLayout = {
-    wrapperCol: {
-        xs: {
-            span: 24,
-            offset: 0,
-        },
-        sm: {
-            span: 16,
-            offset: 8,
-        },
-    },
+const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
 };
 
-const App = () => {
-    const [form] = Form.useForm();
+const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+        onSuccess('ok');
+    }, 0);
+};
+
+function AddDoctor() {
+    const navigate = useNavigate();
+    const [specialties, setSpecialties] = useState([]);
+    const [hospitals, setHospitals] = useState([]);
+    const [imageUrl, setImageUrl] = useState();
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/specialties').then((res) => {
+            setSpecialties(res.data.data);
+            console.log(res.data.data);
+        });
+    }, []);
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/hospitals').then((res) => {
+            setHospitals(res.data.data);
+            console.log(res.data.data);
+        });
+    }, []);
 
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        console.log('Success:', values);
     };
 
-    const suffixSelector = (
-        <Form.Item name="suffix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Option value="USD">$</Option>
-                <Option value="CNY">¥</Option>
-            </Select>
-        </Form.Item>
-    );
-    const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-
-    const onWebsiteChange = (value) => {
-        if (!value) {
-            setAutoCompleteResult([]);
-        } else {
-            setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
-        }
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
     };
 
-    const websiteOptions = autoCompleteResult.map((website) => ({
-        label: website,
-        value: website,
-    }));
     return (
-        <div className="max-w-[1000px] mx-auto">
-            <Form
-                title="Thêm bác sĩ"
-                {...formItemLayout}
-                form={form}
-                name="register"
-                onFinish={onFinish}
-                initialValues={{
-                    prefix: '86',
-                }}
-                scrollToFirstError
+        <Form
+            style={{
+                maxWidth: '1000px',
+                margin: '0 auto',
+            }}
+            name="basic"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+            layout="vertical"
+        >
+            <Form.Item
+                label="Ảnh đại diện"
+                name="image"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+                valuePropName={'file'}
             >
-                <Form.Item
-                    name="name"
-                    label="Họ và tên"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Trường này là bắt buộc!',
-                        },
-                    ]}
+                <Upload
+                    style={{
+                        margin: '0 auto',
+                    }}
+                    listType="picture-card"
+                    // className="avatar-uploader"
+                    showUploadList={false}
+                    customRequest={dummyRequest}
+                    onChange={(e) => {
+                        getBase64(e.file.originFileObj, (url) => {
+                            setImageUrl(url);
+                        });
+                    }}
                 >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    name="email"
-                    label="E-mail"
-                    rules={[
-                        {
-                            type: 'email',
-                            message: 'The input is not valid E-mail!',
+                    {imageUrl ? (
+                        <img
+                            src={imageUrl}
+                            alt="avatar"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover',
+                            }}
+                        />
+                    ) : (
+                        <div>
+                            {<PlusOutlined />}
+                            <div
+                                style={{
+                                    marginTop: 8,
+                                }}
+                            >
+                                Upload
+                            </div>
+                        </div>
+                    )}
+                </Upload>
+            </Form.Item>
+            <Form.Item
+                label="Họ và tên"
+                name="name"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <Input type="text" placeholder="Nhập tên bác sĩ (bắt buộc)" />
+            </Form.Item>
+            <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                    () => ({
+                        validator(_, value) {
+                            if (!value || emailRegex.test(value)) {
+                                return Promise.resolve();
+                            } else {
+                                return Promise.reject(new Error('Vui lòng nhập đúng email!'));
+                            }
                         },
-                        {
-                            required: true,
-                            message: 'Please input your E-mail!',
+                    }),
+                ]}
+            >
+                <Input type="email" placeholder="Nhập email bác sĩ (bắt buộc)" />
+            </Form.Item>
+            <Form.Item
+                label="Số điện thoại"
+                name="phoneNumber"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                    () => ({
+                        validator(_, value) {
+                            if (!value || phoneNumberRegex.test(value)) {
+                                return Promise.resolve();
+                            } else {
+                                return Promise.reject(new Error('Vui lòng nhập đúng số điện thoại!'));
+                            }
                         },
-                    ]}
+                    }),
+                ]}
+            >
+                <Input type="tel" placeholder="Nhập số điện thoại của bác sĩ (bắt buộc)" />
+            </Form.Item>
+            <Form.Item
+                label="Ngày sinh"
+                name="birth"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <DatePicker
+                    format="DD-MM-YYYY"
+                    inputReadOnly={true}
+                    style={{
+                        width: '100%',
+                    }}
+                />
+            </Form.Item>
+            <Form.Item
+                label="Chuyên khoa"
+                name="specialty"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <Select
+                    showSearch
+                    placeholder="Chọn chuyên khoa (bắt buộc)"
+                    filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
+                    onChange={(value) => {
+                        if (value.startsWith('/')) {
+                            navigate('/admin/doctors');
+                        }
+                    }}
                 >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    name="phoneNumber"
-                    label="Số điện thoại"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Trường này là bắt buộc!',
-                        },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!value || phoneNumberRegex.test(value)) {
-                                    return Promise.resolve();
-                                } else {
-                                    return Promise.reject(new Error('Vui lòng nhập đúng số điện thoại!'));
-                                }
-                            },
-                        }),
-                    ]}
+                    {specialties.map((specialty) => (
+                        <Option key={specialty._id} name={specialty.name} value={specialty._id}>
+                            {specialty.name}
+                        </Option>
+                    ))}
+                    <Option key={0} name="---Thêm chuyên khoa---" value="/admin/doctors">
+                        ---Thêm chuyên khoa---
+                    </Option>
+                </Select>
+            </Form.Item>
+            <Form.Item
+                label="Bệnh viện"
+                name="hospital"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <Select
+                    showSearch
+                    placeholder="Chọn bệnh viện (bắt buộc)"
+                    filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
                 >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    name="address"
-                    label="Địa chỉ"
-                    rules={[
-                        {
-                            type: 'array',
-                            required: true,
-                            message: 'Trường này là bắt buộc!',
-                        },
-                    ]}
-                >
-                    <Cascader placeholder="Chọn địa chỉ" options={options} />
-                </Form.Item>
-
-                <Form.Item
-                    name="price"
-                    label="Giá"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Trường này là bắt buộc!',
-                        },
-                    ]}
-                    initialValue={200000}
-                >
-                    <InputNumber
-                        // defaultValue={200000}
-                        step={50000}
-                        addonAfter={'VNĐ'}
-                        style={{
-                            width: '100%',
-                        }}
-                    />
-                </Form.Item>
-
-                <Form.Item
-                    name="intro"
-                    label="Intro"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Trường này là bắt buộc',
-                        },
-                    ]}
-                >
-                    <ReactQuill
-                        theme="snow"
-                        style={{
-                            height: '250px',
-                            backgroundColor: 'white',
-                        }}
-                    />
-                </Form.Item>
-
-                <Form.Item
-                    name="gender"
-                    label="Gender"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please select gender!',
-                        },
-                    ]}
-                >
-                    <Select placeholder="select your gender">
-                        <Option value="male">Male</Option>
-                        <Option value="female">Female</Option>
-                        <Option value="other">Other</Option>
-                    </Select>
-                </Form.Item>
-
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Register
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+                    {hospitals.map((hospital) => (
+                        <Option key={hospital._id} name={hospital.name} value={hospital._id}>
+                            {hospital.name}
+                        </Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <Form.Item
+                style={{
+                    height: '250px',
+                    overflow: 'hidden',
+                }}
+                label="Giới thiệu ngắn"
+                name="shortDescription"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <ReactQuill
+                    style={{
+                        backgroundColor: 'white',
+                        height: '250px',
+                    }}
+                    theme="snow"
+                    placeholder="Giới thiệu ngắn về bác sĩ (bắt buộc)..."
+                />
+            </Form.Item>
+            <Form.Item
+                style={{
+                    height: '250px',
+                    overflow: 'hidden',
+                }}
+                label="Thông tin chi tiết"
+                name="description"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <ReactQuill
+                    style={{
+                        backgroundColor: 'white',
+                        height: '250px',
+                    }}
+                    placeholder="Thông tin chi tiết về bác sĩ (bắt buộc)..."
+                />
+            </Form.Item>
+            <Form.Item
+                label="Giá"
+                name="price"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+                initialValue={200000}
+            >
+                <InputNumber
+                    step={50000}
+                    style={{
+                        width: '100%',
+                    }}
+                    type="tel"
+                    placeholder="Nhập giá khám bệnh cho bác sĩ..."
+                />
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Submit
+                </Button>
+            </Form.Item>
+        </Form>
     );
-};
+}
 
-export default App;
+export default AddDoctor;
