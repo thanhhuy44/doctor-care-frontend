@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select, Upload, Button, DatePicker } from 'antd';
+import { Form, Input, InputNumber, Select, Upload, Button, DatePicker, Typography } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -40,6 +40,20 @@ function AddDoctor() {
 
     const onFinish = (values) => {
         console.log('Success:', values);
+        axios
+            .post(
+                'http://localhost:3030/api/doctor/create',
+                {
+                    image: values.avatar.file.originFileObj,
+                    ...values,
+                },
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                },
+            )
+            .then((res) => {
+                console.log(res.data);
+            });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -59,9 +73,12 @@ function AddDoctor() {
             autoComplete="off"
             layout="vertical"
         >
+            <Typography.Title level={1} style={{ textAlign: 'center' }}>
+                Thêm bác sĩ
+            </Typography.Title>
             <Form.Item
                 label="Ảnh đại diện"
-                name="image"
+                name="avatar"
                 rules={[
                     {
                         required: true,
@@ -233,10 +250,6 @@ function AddDoctor() {
                 </Select>
             </Form.Item>
             <Form.Item
-                style={{
-                    height: '250px',
-                    overflow: 'hidden',
-                }}
                 label="Giới thiệu ngắn"
                 name="shortDescription"
                 rules={[
@@ -247,19 +260,15 @@ function AddDoctor() {
                 ]}
             >
                 <ReactQuill
+                    className="text-editor"
                     style={{
                         backgroundColor: 'white',
-                        height: '250px',
                     }}
                     theme="snow"
                     placeholder="Giới thiệu ngắn về bác sĩ (bắt buộc)..."
                 />
             </Form.Item>
             <Form.Item
-                style={{
-                    height: '250px',
-                    overflow: 'hidden',
-                }}
                 label="Thông tin chi tiết"
                 name="description"
                 rules={[
@@ -270,9 +279,9 @@ function AddDoctor() {
                 ]}
             >
                 <ReactQuill
+                    className="text-editor"
                     style={{
                         backgroundColor: 'white',
-                        height: '250px',
                     }}
                     placeholder="Thông tin chi tiết về bác sĩ (bắt buộc)..."
                 />
@@ -295,6 +304,7 @@ function AddDoctor() {
                     }}
                     type="tel"
                     placeholder="Nhập giá khám bệnh cho bác sĩ..."
+                    addonAfter="VNĐ"
                 />
             </Form.Item>
             <Form.Item>

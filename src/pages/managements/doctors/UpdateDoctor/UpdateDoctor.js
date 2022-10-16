@@ -1,13 +1,25 @@
-import { useForm, Controller } from 'react-hook-form';
-import Input from '~/components/Form/components/Input';
+import { Form, Input, InputNumber, Select, Upload, Button, DatePicker, Typography } from 'antd';
 import { emailRegex, phoneNumberRegex } from '~/regex';
-import Select from '~/components/Form/components/Select';
-import Editor from '~/components/Form/components/Editor';
-import FileInput from '~/components/Form/components/FileInput';
-import Button from '~/components/Button/Button';
+import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
+const { Option } = Select;
+
+const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+};
+
+const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+        onSuccess('ok');
+    }, 0);
+};
 
 function UpdateDoctor() {
     const params = useParams();
@@ -16,6 +28,7 @@ function UpdateDoctor() {
     const [isLoading, setIsLoading] = useState(true);
     const [hospitals, setHospital] = useState([]);
     const [specialties, setSpecialties] = useState([]);
+    const [imageUrl, setImageUrl] = useState();
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
@@ -32,297 +45,312 @@ function UpdateDoctor() {
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${params.id}`).then((res) => {
             setData(res.data.data);
+            setImageUrl(res.data.data.image);
             setIsLoading(false);
         });
     }, []);
-
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-    } = useForm();
-
-    const handleClick = (data) => {
-        console.log(data.specialty, data.hospital);
+    const onFinish = (values) => {
+        console.log('Success:', values.avatar);
         axios
             .post(
                 `http://localhost:3030/api/doctor/update/${params.id}`,
-                { ...data, birth: data.birthDay },
                 {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+                    image: values.avatar ? values.avatar.file.originFileObj : data.image,
+                    ...values,
+                },
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' },
                 },
             )
             .then((res) => {
                 alert(res.data.message);
-                if (res.data.errCode === 0) {
-                    navigate('/admin/doctors');
-                }
+                navigate('/admin/doctors');
             });
     };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     if (isLoading) {
         <h1>is loading</h1>;
     } else {
         return (
-            <div className="mx-auto max-w-[1000px]">
-                <h1 className="text-3xl font-bold text-center md:text-left">Chỉnh sửa thông tin bác sĩ</h1>
-                <div>
-                    <div className="flex justify-center items-center w-full my-3">
-                        <Controller
-                            control={control}
-                            name="image"
-                            rules={{
-                                required: true,
-                            }}
-                            defaultValue={data.image}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <FileInput
-                                    defaultValue={data.image}
-                                    error={errors.image}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Image"
-                                    id="image"
-                                />
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <Controller
-                            control={control}
-                            name="name"
-                            rules={{
-                                required: true,
-                            }}
-                            defaultValue={data.name}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Input
-                                    defaultValue={data.name}
-                                    error={errors.name}
-                                    type="text"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Họ và tên"
-                                    id="name"
-                                    placeholder="Họ và tên..."
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2">
-                        <div className="md:mr-2">
-                            <Controller
-                                control={control}
-                                name="email"
-                                rules={{
-                                    required: true,
-                                    pattern: {
-                                        value: emailRegex,
-                                        message: 'Please enter valid email !!!',
-                                    },
-                                }}
-                                defaultValue={data.email}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Input
-                                        defaultValue={data.email}
-                                        error={errors.email}
-                                        type="email"
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        selected={value}
-                                        name="Email"
-                                        id="email"
-                                        placeholder="Email..."
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div className="md:ml-2">
-                            <Controller
-                                control={control}
-                                name="phoneNumber"
-                                rules={{
-                                    required: true,
-                                    pattern: {
-                                        value: phoneNumberRegex,
-                                        message: 'Please enter valid Phone Number !!!',
-                                    },
-                                }}
-                                defaultValue={data.phoneNumber}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Input
-                                        defaultValue={data.phoneNumber}
-                                        error={errors.phoneNumber}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        selected={value}
-                                        name="Số điện thoại"
-                                        id="phoneNumber"
-                                        placeholder="Số điện thoại..."
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <Controller
-                            control={control}
-                            name="birthDay"
-                            rules={{
-                                required: true,
-                            }}
-                            defaultValue={`${new Date(data.birth).getFullYear()}-${
-                                new Date(data.birth).getMonth() < 10
-                                    ? `0${new Date(data.birth).getMonth()}`
-                                    : new Date(data.birth).getMonth()
-                            }-${
-                                new Date(data.birth).getDate() < 10
-                                    ? `0${new Date(data.birth).getDate()}`
-                                    : new Date(data.birth).getDate()
-                            }`}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <Input
-                                    defaultValue={`${new Date(data.birth).getFullYear()}-${
-                                        new Date(data.birth).getMonth() < 10
-                                            ? `0${new Date(data.birth).getMonth()}`
-                                            : new Date(data.birth).getMonth()
-                                    }-${
-                                        new Date(data.birth).getDate() < 10
-                                            ? `0${new Date(data.birth).getDate()}`
-                                            : new Date(data.birth).getDate()
-                                    }`}
-                                    error={errors.birthDay}
-                                    type="date"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    selected={value}
-                                    name="Ngày sinh"
-                                    id="birthDay"
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2">
-                        <div className="md:mr-2">
-                            <Controller
-                                control={control}
-                                name="specialty"
-                                rules={{
-                                    required: true,
-                                }}
-                                defaultValue={data.specialty._id}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Select
-                                        defaultValue={data.specialty._id}
-                                        error={errors.specialty}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        selected={value}
-                                        name="Chuyên khoa"
-                                        id="specialty"
-                                        options={[
-                                            ...specialties,
-                                            { name: '---Thêm chuyên khoa---', value: '/specialty/add' },
-                                        ]}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div className="md:ml-2">
-                            <Controller
-                                control={control}
-                                name="hospital"
-                                rules={{
-                                    required: true,
-                                }}
-                                defaultValue={data.hospital._id}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Select
-                                        defaultValue={data.hospital._id}
-                                        error={errors.hospital}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        selected={value}
-                                        name="Bệnh viện"
-                                        id="hospital"
-                                        options={[
-                                            { name: '---Chọn bệnh viện---', value: '' },
-                                            ...hospitals,
-                                            { name: '---Thêm bệnh viện---', value: '/hospital/add' },
-                                        ]}
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <Controller
-                        control={control}
-                        name="shortDescription"
-                        rules={{
-                            required: true,
+            <Form
+                style={{
+                    maxWidth: '1000px',
+                    margin: '0 auto',
+                }}
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                layout="vertical"
+            >
+                <Typography.Title level={1} style={{ textAlign: 'center' }}>
+                    Chỉnh sửa thông tin bác sĩ
+                </Typography.Title>
+                <Form.Item
+                    label="Ảnh đại diện"
+                    name="avatar"
+                    rules={[
+                        () => ({
+                            validator(_, value) {
+                                if (imageUrl) {
+                                    return Promise.resolve();
+                                } else {
+                                    return Promise.reject(new Error('Vui lòng nhập trường này!'));
+                                }
+                            },
+                        }),
+                    ]}
+                    valuePropName={'file'}
+                >
+                    <Upload
+                        style={{
+                            margin: '0 auto',
                         }}
-                        defaultValue={data.shortDescription}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <Editor
-                                defaultValue={data.shortDescription}
-                                error={errors.shortDescription}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                selected={value}
-                                name="Giới thiệu ngắn"
-                                id="shortDescription"
-                            />
-                        )}
-                    />
-                    <Controller
-                        control={control}
-                        name="description"
-                        rules={{
-                            required: true,
+                        listType="picture-card"
+                        // className="avatar-uploader"
+                        showUploadList={false}
+                        customRequest={dummyRequest}
+                        onChange={(e) => {
+                            getBase64(e.file.originFileObj, (url) => {
+                                setImageUrl(url);
+                            });
                         }}
-                        defaultValue={data.description}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <Editor
-                                defaultValue={data.description}
-                                error={errors.description}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                selected={value}
-                                name="Thông tin chi tiết"
-                                id="description"
+                    >
+                        {imageUrl ? (
+                            <img
+                                src={imageUrl}
+                                alt="avatar"
+                                style={{
+                                    height: '100%',
+                                    width: '100%',
+                                    objectFit: 'cover',
+                                }}
                             />
+                        ) : (
+                            <div>
+                                {<PlusOutlined />}
+                                <div
+                                    style={{
+                                        marginTop: 8,
+                                    }}
+                                >
+                                    Upload
+                                </div>
+                            </div>
                         )}
-                    />
-                    <Controller
-                        control={control}
-                        name="price"
-                        rules={{
+                    </Upload>
+                </Form.Item>
+                <Form.Item
+                    label="Họ và tên"
+                    name="name"
+                    rules={[
+                        {
                             required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.name}
+                >
+                    <Input type="text" placeholder="Nhập tên bác sĩ (bắt buộc)" />
+                </Form.Item>
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (!value || emailRegex.test(value)) {
+                                    return Promise.resolve();
+                                } else {
+                                    return Promise.reject(new Error('Vui lòng nhập đúng email!'));
+                                }
+                            },
+                        }),
+                    ]}
+                    initialValue={data.email}
+                >
+                    <Input type="email" placeholder="Nhập email bác sĩ (bắt buộc)" />
+                </Form.Item>
+                <Form.Item
+                    label="Số điện thoại"
+                    name="phoneNumber"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (!value || phoneNumberRegex.test(value)) {
+                                    return Promise.resolve();
+                                } else {
+                                    return Promise.reject(new Error('Vui lòng nhập đúng số điện thoại!'));
+                                }
+                            },
+                        }),
+                    ]}
+                    initialValue={data.phoneNumber}
+                >
+                    <Input type="tel" placeholder="Nhập số điện thoại của bác sĩ (bắt buộc)" />
+                </Form.Item>
+                <Form.Item
+                    label="Ngày sinh"
+                    name="birth"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={moment(data.birth)}
+                >
+                    <DatePicker
+                        format="DD-MM-YYYY"
+                        inputReadOnly={true}
+                        style={{
+                            width: '100%',
                         }}
-                        defaultValue={data.price}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <Input
-                                defaultValue={data.price}
-                                error={errors.price}
-                                type="number"
-                                step={50000}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                selected={value}
-                                name="Giá"
-                                id="price"
-                            />
-                        )}
                     />
-
-                    <Button className="my-10" onClick={handleSubmit(handleClick)} type="primary" size="full">
+                </Form.Item>
+                <Form.Item
+                    label="Chuyên khoa"
+                    name="specialty"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.specialty._id}
+                >
+                    <Select
+                        showSearch
+                        placeholder="Chọn chuyên khoa (bắt buộc)"
+                        filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
+                        onChange={(value) => {
+                            if (value.startsWith('/')) {
+                                navigate('/admin/doctors');
+                            }
+                        }}
+                    >
+                        {specialties.map((specialty) => (
+                            <Option key={specialty._id} name={specialty.name} value={specialty._id}>
+                                {specialty.name}
+                            </Option>
+                        ))}
+                        <Option key={0} name="---Thêm chuyên khoa---" value="/admin/doctors">
+                            ---Thêm chuyên khoa---
+                        </Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Bệnh viện"
+                    name="hospital"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.hospital._id}
+                >
+                    <Select
+                        showSearch
+                        placeholder="Chọn bệnh viện (bắt buộc)"
+                        filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
+                    >
+                        {hospitals.map((hospital) => (
+                            <Option key={hospital._id} name={hospital.name} value={hospital._id}>
+                                {hospital.name}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    style={{
+                        height: '250px',
+                        overflow: 'hidden',
+                    }}
+                    label="Giới thiệu ngắn"
+                    name="shortDescription"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.shortDescription}
+                >
+                    <ReactQuill
+                        className="text-editor"
+                        style={{
+                            backgroundColor: 'white',
+                            height: '200px',
+                        }}
+                        theme="snow"
+                        placeholder="Giới thiệu ngắn về bác sĩ (bắt buộc)..."
+                    />
+                </Form.Item>
+                <Form.Item
+                    style={{
+                        height: '250px',
+                        overflow: 'hidden',
+                    }}
+                    label="Thông tin chi tiết"
+                    name="description"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.description}
+                >
+                    <ReactQuill
+                        className="text-editor"
+                        style={{
+                            height: '200px',
+                            backgroundColor: 'white',
+                        }}
+                        placeholder="Thông tin chi tiết về bác sĩ (bắt buộc)..."
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Giá"
+                    name="price"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.price}
+                >
+                    <InputNumber
+                        step={50000}
+                        style={{
+                            width: '100%',
+                        }}
+                        type="tel"
+                        placeholder="Nhập giá khám bệnh cho bác sĩ..."
+                        addonAfter="VNĐ"
+                    />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">
                         Submit
                     </Button>
-                </div>
-            </div>
+                </Form.Item>
+            </Form>
         );
     }
 }

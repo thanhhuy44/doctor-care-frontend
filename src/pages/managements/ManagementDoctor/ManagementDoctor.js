@@ -60,7 +60,6 @@ function ManagementDoctor() {
     }, [curHospital, curSpecialty]);
 
     const handleUpdate = (id) => {
-        console.log('update');
         navigate(`/admin/doctor/update/${id}`);
     };
 

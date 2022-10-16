@@ -4,8 +4,10 @@ import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function ManagementHospital() {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [isLoading, setIsloading] = useState(true);
 
@@ -15,6 +17,13 @@ function ManagementHospital() {
             setIsloading(false);
         });
     }, []);
+
+    const handleUpdateDoctor = (id) => {
+        navigate(`/admin/hospital/update/${id}`);
+    };
+    const handleDeleteDoctor = () => {
+        console.log('delete');
+    };
 
     if (isLoading) {
         <h1>Is Loading</h1>;
@@ -53,7 +62,13 @@ function ManagementHospital() {
                 </div>
                 <div className="mt-5">
                     {data.map((hospital) => (
-                        <ObjectItem data={hospital} key={hospital._id} />
+                        <ObjectItem
+                            data={hospital}
+                            key={hospital._id}
+                            update={() => {
+                                handleUpdateDoctor(hospital._id);
+                            }}
+                        />
                     ))}
                     <div className="py-3 flex">
                         <Button

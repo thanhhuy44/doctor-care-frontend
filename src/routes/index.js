@@ -24,6 +24,7 @@ import Specialty from '~/pages/Specialty';
 import ManagementSpecialty from '~/pages/managements/ManagementSpecialty';
 import ManagementPackage from '~/pages/managements/ManagementPackage';
 import UpdateDoctor from '~/pages/managements/doctors/UpdateDoctor';
+import UpdateHospital from '~/pages/managements/hospitals/UpdateHospital/UpdateHospital';
 
 const publicRoutes = [
     {
@@ -115,6 +116,11 @@ const publicRoutes = [
     {
         path: '/admin/hospital/add',
         component: AddHospital,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/hospital/update/:id',
+        component: UpdateHospital,
         layout: ManagementLayout,
     },
     {
