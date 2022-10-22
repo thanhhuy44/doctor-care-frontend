@@ -25,6 +25,9 @@ import ManagementSpecialty from '~/pages/managements/ManagementSpecialty';
 import ManagementPackage from '~/pages/managements/ManagementPackage';
 import UpdateDoctor from '~/pages/managements/doctors/UpdateDoctor';
 import UpdateHospital from '~/pages/managements/hospitals/UpdateHospital/UpdateHospital';
+import AddSpecialty from '~/pages/managements/specialties/AddSpecialty/AddSpecialty';
+import AddTypePackage from '~/pages/managements/typePackages/AddTypePackage/AddTypePackage';
+import AddPackage from '~/pages/managements/packages/AddPackage';
 
 const publicRoutes = [
     {
@@ -124,9 +127,19 @@ const publicRoutes = [
         layout: ManagementLayout,
     },
     {
-        path: '/test/form',
-        component: Test,
-        layout: MainLayout,
+        path: '/admin/specialty/add',
+        component: AddSpecialty,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/type-package/add',
+        component: AddTypePackage,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/package/add',
+        component: AddPackage,
+        layout: ManagementLayout,
     },
 
     //page detail

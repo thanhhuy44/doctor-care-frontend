@@ -1,4 +1,4 @@
-import { Form, Input, Sct, Upload, Button, Typography, Modal, Cascader } from 'antd';
+import { Form, Input, Upload, Button, Typography, Modal, Cascader } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useState } from 'react';

@@ -1,11 +1,9 @@
-import { Form, Input, InputNumber, Select, Upload, Button, DatePicker, Typography } from 'antd';
+import { Form, Input, Upload, Button, Typography, InputNumber, Select } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { emailRegex, phoneNumberRegex } from '~/regex';
 import { PlusOutlined } from '@ant-design/icons';
-const { Option } = Select;
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -19,29 +17,17 @@ const dummyRequest = ({ file, onSuccess }) => {
     }, 0);
 };
 
-function AddDoctor() {
+function AddPackage() {
+    const [form] = Form.useForm();
     const navigate = useNavigate();
-    const [specialties, setSpecialties] = useState([]);
-    const [hospitals, setHospitals] = useState([]);
     const [imageUrl, setImageUrl] = useState();
-
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
-            setSpecialties(res.data.data);
-            console.log(res.data.data);
-        });
-    }, []);
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setHospitals(res.data.data);
-            console.log(res.data.data);
-        });
-    }, []);
+    const [hospitals, setHospitals] = useState([]);
+    const [typePackages, setTypePackages] = useState([]);
 
     const onFinish = (values) => {
         axios
             .post(
-                'http://localhost:3030/api/doctor/create',
+                'http://localhost:3030/api/package/create',
                 {
                     image: values.avatar.file.originFileObj,
                     ...values,
@@ -51,7 +37,12 @@ function AddDoctor() {
                 },
             )
             .then((res) => {
-                console.log(res.data);
+                alert(res.data.message);
+                if (res.data.errCode === 0) {
+                    navigate('/admin/packages');
+                } else {
+                    form.resetFields();
+                }
             });
     };
 
@@ -59,6 +50,16 @@ function AddDoctor() {
         console.log('Failed:', errorInfo);
     };
 
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/hospitals').then((res) => {
+            setHospitals(res.data.data);
+        });
+    }, []);
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/type-packages').then((res) => {
+            setTypePackages(res.data.data);
+        });
+    }, []);
     return (
         <Form
             style={{
@@ -73,7 +74,7 @@ function AddDoctor() {
             layout="vertical"
         >
             <Typography.Title level={1} style={{ textAlign: 'center' }}>
-                Thêm bác sĩ
+                Thêm mới gói khám
             </Typography.Title>
             <Form.Item
                 label="Ảnh đại diện"
@@ -124,8 +125,9 @@ function AddDoctor() {
                     )}
                 </Upload>
             </Form.Item>
+
             <Form.Item
-                label="Họ và tên"
+                label="Tên gói khám"
                 name="name"
                 rules={[
                     {
@@ -134,53 +136,11 @@ function AddDoctor() {
                     },
                 ]}
             >
-                <Input type="text" placeholder="Nhập tên bác sĩ (bắt buộc)" />
+                <Input type="text" placeholder="Nhập tên gói khám (bắt buộc)" />
             </Form.Item>
             <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập trường này',
-                    },
-                    () => ({
-                        validator(_, value) {
-                            if (!value || emailRegex.test(value)) {
-                                return Promise.resolve();
-                            } else {
-                                return Promise.reject(new Error('Vui lòng nhập đúng email!'));
-                            }
-                        },
-                    }),
-                ]}
-            >
-                <Input type="email" placeholder="Nhập email bác sĩ (bắt buộc)" />
-            </Form.Item>
-            <Form.Item
-                label="Số điện thoại"
-                name="phoneNumber"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập trường này',
-                    },
-                    () => ({
-                        validator(_, value) {
-                            if (!value || phoneNumberRegex.test(value)) {
-                                return Promise.resolve();
-                            } else {
-                                return Promise.reject(new Error('Vui lòng nhập đúng số điện thoại!'));
-                            }
-                        },
-                    }),
-                ]}
-            >
-                <Input type="tel" placeholder="Nhập số điện thoại của bác sĩ (bắt buộc)" />
-            </Form.Item>
-            <Form.Item
-                label="Ngày sinh"
-                name="birth"
+                label="Thông tin tổng quan gói khám"
+                name="description"
                 rules={[
                     {
                         required: true,
@@ -188,17 +148,16 @@ function AddDoctor() {
                     },
                 ]}
             >
-                <DatePicker
-                    format="DD-MM-YYYY"
-                    inputReadOnly={true}
+                <ReactQuill
                     style={{
-                        width: '100%',
+                        backgroundColor: 'white',
                     }}
+                    placeholder="Thông tin tổng quan về gói khám (bắt buộc)..."
                 />
             </Form.Item>
             <Form.Item
-                label="Chuyên khoa"
-                name="specialty"
+                label="Các thành phần"
+                name="elements"
                 rules={[
                     {
                         required: true,
@@ -206,25 +165,12 @@ function AddDoctor() {
                     },
                 ]}
             >
-                <Select
-                    showSearch
-                    placeholder="Chọn chuyên khoa (bắt buộc)"
-                    filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
-                    onChange={(value) => {
-                        if (value.startsWith('/')) {
-                            navigate(value);
-                        }
+                <ReactQuill
+                    style={{
+                        backgroundColor: 'white',
                     }}
-                >
-                    {specialties.map((specialty) => (
-                        <Option key={specialty._id} name={specialty.name} value={specialty._id}>
-                            {specialty.name}
-                        </Option>
-                    ))}
-                    <Option key={0} name="---Thêm chuyên khoa---" value="/admin/specialty/add">
-                        ---Thêm chuyên khoa---
-                    </Option>
-                </Select>
+                    placeholder="Các thành phần của gói khám (bắt buộc)..."
+                />
             </Form.Item>
             <Form.Item
                 label="Bệnh viện"
@@ -242,15 +188,15 @@ function AddDoctor() {
                     filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
                 >
                     {hospitals.map((hospital) => (
-                        <Option key={hospital._id} name={hospital.name} value={hospital._id}>
+                        <Select.Option key={hospital._id} name={hospital.name} value={hospital._id}>
                             {hospital.name}
-                        </Option>
+                        </Select.Option>
                     ))}
                 </Select>
             </Form.Item>
             <Form.Item
-                label="Giới thiệu ngắn"
-                name="shortDescription"
+                label="Loại gói khám"
+                name="typePackage"
                 rules={[
                     {
                         required: true,
@@ -258,18 +204,21 @@ function AddDoctor() {
                     },
                 ]}
             >
-                <ReactQuill
-                    className="text-editor"
-                    style={{
-                        backgroundColor: 'white',
-                    }}
-                    theme="snow"
-                    placeholder="Giới thiệu ngắn về bác sĩ (bắt buộc)..."
-                />
+                <Select
+                    showSearch
+                    placeholder="Chọn Loại gói khám (bắt buộc)"
+                    filterOption={(input, option) => option.name.toLowerCase().includes(input.toLowerCase())}
+                >
+                    {typePackages.map((typePackage) => (
+                        <Select.Option key={typePackage._id} name={typePackage.name} value={typePackage._id}>
+                            {typePackage.name}
+                        </Select.Option>
+                    ))}
+                </Select>
             </Form.Item>
             <Form.Item
-                label="Thông tin chi tiết"
-                name="description"
+                label="Quy trình khám bệnh"
+                name="procedure"
                 rules={[
                     {
                         required: true,
@@ -278,11 +227,10 @@ function AddDoctor() {
                 ]}
             >
                 <ReactQuill
-                    className="text-editor"
                     style={{
                         backgroundColor: 'white',
                     }}
-                    placeholder="Thông tin chi tiết về bác sĩ (bắt buộc)..."
+                    placeholder="Quy trình khám bệnh của cơ sở y tế (bắt buộc)..."
                 />
             </Form.Item>
             <Form.Item
@@ -302,7 +250,7 @@ function AddDoctor() {
                         width: '100%',
                     }}
                     type="tel"
-                    placeholder="Nhập giá khám bệnh cho bác sĩ..."
+                    placeholder="Nhập giá khám bệnh của gói khám..."
                     addonAfter="VNĐ"
                 />
             </Form.Item>
@@ -315,4 +263,4 @@ function AddDoctor() {
     );
 }
 
-export default AddDoctor;
+export default AddPackage;
