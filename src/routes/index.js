@@ -28,6 +28,7 @@ import UpdateHospital from '~/pages/managements/hospitals/UpdateHospital/UpdateH
 import AddSpecialty from '~/pages/managements/specialties/AddSpecialty/AddSpecialty';
 import AddTypePackage from '~/pages/managements/typePackages/AddTypePackage/AddTypePackage';
 import AddPackage from '~/pages/managements/packages/AddPackage';
+import ManagementBooking from '~/pages/managements/ManagementBooking/ManagementBooking';
 
 const publicRoutes = [
     {
@@ -139,6 +140,11 @@ const publicRoutes = [
     {
         path: '/admin/package/add',
         component: AddPackage,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/booking',
+        component: ManagementBooking,
         layout: ManagementLayout,
     },
 
