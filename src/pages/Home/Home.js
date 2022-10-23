@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import background from '~/assets/images/bookingcare-cover-4.jpg';
+import background from '~/assets/images/bookingcare-cover-4.png';
 import images from '~/assets';
 import Section from '~/components/Section';
 import SlideShow from '~/components/SlideShow';

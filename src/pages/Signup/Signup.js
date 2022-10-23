@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import classNames from 'classnames/bind';
 import styles from './Signup.module.scss';
-import background from '~/assets/images/bookingcare-cover-4.jpg';
+import background from '~/assets/images/bookingcare-cover-4.png';
 import Button from '~/components/Button/Button';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 

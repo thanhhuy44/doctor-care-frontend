@@ -50,3 +50,7 @@ a {
 .slick-track {
     width: inherit !important;
 }
+
+.footer-menu {
+    @apply text-base cursor-pointer mb-1 hover:text-[#45c3d2] text-black;
+}

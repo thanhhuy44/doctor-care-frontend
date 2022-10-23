@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import background from '~/assets/images/bookingcare-cover-4.jpg';
+import background from '~/assets/images/bookingcare-cover-4.png';
 import Button from '~/components/Button/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,10 +10,7 @@ import axios from 'axios';
 function Login() {
     const {
         register,
-        getValues,
         handleSubmit,
-        control,
-        watch,
         formState: { errors },
     } = useForm();
     const [hidePass, setHidePass] = useState(true);
