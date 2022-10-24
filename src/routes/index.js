@@ -11,7 +11,6 @@ import Hospital from '~/pages/Hospital';
 import ManagementDoctor from '~/pages/managements/ManagementDoctor';
 import ManagementHospital from '~/pages/managements/ManagementHospital';
 import ManagementAdmin from '~/pages/managements/ManagementAdmin';
-import Test from '~/pages/Test';
 import MainLayout from '~/layouts/MainLayout';
 import AddDoctor from '~/pages/managements/doctors/AddDoctor';
 import AddHospital from '~/pages/managements/hospitals/AddHospital';
@@ -60,10 +59,6 @@ const publicRoutes = [
         component: DetailDoctor,
     },
     {
-        path: '/hospital',
-        component: Hospital,
-    },
-    {
         path: '/booking',
         component: Booking,
     },
@@ -77,71 +72,19 @@ const publicRoutes = [
         component: Signup,
         layout: SingleLayout,
     },
-    {
-        path: '/admin',
-        component: Admin,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/doctor/add',
-        component: AddDoctor,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/doctors',
-        component: ManagementDoctor,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/doctor/update/:id',
-        component: UpdateDoctor,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/hospitals',
-        component: ManagementHospital,
-        layout: ManagementLayout,
-    },
+
     {
         path: '/admin/quan-ly-admin',
         component: ManagementAdmin,
         layout: ManagementLayout,
     },
-    {
-        path: '/admin/specialties',
-        component: ManagementSpecialty,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/packages',
-        component: ManagementPackage,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/hospital/add',
-        component: AddHospital,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/hospital/update/:id',
-        component: UpdateHospital,
-        layout: ManagementLayout,
-    },
-    {
-        path: '/admin/specialty/add',
-        component: AddSpecialty,
-        layout: ManagementLayout,
-    },
+
     {
         path: '/admin/type-package/add',
         component: AddTypePackage,
         layout: ManagementLayout,
     },
-    {
-        path: '/admin/package/add',
-        component: AddPackage,
-        layout: ManagementLayout,
-    },
+
     {
         path: '/admin/booking',
         component: ManagementBooking,
@@ -172,6 +115,63 @@ const publicRoutes = [
     },
 ];
 
-const privateRoutes = {};
+const privateRoutes = [
+    {
+        path: '/admin',
+        component: Admin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/doctors',
+        component: ManagementDoctor,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/doctor/add',
+        component: AddDoctor,
+        layout: ManagementLayout,
+    },
+
+    {
+        path: '/admin/doctor/update/:id',
+        component: UpdateDoctor,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/hospitals',
+        component: ManagementHospital,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/hospital/add',
+        component: AddHospital,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/hospital/update/:id',
+        component: UpdateHospital,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/specialties',
+        component: ManagementSpecialty,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/specialty/add',
+        component: AddSpecialty,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/packages',
+        component: ManagementPackage,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/package/add',
+        component: AddPackage,
+        layout: ManagementLayout,
+    },
+];
 
 export { publicRoutes, privateRoutes };

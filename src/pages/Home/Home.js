@@ -10,6 +10,7 @@ import axios from 'axios';
 function Home() {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/home`).then((res) => {
@@ -17,6 +18,10 @@ function Home() {
             setIsLoading(false);
         });
     }, []);
+
+    const handleSearch = () => {
+        console.log(searchValue);
+    };
 
     if (isLoading) {
         return <h1>Is Loading</h1>;
@@ -34,10 +39,18 @@ function Home() {
                             CHĂM SÓC SỨC KHỎE TOÀN DIỆN
                         </h1>
                         <div className="flex items-center mt-3 mx-2 sm:mx-0 rounded-3xl overflow-hidden shadow-2xl bg-white">
-                            <button className="bg-transparent text-xl sm:text-2xl p-2 sm:py-3 sm:px-4  cursor-pointer hover:opacity-75">
+                            <button
+                                onClick={handleSearch}
+                                className="bg-transparent text-xl sm:text-2xl p-2 sm:py-3 sm:px-4  cursor-pointer hover:opacity-75"
+                            >
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </button>
-                            <input className="bg-transparent text-xl w-full sm:w-[500px]" placeholder="Search..." />
+                            <input
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                className="bg-transparent text-xl w-full sm:w-[500px]"
+                                placeholder="Tìm kiếm..."
+                            />
                         </div>
                         <div className="mt-5 sm:flex items-center hidden ">
                             <a

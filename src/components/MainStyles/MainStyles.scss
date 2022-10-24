@@ -16,6 +16,9 @@ html {
 a {
     display: block;
 }
+a:hover {
+    color: inherit !important;
+}
 
 /* width */
 ::-webkit-scrollbar {
