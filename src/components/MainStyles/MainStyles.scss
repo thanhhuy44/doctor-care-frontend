@@ -47,8 +47,15 @@ a {
     }
 }
 
-.slick-track {
-    width: inherit !important;
+.ant-btn.ant-btn-primary {
+    display: block;
+    width: 100% !important;
+}
+
+.ant-upload-picture-card-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }
 
 .footer-menu {

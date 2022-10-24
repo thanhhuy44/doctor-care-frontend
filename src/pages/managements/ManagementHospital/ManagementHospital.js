@@ -18,11 +18,19 @@ function ManagementHospital() {
         });
     }, []);
 
-    const handleUpdateDoctor = (id) => {
+    const handleUpdateHospital = (id) => {
         navigate(`/admin/hospital/update/${id}`);
     };
-    const handleDeleteDoctor = () => {
-        console.log('delete');
+    const handleDeleteHospital = (id) => {
+        axios.post(`http://localhost:3030/api/hospital/delete/${id}`).then((res) => {
+            alert(res.data.message);
+            if (res.data.errCode === 0) {
+                const newData = data.filter((hospital) => {
+                    return hospital._id !== id;
+                });
+                setData(newData);
+            }
+        });
     };
 
     if (isLoading) {
@@ -66,7 +74,10 @@ function ManagementHospital() {
                             data={hospital}
                             key={hospital._id}
                             update={() => {
-                                handleUpdateDoctor(hospital._id);
+                                handleUpdateHospital(hospital._id);
+                            }}
+                            remove={() => {
+                                handleDeleteHospital(hospital._id);
                             }}
                         />
                     ))}

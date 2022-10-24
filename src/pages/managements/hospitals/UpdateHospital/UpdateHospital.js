@@ -34,16 +34,6 @@ const getBase64 = (img, callback) => {
     reader.readAsDataURL(img);
 };
 
-const getBase64ListFiles = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onload = () => resolve(reader.result);
-
-        reader.onerror = (error) => reject(error);
-    });
-
 const dummyRequest = ({ file, onSuccess }) => {
     setTimeout(() => {
         onSuccess('ok');
@@ -55,11 +45,8 @@ function UpdateHospital() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState({});
+    const [logoUrl, setLogoUrl] = useState();
     const [imageUrl, setImageUrl] = useState();
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([]);
     const formData = new FormData();
 
     const onFinish = (values) => {
@@ -71,9 +58,6 @@ function UpdateHospital() {
         formData.append('image', values.avatar.file.originFileObj);
         values.address.forEach((value) => {
             formData.append('address', value);
-        });
-        values.descImages.fileList.forEach((file) => {
-            formData.append('descImages', file.originFileObj);
         });
 
         axios
@@ -91,25 +75,12 @@ function UpdateHospital() {
         console.log('Failed:', errorInfo);
     };
 
-    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-    const handleCancel = () => setPreviewOpen(false);
-
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64ListFiles(file.originFileObj);
-        }
-
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-    };
-
     useEffect(() => {
         axios.get(`http://localhost:3030/api/hospital/${params.id}`).then((res) => {
             setData(res.data.data);
             setImageUrl(res.data.data.image);
+            setLogoUrl(res.data.data.logo);
             setIsLoading(false);
-            setFileList(res.data.data.descImages);
         });
     }, []);
 
@@ -133,8 +104,56 @@ function UpdateHospital() {
                     Thêm mới bệnh viện
                 </Typography.Title>
                 <Form.Item
-                    label="Ảnh đại diện"
-                    name="avatar"
+                    label="Logo cơ sở y tế"
+                    name="logo"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    valuePropName={'file'}
+                >
+                    <Upload
+                        style={{
+                            margin: '0 auto',
+                        }}
+                        listType="picture-card"
+                        showUploadList={false}
+                        customRequest={dummyRequest}
+                        onChange={(e) => {
+                            getBase64(e.file.originFileObj, (url) => {
+                                setLogoUrl(url);
+                            });
+                        }}
+                    >
+                        {logoUrl ? (
+                            <img
+                                src={logoUrl}
+                                alt="avatar"
+                                style={{
+                                    height: '100%',
+                                    width: '100%',
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        ) : (
+                            <div>
+                                {<PlusOutlined />}
+                                <div
+                                    style={{
+                                        marginTop: 8,
+                                    }}
+                                >
+                                    Upload
+                                </div>
+                            </div>
+                        )}
+                    </Upload>
+                </Form.Item>
+                <Form.Item
+                    label="Hình ảnh bệnh viện"
+                    name="image"
                     rules={[
                         {
                             required: true,
@@ -181,7 +200,6 @@ function UpdateHospital() {
                         )}
                     </Upload>
                 </Form.Item>
-
                 <Form.Item
                     label="Tên bệnh viện"
                     name="name"
@@ -200,12 +218,25 @@ function UpdateHospital() {
                     name="address"
                     rules={[
                         {
+                            required: true,
+                            message: 'Vui lòng nhập trường này',
+                        },
+                    ]}
+                    initialValue={data.address}
+                >
+                    <Input type="text" placeholder="Nhập địa chỉ bệnh viện (bắt buộc)" />
+                </Form.Item>
+                <Form.Item
+                    label="Tỉnh thành"
+                    name="location"
+                    rules={[
+                        {
                             type: 'array',
                             required: true,
                             message: 'Vui lòng nhập trường này',
                         },
                     ]}
-                    initialValue={[data.address.province, data.address.district, data.address.wards]}
+                    initialValue={[data.location.province, data.location.district, data.location.wards]}
                 >
                     <Cascader placeholder="Chọn địa chỉ bệnh viện" options={addressOptions} />
                 </Form.Item>
@@ -254,7 +285,7 @@ function UpdateHospital() {
                             message: 'Vui lòng nhập trường này',
                         },
                     ]}
-                    initialValue={data.equipments}
+                    initialValue={data.equipments ? data.equipments : ''}
                 >
                     <ReactQuill
                         style={{
@@ -280,49 +311,6 @@ function UpdateHospital() {
                         }}
                         placeholder="Quy trình khám bệnh của cơ sở y tế (bắt buộc)..."
                     />
-                </Form.Item>
-                <Form.Item
-                    label="Ảnh mô tả bệnh viện"
-                    name="descImages"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập trường này',
-                        },
-                        () => ({
-                            validator(_, value) {
-                                if (fileList.length >= 3) {
-                                    return Promise.resolve();
-                                } else {
-                                    return Promise.reject(new Error('Vui lòng nhập ít nhất 3 ảnh!'));
-                                }
-                            },
-                        }),
-                    ]}
-                >
-                    <Upload
-                        multiple
-                        customRequest={dummyRequest}
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleChange}
-                        valuePropName={'fileList'}
-                    >
-                        <div>
-                            <PlusOutlined />
-                            <div style={{ marginTop: 8 }}>Upload</div>
-                        </div>
-                        <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                            <img
-                                alt="example"
-                                style={{
-                                    width: '100%',
-                                }}
-                                src={previewImage}
-                            />
-                        </Modal>
-                    </Upload>
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">

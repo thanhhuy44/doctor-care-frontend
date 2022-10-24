@@ -26,11 +26,11 @@ function ManagementLayout({ children }) {
                     </div>
 
                     <div className="flex-1 my-5 md:ml-[250px] z-0 overflow-y-auto min-h-[100vh]">
-                        <div className="container mx-auto px-5">{children}</div>
+                        <div className="container mx-auto px-5 min-h-[60vh]">{children}</div>
+                        <div className="block">
+                            <Footer />
+                        </div>
                     </div>
-                </div>
-                <div className="footer">
-                    <Footer />
                 </div>
             </div>
         </div>

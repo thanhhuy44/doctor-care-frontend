@@ -5,7 +5,7 @@ import images from '~/assets';
 
 function Footer() {
     return (
-        <div className="bg-gray-100">
+        <div className="bg-slate-300 border-t-[0.5px] border-black">
             <div className="container mx-auto py-8 px-2 grid grid-cols-1 lg:grid-cols-2 ">
                 <div className="mb-8 lg:mb-0">
                     <Link to="/" className="block mb-4">

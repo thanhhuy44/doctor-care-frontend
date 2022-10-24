@@ -1,48 +1,59 @@
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Link } from 'react-router-dom';
-
-const Item = ({ border, data }) => {
-    return (
-        <div className="block mx-4">
-            <div className={border && 'p-2 border-[0.2px] border-gray-600'}>
-                <Link to={data.link} className="block w-full rounded overflow-hidden shadow-sm">
-                    <img
-                        className="w-full block h-[240px] object-cover"
-                        alt={data.alias}
-                        src={data.image || data.banner}
-                    />
-                </Link>
-                <div className="mt-3">
-                    <Link className="mb-1 text-xl font-semibold hover:text-blue-600" to={data.link}>
-                        {data.name || data.title || `${data.lastName} ${data.firstName}`}
-                    </Link>
-                    <p className="cursor-pointer text-base">{data.shortDescription || data.summary}</p>
-                </div>
-            </div>
-        </div>
-    );
-};
+import 'swiper/css';
+import { Autoplay } from 'swiper';
 
 function SlideShow({ children, numberOfSlide, dots, autoplaySpeed, className, data }) {
-    const settings = {
-        dots: dots || false,
-        infinite: true,
-        slidesToShow: numberOfSlide || 3,
-        slidesToScroll: 1,
-        autoplay: true,
-        speed: 1000,
-        autoplaySpeed: autoplaySpeed || 4000,
-    };
     return (
-        <div className={className}>
-            <Slider {...settings}>
-                {data.map((slide, index) => (
-                    <Item key={index} data={slide} />
-                ))}
-            </Slider>
-        </div>
+        <Swiper
+            spaceBetween={30}
+            slidesPerView={1}
+            autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+            }}
+            modules={[Autoplay]}
+            loop={true}
+            breakpoints={{
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 50,
+                },
+            }}
+        >
+            {data.map((slide, index) => (
+                <SwiperSlide key={index}>
+                    <div className="block">
+                        <div>
+                            <Link to={slide.link} className="block w-full rounded overflow-hidden shadow-sm">
+                                <img
+                                    className="w-full block h-[240px] object-cover"
+                                    alt={slide.alias}
+                                    src={slide.image || slide.banner}
+                                />
+                            </Link>
+                            <div className="mt-3">
+                                <Link className="mb-1 text-xl font-semibold hover:text-blue-600" to={slide.link}>
+                                    {slide.name || slide.title || `${slide.lastName} ${slide.firstName}`}
+                                </Link>
+                                <p
+                                    className="cursor-pointer text-base"
+                                    dangerouslySetInnerHTML={{ __html: slide.shortDescription || slide.summary }}
+                                ></p>
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
+            ))}
+        </Swiper>
     );
 }
 

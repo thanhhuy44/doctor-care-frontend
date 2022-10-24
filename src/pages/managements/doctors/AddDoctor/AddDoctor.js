@@ -21,6 +21,7 @@ const dummyRequest = ({ file, onSuccess }) => {
 
 function AddDoctor() {
     const navigate = useNavigate();
+    const [form] = Form.useForm();
     const [specialties, setSpecialties] = useState([]);
     const [hospitals, setHospitals] = useState([]);
     const [imageUrl, setImageUrl] = useState();
@@ -51,7 +52,12 @@ function AddDoctor() {
                 },
             )
             .then((res) => {
-                console.log(res.data);
+                alert(res.data.message);
+                if (res.data.errCode === 0) {
+                    navigate('/admin/doctors');
+                } else {
+                    form.resetFields();
+                }
             });
     };
 

@@ -1,4 +1,4 @@
-import { Form, Input, Upload, Button, Typography, Modal, Cascader } from 'antd';
+import { Form, Input, Upload, Button, Typography, Cascader } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useState } from 'react';
@@ -12,16 +12,6 @@ const getBase64 = (img, callback) => {
     reader.readAsDataURL(img);
 };
 
-const getBase64ListFiles = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onload = () => resolve(reader.result);
-
-        reader.onerror = (error) => reject(error);
-    });
-
 const dummyRequest = ({ file, onSuccess }) => {
     setTimeout(() => {
         onSuccess('ok');
@@ -30,11 +20,9 @@ const dummyRequest = ({ file, onSuccess }) => {
 
 function AddHospital() {
     const navigate = useNavigate();
+    const [logoUrl, setLogoUrl] = useState();
     const [imageUrl, setImageUrl] = useState();
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([]);
+    const [form] = Form.useForm();
     const formData = new FormData();
 
     const addressOptions = location.map((item) => {
@@ -62,15 +50,14 @@ function AddHospital() {
     const onFinish = (values) => {
         formData.append('name', values.name);
         formData.append('description', values.description);
-        formData.append('equipments', values.equipments);
+        values.equipments && formData.append('equipments', values.equipments);
         formData.append('strengths', values.strengths);
         formData.append('procedure', values.procedure);
-        formData.append('image', values.avatar.file.originFileObj);
-        values.address.forEach((value) => {
-            formData.append('address', value);
-        });
-        values.descImages.fileList.forEach((file) => {
-            formData.append('descImages', file.originFileObj);
+        formData.append('address', values.address);
+        formData.append('logo', values.logo.file.originFileObj);
+        formData.append('image', values.image.file.originFileObj);
+        values.location.forEach((value) => {
+            formData.append('location', value);
         });
 
         axios
@@ -78,9 +65,17 @@ function AddHospital() {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((res) => {
+                alert(res.data.message);
                 if (res.data.errCode === 0) {
                     navigate('/admin/hospitals');
+                } else {
+                    form.resetFields();
                 }
+            })
+            .catch(() => {
+                form.resetFields();
+                setImageUrl('');
+                setLogoUrl('');
             });
     };
 
@@ -88,20 +83,9 @@ function AddHospital() {
         console.log('Failed:', errorInfo);
     };
 
-    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-    const handleCancel = () => setPreviewOpen(false);
-
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64ListFiles(file.originFileObj);
-        }
-
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-    };
     return (
         <Form
+            form={form}
             style={{
                 maxWidth: '1000px',
                 margin: '0 auto',
@@ -117,8 +101,8 @@ function AddHospital() {
                 Thêm mới bệnh viện
             </Typography.Title>
             <Form.Item
-                label="Ảnh đại diện"
-                name="avatar"
+                label="Logo bệnh viện"
+                name="logo"
                 rules={[
                     {
                         required: true,
@@ -131,8 +115,8 @@ function AddHospital() {
                     style={{
                         margin: '0 auto',
                     }}
+                    multiple={false}
                     listType="picture-card"
-                    // className="avatar-uploader"
                     showUploadList={false}
                     customRequest={dummyRequest}
                     onChange={(e) => {
@@ -165,7 +149,55 @@ function AddHospital() {
                     )}
                 </Upload>
             </Form.Item>
-
+            <Form.Item
+                label="Hình ảnh bệnh viện"
+                name="image"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+                valuePropName={'file'}
+            >
+                <Upload
+                    style={{
+                        margin: '0 auto',
+                    }}
+                    multiple={false}
+                    listType="picture-card"
+                    showUploadList={false}
+                    customRequest={dummyRequest}
+                    onChange={(e) => {
+                        getBase64(e.file.originFileObj, (url) => {
+                            setLogoUrl(url);
+                        });
+                    }}
+                >
+                    {logoUrl ? (
+                        <img
+                            src={logoUrl}
+                            alt="avatar"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover',
+                            }}
+                        />
+                    ) : (
+                        <div>
+                            {<PlusOutlined />}
+                            <div
+                                style={{
+                                    marginTop: 8,
+                                }}
+                            >
+                                Upload
+                            </div>
+                        </div>
+                    )}
+                </Upload>
+            </Form.Item>
             <Form.Item
                 label="Tên bệnh viện"
                 name="name"
@@ -183,13 +215,25 @@ function AddHospital() {
                 name="address"
                 rules={[
                     {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <Input type="text" placeholder="Nhập địa chỉ bệnh viện (bắt buộc)" />
+            </Form.Item>
+            <Form.Item
+                label="Tỉnh thành"
+                name="location"
+                rules={[
+                    {
                         type: 'array',
                         required: true,
                         message: 'Vui lòng nhập trường này',
                     },
                 ]}
             >
-                <Cascader placeholder="Chọn địa chỉ bệnh viện" options={addressOptions} />
+                <Cascader placeholder="Chọn tỉnh thành..." options={addressOptions} />
             </Form.Item>
             <Form.Item
                 label="Thông tin tổng quan cơ sở y tế"
@@ -225,21 +269,12 @@ function AddHospital() {
                     placeholder="Thế mạnh chuyên môn của cơ sở y tế (bắt buộc)..."
                 />
             </Form.Item>
-            <Form.Item
-                label="Trang thiết bị"
-                name="equipments"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập trường này',
-                    },
-                ]}
-            >
+            <Form.Item label="Trang thiết bị" name="equipments">
                 <ReactQuill
                     style={{
                         backgroundColor: 'white',
                     }}
-                    placeholder="Trang thiết bị của cơ sở y tế (bắt buộc)..."
+                    placeholder="Trang thiết bị của cơ sở y tế..."
                 />
             </Form.Item>
             <Form.Item
@@ -258,49 +293,6 @@ function AddHospital() {
                     }}
                     placeholder="Quy trình khám bệnh của cơ sở y tế (bắt buộc)..."
                 />
-            </Form.Item>
-            <Form.Item
-                label="Ảnh mô tả bệnh viện"
-                name="descImages"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập trường này',
-                    },
-                    () => ({
-                        validator(_, value) {
-                            if (fileList.length >= 3) {
-                                return Promise.resolve();
-                            } else {
-                                return Promise.reject(new Error('Vui lòng nhập ít nhất 3 ảnh!'));
-                            }
-                        },
-                    }),
-                ]}
-            >
-                <Upload
-                    multiple
-                    customRequest={dummyRequest}
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={handlePreview}
-                    onChange={handleChange}
-                    valuePropName={'fileList'}
-                >
-                    <div>
-                        <PlusOutlined />
-                        <div style={{ marginTop: 8 }}>Upload</div>
-                    </div>
-                    <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                        <img
-                            alt="example"
-                            style={{
-                                width: '100%',
-                            }}
-                            src={previewImage}
-                        />
-                    </Modal>
-                </Upload>
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">

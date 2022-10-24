@@ -16,7 +16,7 @@ function Home() {
             setData(res.data.data);
             setIsLoading(false);
         });
-    });
+    }, []);
 
     if (isLoading) {
         return <h1>Is Loading</h1>;
@@ -25,15 +25,15 @@ function Home() {
             <div>
                 <div className="block  relative w-full object-cover">
                     <div className="block">
-                        <img className="w-full block max-h-[100vh] object-cover" src={background} alt="background" />
+                        <img className="w-full block max-h-[80vh] object-cover" src={background} alt="background" />
                     </div>
-                    <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center bg-black/30 ">
+                    <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center bg-black/50 ">
                         <h1 className="text-center text-2xl sm:text-4xl leading-6 font-semibold text-white uppercase drop-shadow sm:mb-5 leading-16">
                             NỀN TẢNG Y TẾ
                             <br />
                             CHĂM SÓC SỨC KHỎE TOÀN DIỆN
                         </h1>
-                        <div className="flex items-center mt-3 mx-2 sm:mx-0  bg-yellow-400 rounded-3xl overflow-hidden shadow-2xl">
+                        <div className="flex items-center mt-3 mx-2 sm:mx-0 rounded-3xl overflow-hidden shadow-2xl bg-white">
                             <button className="bg-transparent text-xl sm:text-2xl p-2 sm:py-3 sm:px-4  cursor-pointer hover:opacity-75">
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </button>
