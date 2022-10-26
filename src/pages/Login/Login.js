@@ -4,10 +4,14 @@ import background from '~/assets/images/bookingcare-cover-4.png';
 import Button from '~/components/Button/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faKey, faEye, faEyeSlash, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setAdminInfo, setLogIn } from '~/redux/features/doctorCareSlice';
+import { notification } from 'antd';
 
 function Login() {
+    const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
@@ -16,7 +20,21 @@ function Login() {
     const [hidePass, setHidePass] = useState(true);
 
     const handleLogin = (data) => {
-        axios.post('http://localhost:3030/api/admin/login', data).then((res) => console.log(res.data.data));
+        axios.post('http://localhost:3030/api/admin/login', data).then((res) => {
+            if (res.data.errCode === 0) {
+                dispatch(setLogIn(true));
+                dispatch(setAdminInfo(res.data.data));
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                    message: res.data.message,
+                });
+            } else {
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: res.data.message,
+                });
+            }
+        });
     };
     return (
         <div>
@@ -42,7 +60,7 @@ function Login() {
                                 type="email"
                                 id="email"
                                 className="flex-1 w-full bg-transparent ml-2 text-xl text-gray-900 px-1"
-                                placeholder="Email"
+                                placeholder="Tên người dùng (User Name)..."
                             />
                         </div>
                         {errors.userName?.type === 'required' && (
@@ -65,7 +83,7 @@ function Login() {
                                 id="password"
                                 type={hidePass ? 'password' : 'text'}
                                 className="flex-1 w-full bg-transparent ml-2 text-xl text-gray-900 px-1"
-                                placeholder="Password"
+                                placeholder="Mật khẩu..."
                             />
                             <Button onClick={() => setHidePass(!hidePass)} className={'block min-w-[28px] text-center'}>
                                 {hidePass ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
