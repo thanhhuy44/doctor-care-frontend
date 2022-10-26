@@ -1,10 +1,12 @@
-import { Form, Input, Upload, Button, Typography, Cascader } from 'antd';
+import { Form, Input, Upload, Button, Typography, Cascader, notification } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import location from '~/assets/location/local.json';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -51,7 +53,7 @@ function AddHospital() {
         formData.append('name', values.name);
         formData.append('description', values.description);
         values.equipments && formData.append('equipments', values.equipments);
-        formData.append('strengths', values.strengths);
+        values.strengths && formData.append('strengths', values.strengths);
         formData.append('procedure', values.procedure);
         formData.append('address', values.address);
         formData.append('logo', values.logo.file.originFileObj);
@@ -65,11 +67,22 @@ function AddHospital() {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((res) => {
-                alert(res.data.message);
                 if (res.data.errCode === 0) {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                        message: 'Thành công',
+                        description: res.data.message,
+                    });
                     navigate('/admin/hospitals');
                 } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.data.message,
+                    });
                     form.resetFields();
+                    setLogoUrl('');
+                    setImageUrl('');
                 }
             })
             .catch(() => {
@@ -252,16 +265,7 @@ function AddHospital() {
                     placeholder="Thông tin tổng quan về cơ sở y tế (bắt buộc)..."
                 />
             </Form.Item>
-            <Form.Item
-                label="Thế mạnh chuyên môn"
-                name="strengths"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng nhập trường này',
-                    },
-                ]}
-            >
+            <Form.Item label="Thế mạnh chuyên môn" name="strengths">
                 <ReactQuill
                     style={{
                         backgroundColor: 'white',

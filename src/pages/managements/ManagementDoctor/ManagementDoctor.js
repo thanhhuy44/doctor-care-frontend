@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
 
 function ManagementDoctor() {
     const navigate = useNavigate();
@@ -66,13 +67,21 @@ function ManagementDoctor() {
     const handleRemove = (id) => {
         axios.post(`http://localhost:3030/api/doctor/delete/${id}`).then((res) => {
             if (res.data.errCode === 0) {
-                alert(res.data.message);
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                    message: 'Thành công',
+                    description: res.data.message,
+                });
                 const newData = data.filter((doctor) => {
                     return doctor._id !== id;
                 });
                 setData(newData);
             } else {
-                alert(res.data.message);
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: 'Lỗi',
+                    description: res.data.message,
+                });
             }
         });
     };

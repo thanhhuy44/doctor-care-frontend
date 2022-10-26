@@ -1,10 +1,12 @@
-import { Form, Input, Sct, Upload, Button, Typography, Modal, Cascader } from 'antd';
+import { Form, Input, Upload, Button, Typography, notification, Cascader } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import location from '~/assets/location/local.json';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 
 const addressOptions = location.map((item) => {
     return {
@@ -51,22 +53,33 @@ function UpdateHospital() {
 
     const onFinish = (values) => {
         formData.append('name', values.name);
+        formData.append('address', values.address);
         formData.append('description', values.description);
         formData.append('equipments', values.equipments);
         formData.append('strengths', values.strengths);
         formData.append('procedure', values.procedure);
-        formData.append('image', values.avatar.file.originFileObj);
-        values.address.forEach((value) => {
-            formData.append('address', value);
+        values.logo && formData.append('logo', values.logo.file.originFileObj);
+        values.image && formData.append('image', values.image.file.originFileObj);
+        values.location.forEach((value) => {
+            formData.append('location', value);
         });
 
         axios
-            .post('http://localhost:3030/api/hospital/create', formData, {
+            .post(`http://localhost:3030/api/hospital/update/${params.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((res) => {
                 if (res.data.errCode === 0) {
                     navigate('/admin/hospitals');
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                        message: res.data.message,
+                    });
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: res.data.message,
+                    });
                 }
             });
     };
@@ -103,17 +116,7 @@ function UpdateHospital() {
                 <Typography.Title level={1} style={{ textAlign: 'center' }}>
                     Thêm mới bệnh viện
                 </Typography.Title>
-                <Form.Item
-                    label="Logo cơ sở y tế"
-                    name="logo"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập trường này',
-                        },
-                    ]}
-                    valuePropName={'file'}
-                >
+                <Form.Item label="Logo cơ sở y tế" name="logo" valuePropName={'file'}>
                     <Upload
                         style={{
                             margin: '0 auto',
@@ -130,7 +133,7 @@ function UpdateHospital() {
                         {logoUrl ? (
                             <img
                                 src={logoUrl}
-                                alt="avatar"
+                                alt="logo"
                                 style={{
                                     height: '100%',
                                     width: '100%',
@@ -151,17 +154,7 @@ function UpdateHospital() {
                         )}
                     </Upload>
                 </Form.Item>
-                <Form.Item
-                    label="Hình ảnh bệnh viện"
-                    name="image"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập trường này',
-                        },
-                    ]}
-                    valuePropName={'file'}
-                >
+                <Form.Item label="Hình ảnh bệnh viện" name="image" valuePropName={'file'}>
                     <Upload
                         style={{
                             margin: '0 auto',

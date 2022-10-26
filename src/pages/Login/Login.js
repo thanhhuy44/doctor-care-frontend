@@ -26,12 +26,14 @@ function Login() {
                 dispatch(setAdminInfo(res.data.data));
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
-                    message: res.data.message,
+                    message: 'Thành công',
+                    description: res.data.message,
                 });
             } else {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-                    message: res.data.message,
+                    message: 'Lỗi',
+                    description: res.data.message,
                 });
             }
         });

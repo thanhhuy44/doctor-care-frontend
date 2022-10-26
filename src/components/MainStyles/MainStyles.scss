@@ -49,10 +49,16 @@ a:hover {
         background-color: white !important;
     }
 }
-
 .ant-btn.ant-btn-primary {
-    display: block;
-    width: 100% !important;
+    background-color: #1890ff !important;
+}
+
+.ant-form {
+    .ant-btn.ant-btn-primary {
+        display: block;
+        width: 100% !important;
+        background-color: #1890ff !important;
+    }
 }
 
 .ant-upload-picture-card-wrapper {

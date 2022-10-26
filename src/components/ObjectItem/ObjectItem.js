@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilePen, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '../Button/Button';
+import { Popconfirm } from 'antd';
 
 function ObjectItem({ data, update, remove }) {
     return (
@@ -13,9 +14,18 @@ function ObjectItem({ data, update, remove }) {
                 <Button onClick={update} className="bg-transparent text-yellow-600">
                     <FontAwesomeIcon icon={faFilePen} />
                 </Button>
-                <Button onClick={remove} className="bg-transparent text-red-600">
-                    <FontAwesomeIcon icon={faMinusCircle} />
-                </Button>
+
+                <Popconfirm
+                    placement="right"
+                    title="Bạn có chắc chắn muốn xóa?"
+                    onConfirm={remove}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <Button className="bg-transparent text-red-600">
+                        <FontAwesomeIcon icon={faMinusCircle} />
+                    </Button>
+                </Popconfirm>
             </div>
         </div>
     );
