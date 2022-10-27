@@ -6,6 +6,7 @@ import Section from '~/components/Section';
 import SlideShow from '~/components/SlideShow';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loading from '../Loading';
 
 function Home() {
     const [data, setData] = useState([]);
@@ -24,7 +25,7 @@ function Home() {
     };
 
     if (isLoading) {
-        return <h1>Is Loading</h1>;
+        return <Loading />;
     } else {
         return (
             <div>

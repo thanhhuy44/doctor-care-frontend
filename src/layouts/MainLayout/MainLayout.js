@@ -12,7 +12,7 @@ function MainLayout({ children }) {
             <div className="bg-white">
                 <Header />
             </div>
-            <div className="mt-[80px]">{children}</div>
+            <div className="mt-[80px] min-h-[60vh] relative">{children}</div>
             <div className={cx('footer')}>
                 <Footer />
             </div>

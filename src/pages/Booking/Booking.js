@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faEnvelope, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import { useForm, Controller } from 'react-hook-form';
-import ErrorMessage from '~/components/Form/components/ErrorMessage';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 import axios from 'axios';
 
@@ -114,7 +113,7 @@ function Booking() {
                                     }
                                 />
                             </div>
-                            {errors.name?.type === 'required' && <ErrorMessage message="Trường này là bắt buộc" />}
+                            {errors.name?.type === 'required' && <p>Trường này là bắt buộc</p>}
                         </div>
                     )}
                 />
@@ -146,10 +145,8 @@ function Booking() {
                                     placeholder="Số điện thoại liên hệ (bắt buộc)"
                                 />
                             </div>
-                            {errors.numberPhone?.type === 'required' && (
-                                <ErrorMessage message="Trường này là bắt buộc" />
-                            )}
-                            {errors.numberPhone && <ErrorMessage message={errors.numberPhone.message} />}
+                            {errors.numberPhone?.type === 'required' && <p>Trường này là bắt buộc</p>}
+                            {errors.numberPhone && <p>{errors.numberPhone.message}</p>}
                         </div>
                     )}
                 />
@@ -180,8 +177,8 @@ function Booking() {
                                     placeholder="Email (bắt buộc)"
                                 />
                             </div>
-                            {errors.email?.type === 'required' && <ErrorMessage message="Trường này là bắt buộc" />}
-                            {errors.email && <ErrorMessage message={errors.email.message} />}
+                            {errors.email?.type === 'required' && <p>Trường này là bắt buộc</p>}
+                            {errors.email && <p>{errors.email.message}</p>}
                         </div>
                     )}
                 />
@@ -208,7 +205,7 @@ function Booking() {
                                     placeholder="Địa chỉ (bắt buộc)"
                                 />
                             </div>
-                            {errors.address?.type === 'required' && <ErrorMessage message="Trường này là bắt buộc" />}
+                            {errors.address?.type === 'required' && <p>Trường này là bắt buộc</p>}
                         </div>
                     )}
                 />

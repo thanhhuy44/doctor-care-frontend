@@ -51,6 +51,8 @@ function AddHospital() {
 
     const onFinish = (values) => {
         formData.append('name', values.name);
+        formData.append('email', values.email);
+        formData.append('phoneNumber', values.phoneNumber);
         formData.append('description', values.description);
         values.equipments && formData.append('equipments', values.equipments);
         values.strengths && formData.append('strengths', values.strengths);
@@ -111,10 +113,10 @@ function AddHospital() {
             layout="vertical"
         >
             <Typography.Title level={1} style={{ textAlign: 'center' }}>
-                Thêm mới bệnh viện
+                Thêm mới cơ sở y tế
             </Typography.Title>
             <Form.Item
-                label="Logo bệnh viện"
+                label="Logo cơ sở y tế"
                 name="logo"
                 rules={[
                     {
@@ -163,7 +165,7 @@ function AddHospital() {
                 </Upload>
             </Form.Item>
             <Form.Item
-                label="Hình ảnh bệnh viện"
+                label="Hình ảnh cơ sở y tế"
                 name="image"
                 rules={[
                     {
@@ -212,7 +214,7 @@ function AddHospital() {
                 </Upload>
             </Form.Item>
             <Form.Item
-                label="Tên bệnh viện"
+                label="Tên cơ sở y tế"
                 name="name"
                 rules={[
                     {
@@ -221,10 +223,34 @@ function AddHospital() {
                     },
                 ]}
             >
-                <Input type="text" placeholder="Nhập tên bệnh viện (bắt buộc)" />
+                <Input type="text" placeholder="Nhập tên cơ sở y tế (bắt buộc)" />
             </Form.Item>
             <Form.Item
-                label="Địa chỉ bệnh viện"
+                label="Email cơ sở y tế"
+                name="email"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <Input type="text" placeholder="Nhập email cơ sở y tế (bắt buộc)" />
+            </Form.Item>
+            <Form.Item
+                label="Số điện thoại cơ sỏ y tế"
+                name="phoneNumber"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng nhập trường này',
+                    },
+                ]}
+            >
+                <Input type="text" placeholder="Nhập số điện thoại cơ sỏ y tế (bắt buộc)" />
+            </Form.Item>
+            <Form.Item
+                label="Địa chỉ cơ sở y tế"
                 name="address"
                 rules={[
                     {
@@ -233,7 +259,7 @@ function AddHospital() {
                     },
                 ]}
             >
-                <Input type="text" placeholder="Nhập địa chỉ bệnh viện (bắt buộc)" />
+                <Input type="text" placeholder="Nhập địa chỉ cơ sở y tế (bắt buộc)" />
             </Form.Item>
             <Form.Item
                 label="Tỉnh thành"
