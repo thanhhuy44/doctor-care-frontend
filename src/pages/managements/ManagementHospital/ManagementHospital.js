@@ -43,6 +43,7 @@ function ManagementHospital() {
                     return hospital._id !== id;
                 });
                 setData(newData);
+                setPageData(newData);
             } else {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,

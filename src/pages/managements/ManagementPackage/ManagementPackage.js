@@ -31,7 +31,7 @@ function ManagementPackage() {
                     <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
                             <label htmlFor="specialtySelect" className="text-base font-medium mr-3">
-                                Địa điểm
+                                Cơ sở y tế
                             </label>
                             <select id="specialtySelect">
                                 <option>Tất cả</option>

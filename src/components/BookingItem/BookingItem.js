@@ -1,8 +1,42 @@
 import { faCalendar, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DatePicker } from 'antd';
+import moment from 'moment';
+import { useState } from 'react';
 import Button from '../Button/Button';
 
+const shirfts = [
+    { sequence: 1, timeStart: 8, timeEnd: 9 },
+    {
+        sequence: 2,
+        timeStart: 9,
+        timeEnd: 10,
+    },
+    {
+        sequence: 3,
+        timeStart: 10,
+        timeEnd: 11,
+    },
+    {
+        sequence: 4,
+        timeStart: 13,
+        timeEnd: 14,
+    },
+    {
+        sequence: 5,
+        timeStart: 14,
+        timeEnd: 15,
+    },
+    {
+        sequence: 6,
+        timeStart: 15,
+        timeEnd: 16,
+    },
+];
+
 function BookingItem() {
+    const [dateValue, setDateValue] = useState(new Date());
+
     return (
         <div className="flex flex-col md:flex-row md:items-start shadow-lg rounded-md mb-4">
             <div className="flex-1 flex items-center flex-col sm:flex-row sm:items-start p-4">
@@ -29,31 +63,37 @@ function BookingItem() {
                 </div>
             </div>
             <div className="booking flex-1 px-4 md:px-10 my-4 md:border-l-[0.5px] border-gray-700 text-gray-900 text-base">
-                <select className="block w-full md:w-[200px] p-2 focus:outline-cyan-700 border-b border-cyan-800 ">
-                    <option>13/4</option>
-                    <option>14/4</option>
-                    <option>15/4</option>
-                    <option>16/4</option>
-                </select>
+                <DatePicker
+                    inputReadOnly={true}
+                    defaultValue={moment(new Date())}
+                    format="DD-MM-yyyy"
+                    onChange={(e) => {
+                        setDateValue(moment(e).format('yyyy-MM-DD'));
+                        console.log(new Date().getFullYear());
+                    }}
+                />
                 <div className="my-5">
                     <p className="font-semibold uppercase text-xl">
                         <FontAwesomeIcon className="mr-2" icon={faCalendar} />
                         Lịch khám
                     </p>
-                    <div className="my-2 overflow-x-auto flex items-center flex-nowrap">
-                        <Button className="min-w-[100px] text-center bg-gray-200 p-2 rounded-[0px] hover:text-cyan-700">
-                            Ca 1
-                        </Button>
-                        <Button className="min-w-[100px] text-center bg-gray-200 p-2 rounded-[0px] hover:text-cyan-700">
-                            Ca 2
-                        </Button>
-                        <Button className="min-w-[100px] text-center bg-gray-200 p-2 rounded-[0px] hover:text-cyan-700">
-                            Ca 3
-                        </Button>
-                        <Button className="min-w-[100px] text-center bg-gray-200 p-2 rounded-[0px] hover:text-cyan-700">
-                            Ca 4
-                        </Button>
-                    </div>
+                    {new Date(dateValue).getDate() >= new Date().getDate() &&
+                        new Date(dateValue).getMonth() >= new Date().getMonth() &&
+                        new Date(dateValue).getFullYear() >= new Date().getFullYear() && (
+                            <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-start ">
+                                {shirfts.map((shirft) => (
+                                    <Button
+                                        key={shirft.sequence}
+                                        className=" min-w-[160px] text-center bg-gray-200 p-2 rounded-[0px] hover:text-cyan-700"
+                                    >
+                                        <p>Ca {shirft.sequence}</p>
+                                        <span>
+                                            Từ {shirft.timeStart}:00 đến {shirft.timeEnd}:00
+                                        </span>
+                                    </Button>
+                                ))}
+                            </div>
+                        )}
                 </div>
                 <div className="border-t border-gray-500 py-2">
                     <h4 className="text-lg font-semibold uppercase">Địa chỉ khám</h4>
