@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Button from '../Button/Button';
 
-const shirfts = [
+const shifts = [
     { sequence: 1, timeStart: 8, timeEnd: 9 },
     {
         sequence: 2,
@@ -34,42 +35,42 @@ const shirfts = [
     },
 ];
 
-function BookingItem() {
-    const [dateValue, setDateValue] = useState(new Date());
+function BookingItem({ data }) {
+    const [dateValue, setDateValue] = useState(
+        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() + 1}`,
+    );
+    console.log(data);
 
     return (
         <div className="flex flex-col md:flex-row md:items-start shadow-lg rounded-md mb-4">
             <div className="flex-1 flex items-center flex-col sm:flex-row sm:items-start p-4">
                 <div className=" flex flex-col items-center min-w-[120px] ">
-                    <img
-                        className="block aspect-square rounded-full mb-4"
-                        src="https://cdn.bookingcare.vn/fr/w200/2018/04/09/151800292142135730131997187173031663525568184320n.jpg"
-                        alt="avatar"
-                    />
-                    <Button className="text-cyan-900 hidden sm:block">Xem thêm</Button>
+                    <img className="block aspect-square rounded-full mb-4" src={data.image} alt={data.link} />
+                    <Link
+                        to={data.link}
+                        className="p-2 text-xl font-medium text-cyan-900 hidden sm:block hover:border-b border-cyan-900"
+                    >
+                        Xem thêm
+                    </Link>
                 </div>
                 <div className="sm:pl-5 text-gray-900 text-center sm:text-left">
-                    <h3 className="mb-4 sm:mb-0 text-xl font-medium text-cyan-700">
-                        Giáo sư, Tiến sĩ, Bác sĩ Trần Ngọc Ân
-                    </h3>
-                    <div className="mt-1 text-justify sm:text-left">
-                        Nguyên Trưởng khoa Cơ xương khớp, Bệnh viện Bạch Mai Chủ tịch Hội Thấp khớp học Việt Nam Giáo sư
-                        đầu ngành với gần 50 năm kinh nghiệm điều trị các bệnh lý liên quan đến Cơ xương khớp Bác sĩ
-                        khám cho người bệnh từ 14 tuổi trở lên
-                    </div>
+                    <h3 className="mb-4 sm:mb-0 text-xl font-medium text-cyan-700">{data.name}</h3>
+                    <div
+                        className="mt-1 text-justify sm:text-left"
+                        dangerouslySetInnerHTML={{ __html: data.shortDescription }}
+                    ></div>
                     <p className="mt-2 font-normal text-left">
-                        <FontAwesomeIcon icon={faLocationDot} /> Gia Lai
+                        <FontAwesomeIcon icon={faLocationDot} /> {data.hospital.location.province}
                     </p>
                 </div>
             </div>
-            <div className="booking flex-1 px-4 md:px-10 my-4 md:border-l-[0.5px] border-gray-700 text-gray-900 text-base">
+            <div className="booking flex-1 px-4 my-4 md:border-l-[0.5px] border-gray-700 text-gray-900 text-base">
                 <DatePicker
                     inputReadOnly={true}
-                    defaultValue={moment(new Date())}
+                    defaultValue={moment(dateValue)}
                     format="DD-MM-yyyy"
                     onChange={(e) => {
                         setDateValue(moment(e).format('yyyy-MM-DD'));
-                        console.log(new Date().getFullYear());
                     }}
                 />
                 <div className="my-5">
@@ -77,28 +78,34 @@ function BookingItem() {
                         <FontAwesomeIcon className="mr-2" icon={faCalendar} />
                         Lịch khám
                     </p>
-                    {new Date(dateValue).getDate() >= new Date().getDate() &&
-                        new Date(dateValue).getMonth() >= new Date().getMonth() &&
-                        new Date(dateValue).getFullYear() >= new Date().getFullYear() && (
-                            <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-start ">
-                                {shirfts.map((shirft) => (
-                                    <Button
-                                        key={shirft.sequence}
-                                        className=" min-w-[160px] text-center bg-gray-200 p-2 rounded-[0px] hover:text-cyan-700"
-                                    >
-                                        <p>Ca {shirft.sequence}</p>
-                                        <span>
-                                            Từ {shirft.timeStart}:00 đến {shirft.timeEnd}:00
-                                        </span>
-                                    </Button>
-                                ))}
-                            </div>
-                        )}
+                    {new Date(dateValue).getTime() > new Date().getTime() ? (
+                        <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-start ">
+                            {shifts.map((shift) => (
+                                <Link
+                                    state={{
+                                        shift,
+                                        dateValue,
+                                        data,
+                                    }}
+                                    to="/booking"
+                                    key={shift.sequence}
+                                    className="mr-4 mb-4 min-w-[150px] text-center bg-gray-200 p-1 hover:bg-yellow-50 duration-500"
+                                >
+                                    <p className="font-medium text-lg">Ca {shift.sequence}</p>
+                                    <span className="font-normal text-sm">
+                                        Từ {shift.timeStart}:00 đến {shift.timeEnd}:00
+                                    </span>
+                                </Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <h1 className="font-semibold text-base mt-4 text-red-500">Không có lịch khám</h1>
+                    )}
                 </div>
                 <div className="border-t border-gray-500 py-2">
                     <h4 className="text-lg font-semibold uppercase">Địa chỉ khám</h4>
-                    <p>Bệnh viện Đa khoa Hồng Phát</p>
-                    <p>Số 219 Lê Duẩn - Hai Bà Trưng - Hà Nội</p>
+                    <p>{data.hospital.name}</p>
+                    <p>{data.hospital.address}</p>
                 </div>
                 <div className="border-t border-gray-500 py-2 flex items-center">
                     <h4 className="font-semibold mr-2 uppercase">Giá khám</h4>

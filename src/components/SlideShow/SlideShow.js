@@ -42,11 +42,13 @@ function SlideShow({ children, numberOfSlide, dots, autoplaySpeed, className, da
                             </Link>
                             <div className="mt-3">
                                 <Link className="mb-1 text-xl font-semibold hover:text-blue-600" to={slide.link}>
-                                    {slide.name || slide.title || `${slide.lastName} ${slide.firstName}`}
+                                    {slide.name || slide.title}
                                 </Link>
                                 <p
-                                    className="cursor-pointer text-base"
-                                    dangerouslySetInnerHTML={{ __html: slide.shortDescription || slide.summary }}
+                                    className="cursor-pointer text-base lin"
+                                    dangerouslySetInnerHTML={{
+                                        __html: slide.shortDescription || slide.summary || slide.address,
+                                    }}
                                 ></p>
                             </div>
                         </div>

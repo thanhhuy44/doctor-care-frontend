@@ -28,6 +28,7 @@ import AddSpecialty from '~/pages/managements/specialties/AddSpecialty/AddSpecia
 import AddTypePackage from '~/pages/managements/typePackages/AddTypePackage/AddTypePackage';
 import AddPackage from '~/pages/managements/packages/AddPackage';
 import ManagementBooking from '~/pages/managements/ManagementBooking/ManagementBooking';
+import AllTypePackages from '~/pages/AllTypePackage';
 
 const publicRoutes = [
     {
@@ -47,7 +48,11 @@ const publicRoutes = [
         component: AllSpecialties,
     },
     {
-        path: '/packages',
+        path: 'packages',
+        component: AllTypePackages,
+    },
+    {
+        path: '/type-package/:name/:id',
         component: AllPackages,
     },
     {

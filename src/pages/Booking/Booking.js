@@ -1,34 +1,60 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCirclePlus, faEnvelope, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCheckCircle,
+    faCirclePlus,
+    faEnvelope,
+    faLocationDot,
+    faPhone,
+    faUser,
+    faXmarkCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import { useForm, Controller } from 'react-hook-form';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import { notification } from 'antd';
 
 function Booking() {
-    const [isMySelf, setIsMySelf] = useState(true);
+    const navigate = useNavigate();
+    const location = useLocation();
     const {
         handleSubmit,
         control,
         formState: { errors },
     } = useForm();
 
-    const handleClick = (data) => {
-        console.log(data);
+    const data = location.state;
+
+    const handleClick = (values) => {
         axios
             .post('http://localhost:3030/api/booking/create', {
-                name: data.name,
-                numberPhone: data.numberPhone,
-                email: data.email,
-                address: data.address,
-                doctor: '6315c744071e0cfcc3396e52',
-                time: '2022-09-15T00:00:00.000Z',
-                shift: 1,
-                reason: data.reason,
+                name: values.name,
+                numberPhone: values.numberPhone,
+                email: values.email,
+                address: values.address,
+                doctor: data.data._id,
+                date: data.dateValue,
+                time: data.shift.sequence,
+                reason: values.reason,
             })
             .then((res) => {
-                alert(res.data.message);
+                if (res.data.errCode === 0) {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                        message: 'Thành công',
+                        description: res.data.message,
+                    });
+                    navigate('/');
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.data.message,
+                    });
+                }
             });
     };
 
@@ -36,58 +62,24 @@ function Booking() {
         <div className="container p-5 max-w-[700px] mx-auto">
             <h2 className="mb-4 font-semibold text-2xl text-center">ĐẶT LỊCH KHÁM</h2>
             <div className="flex items-center flex-col lg:flex-row">
-                <div className="block max-w-[200px] aspect-square rounded-full overflow-hidden shadow-sm">
+                <div className="">
                     <img
-                        className="block"
-                        src="https://cdn.bookingcare.vn/fr/w100/2021/01/18/105401-bsckii-tran-minh-khuyen.jpg"
-                        alt="alt"
+                        className="block max-w-[160px] aspect-square rounded-full overflow-hidden shadow-sm object-cover"
+                        src={data.data.image}
+                        alt={data.data.alias}
                     />
                 </div>
                 <div className="py-2 px-4  text-center lg:text-left">
-                    <h4 className="text-xl mb-2">Bác sĩ Chuyên khoa II Trần Minh Khuyên</h4>
-                    <p className="text-sm font-normal lowercase">08:30 - 09:00 - Thứ 2 - 15/08/2022</p>
+                    <h4 className="text-xl font-semibold mb-2">{data.data.name}</h4>
+                    <p className="text-sm font-normal">
+                        Thời gian: {data.shift.timeStart}:00 - {data.shift.timeEnd}:00
+                    </p>
+                    <p className="text-sm font-normal">{`Ngày ${moment(data.dateValue).date()} tháng ${
+                        moment(data.dateValue).month() + 1
+                    } năm ${moment(data.dateValue).year()}`}</p>
                 </div>
             </div>
             <div className="mt-10">
-                <Controller
-                    control={control}
-                    name="self"
-                    rules={{
-                        required: true,
-                    }}
-                    defaultValue={isMySelf}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <div className="flex flex-col md:flex-row">
-                            <span className="mr-4">
-                                <input
-                                    defaultChecked
-                                    type="radio"
-                                    onChange={(e) => {
-                                        console.log(isMySelf);
-                                        setIsMySelf(true);
-                                        onChange(e);
-                                    }}
-                                    value={true}
-                                    name="isMySelf"
-                                />{' '}
-                                Đặt cho chính mình
-                            </span>
-                            <span className="mr-4">
-                                <input
-                                    type="radio"
-                                    onChange={(e) => {
-                                        console.log(isMySelf);
-                                        setIsMySelf(false);
-                                        onChange(e);
-                                    }}
-                                    value={false}
-                                    name="isMySelf"
-                                />{' '}
-                                Đặt cho người thân
-                            </span>
-                        </div>
-                    )}
-                />
                 <Controller
                     control={control}
                     name="name"
@@ -108,12 +100,12 @@ function Booking() {
                                     id="name"
                                     onChange={onChange}
                                     className="flex-1"
-                                    placeholder={
-                                        isMySelf ? 'Họ và tên bệnh nhân (bắt buộc)' : 'Họ và tên người thân (bắt buộc)'
-                                    }
+                                    placeholder="Họ và tên bệnh nhân (bắt buộc)"
                                 />
                             </div>
-                            {errors.name?.type === 'required' && <p>Trường này là bắt buộc</p>}
+                            {errors.name?.type === 'required' && (
+                                <p className="error-message">Trường này là bắt buộc</p>
+                            )}
                         </div>
                     )}
                 />
@@ -145,8 +137,10 @@ function Booking() {
                                     placeholder="Số điện thoại liên hệ (bắt buộc)"
                                 />
                             </div>
-                            {errors.numberPhone?.type === 'required' && <p>Trường này là bắt buộc</p>}
-                            {errors.numberPhone && <p>{errors.numberPhone.message}</p>}
+                            {errors.numberPhone?.type === 'required' && (
+                                <p className="error-message">Trường này là bắt buộc</p>
+                            )}
+                            {errors.numberPhone && <p className="error-message">{errors.numberPhone.message}</p>}
                         </div>
                     )}
                 />
@@ -177,8 +171,10 @@ function Booking() {
                                     placeholder="Email (bắt buộc)"
                                 />
                             </div>
-                            {errors.email?.type === 'required' && <p>Trường này là bắt buộc</p>}
-                            {errors.email && <p>{errors.email.message}</p>}
+                            {errors.email?.type === 'required' && (
+                                <p className="error-message">Trường này là bắt buộc</p>
+                            )}
+                            {errors.email && <p className="error-message">{errors.email.message}</p>}
                         </div>
                     )}
                 />
@@ -205,7 +201,9 @@ function Booking() {
                                     placeholder="Địa chỉ (bắt buộc)"
                                 />
                             </div>
-                            {errors.address?.type === 'required' && <p>Trường này là bắt buộc</p>}
+                            {errors.address?.type === 'required' && (
+                                <p className="error-message">Trường này là bắt buộc</p>
+                            )}
                         </div>
                     )}
                 />
@@ -222,7 +220,7 @@ function Booking() {
                                 <textarea
                                     className="flex-1 min-h-[150px] focus:outline-none"
                                     id="reason"
-                                    placeholder="Lý do khám"
+                                    placeholder="Lý do khám (Vui lòng điền thông tin thật chi tiết để các y bác sĩ hỗ trợ bạn tốt nhất)"
                                 />
                             </div>
                         </div>
@@ -231,7 +229,7 @@ function Booking() {
                 <div className="rounded overflow-hidden p-4 mt-3 bg-[#f6f6f6] text-base leading-4 text-gray-900">
                     <p className="my-1 flex items-center justify-between font-semibold">
                         <span>Giá khám</span>
-                        <span>250.000đ</span>
+                        <span>{data.data.price} VNĐ</span>
                     </p>
                     <p className="mt-1 mb-3 flex items-center justify-between text-sm">
                         <span>Phí đặt lịch</span>
@@ -239,7 +237,7 @@ function Booking() {
                     </p>
                     <p className="my-1 flex items-center justify-between pt-3 border-t border-orange-600 text-orange-600 font-semibold">
                         <span>Tổng cộng</span>
-                        <span>250.000đ</span>
+                        <span>{data.data.price} VNĐ</span>
                     </p>
                 </div>
                 <div className="p-3 text-sm text-center text-gray-900">
@@ -248,14 +246,14 @@ function Booking() {
                 <div className="p-4 bg-[#d4effc] rounded">
                     <h3 className="text-xl uppercase font-semibold">LƯU Ý</h3>
                     <div>
-                        <p className="mt-3 text-sm">
+                        <div className="mt-3 text-sm">
                             1. Thông tin bạn cung cấp sẽ được sử dụng làm hồ sơ khám bệnh. Vì vậy khi điền thông tin,
                             bạn vui lòng lưu ý:
                             <ul>
                                 <li>Ghi rõ họ và tên, viết hoa những chữ cái đầu tiên, ví dụ: Trần Văn Phú</li>
                                 <li>Điền đầy đủ, đúng và kiểm tra lại thông tin trước khi ấn "Xác nhận đặt khám"</li>
                             </ul>
-                        </p>
+                        </div>
                         <p className="mt-3 text-sm">
                             2. Tuân thủ quy định phòng chống dịch (đeo khẩu trang, khử khuẩn, khai báo dịch tễ) khi đến
                             khám.

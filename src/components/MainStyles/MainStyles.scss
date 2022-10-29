@@ -70,3 +70,33 @@ a:hover {
 .footer-menu {
     @apply text-base cursor-pointer mb-1 hover:text-[#45c3d2] text-black;
 }
+
+.rich-text {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        display: block;
+        margin: 16px 0;
+    }
+    ul {
+        margin-left: 20px;
+        list-style-type: circle;
+    }
+    h1 {
+        margin: 28px 0;
+        font-size: 28px;
+    }
+    h2 {
+        margin: 24px 0;
+        font-size: 24px;
+    }
+    h3 {
+        font-size: 20px;
+    }
+}
+
+.error-message {
+    color: red;
+}

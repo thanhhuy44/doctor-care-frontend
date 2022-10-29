@@ -2,7 +2,7 @@
     @apply text-base rounded font-semibold cursor-pointer;
 }
 .button + .button {
-    @apply ml-3;
+    @apply ml-4;
 }
 
 .primary {

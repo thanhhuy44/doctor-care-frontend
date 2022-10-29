@@ -1,7 +1,40 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import Loading from '../Loading';
+import moment from 'moment';
+import { DatePicker } from 'antd';
+import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+const shifts = [
+    { sequence: 1, timeStart: 8, timeEnd: 9 },
+    {
+        sequence: 2,
+        timeStart: 9,
+        timeEnd: 10,
+    },
+    {
+        sequence: 3,
+        timeStart: 10,
+        timeEnd: 11,
+    },
+    {
+        sequence: 4,
+        timeStart: 13,
+        timeEnd: 14,
+    },
+    {
+        sequence: 5,
+        timeStart: 14,
+        timeEnd: 15,
+    },
+    {
+        sequence: 6,
+        timeStart: 15,
+        timeEnd: 16,
+    },
+];
 const Item = () => {
     return (
         <div className="py-2 border-b-[0.5px] border-gray-300">
@@ -19,15 +52,28 @@ function DetailDoctor() {
     const id = params?.id;
     const [data, setData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    console.log(id);
+    const [dateValue, setDateValue] = useState(
+        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() + 1}`,
+    );
+    const [bookingOnDate, setBookingOnDate] = useState([]);
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${id}`).then((res) => {
             setData(res.data.data);
             setIsLoading(false);
+            setBookingOnDate(
+                res.data.data.booking.filter((booking) => {
+                    return (
+                        moment(booking.date).date() === moment(dateValue).date() &&
+                        moment(booking.date).month() === moment(dateValue).month() &&
+                        moment(booking.date).year() === moment(dateValue).year()
+                    );
+                }),
+            );
+            console.log(bookingOnDate);
         });
     }, []);
     if (isLoading) {
-        return <h1>isLoading</h1>;
+        return <Loading />;
     } else {
         return (
             <div className="container mx-auto py-8">
@@ -36,7 +82,7 @@ function DetailDoctor() {
                         <img className="block aspect-square object-cover" src={data.image} alt="doctor" />
                     </div>
                     <div className="m-5">
-                        <h3 className="mb-3 text-3xl font-semibold">Bác sĩ {`${data.firstName} ${data.lastName}`}</h3>
+                        <h3 className="mb-3 text-3xl font-semibold">Bác sĩ {data.name}</h3>
                         <p
                             className="text-sm font-normal leading-6"
                             dangerouslySetInnerHTML={{ __html: data.shortDescription }}
@@ -44,20 +90,59 @@ function DetailDoctor() {
                     </div>
                 </div>
                 <div className="my-10 flex items-start flex-col lg:flex-row">
-                    <div className="flex-1 mx-5">
-                        <h5 className="uppercase text-xl text-blue-700 font-semibold">Lịch khám</h5>
-                        <select className="p-2 text-base font-semibold border-b border-gray-700 min-w-[200px]">
-                            <option>13/08</option>
-                            <option>14/08</option>
-                            <option>15/08</option>
-                            <option>16/08</option>
-                        </select>
+                    <div className="flex-1">
+                        <DatePicker
+                            inputReadOnly={true}
+                            defaultValue={moment(dateValue)}
+                            format="DD-MM-yyyy"
+                            onChange={(e) => {
+                                setDateValue(moment(e).format('yyyy-MM-DD'));
+                                setBookingOnDate(
+                                    data.booking.filter((booking) => {
+                                        return (
+                                            moment(booking.date).date() === moment(e).date() &&
+                                            moment(booking.date).month() === moment(e).month() &&
+                                            moment(booking.date).year() === moment(e).year()
+                                        );
+                                    }),
+                                );
+                            }}
+                        />
+                        <div className="my-5">
+                            <p className="font-semibold uppercase text-xl">
+                                <FontAwesomeIcon className="mr-2" icon={faCalendar} />
+                                Lịch khám
+                            </p>
+                            {new Date(dateValue).getTime() > new Date().getTime() ? (
+                                <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-start ">
+                                    {shifts.map((shift, index) => (
+                                        <Link
+                                            state={{
+                                                shift,
+                                                dateValue,
+                                                data,
+                                            }}
+                                            to="/booking"
+                                            key={shift.sequence}
+                                            className="mr-4 mb-4 min-w-[150px] text-center bg-gray-200 p-1 hover:bg-yellow-50 duration-500"
+                                        >
+                                            <p className="font-medium text-lg">Ca {shift.sequence}</p>
+                                            <span className="font-normal text-sm">
+                                                Từ {shift.timeStart}:00 đến {shift.timeEnd}:00
+                                            </span>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <h1 className="font-semibold text-base mt-4 text-red-500">Không có lịch khám</h1>
+                            )}
+                        </div>
                     </div>
                     <div className="pl-5 lg:border-l-[0.5px] border-gray-500 mt-8 lg:mt-0">
                         <div>
                             <p className="mb-2 uppercase text-xl font-medium">ĐỊA CHỈ KHÁM</p>
-                            <p className="font-semibold text-xl">Phòng khám Bệnh viện Đại học Y Dược 1</p>
-                            <p className="text-base">20-22 Dương Quang Trung, Phường 12, Quận 10, Tp. HCM</p>
+                            <p className="font-semibold text-xl">{data.hospital.name}</p>
+                            <p className="text-base">{data.hospital.address}</p>
                         </div>
                         <div className="mt-2 flex items-end ">
                             <p className="font-base font-normal">
@@ -68,7 +153,7 @@ function DetailDoctor() {
                     </div>
                 </div>
                 <div
-                    className="mx-3 lg:mx-0 border-t border-gray-300 py-4"
+                    className="mx-3 text-lg lg:mx-0 border-t border-gray-300 py-4 rich-text"
                     dangerouslySetInnerHTML={{ __html: data.description }}
                 ></div>
                 <div className="mx-3 lg:mx-0 border-t border-gray-300 py-4">

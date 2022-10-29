@@ -6,13 +6,9 @@ import 'react-quill/dist/quill.snow.css';
 import Login from './pages/Login';
 import Error from './pages/Error';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
 
 function App() {
     const isLogin = useSelector((state) => state.doctorCare.isLogin);
-    useEffect(() => {
-        console.log(isLogin);
-    }, [isLogin]);
     return (
         <Router>
             <div className="App">

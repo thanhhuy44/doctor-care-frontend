@@ -1,31 +1,56 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Item from '~/components/Item';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import BookingItem from '~/components/BookingItem';
+import Loading from '../Loading';
+import locations from '~/assets/location/local.json';
 
 function AllPackages() {
-    const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const params = useParams();
+    const [isLoading, setIsloading] = useState(true);
+    const [location, setLocation] = useState('');
+    const [data, setData] = useState();
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/type-packages').then((res) => {
-            const result = res.data.data;
-
-            setData(result);
+        axios.get(`http://localhost:3030/api/type-package/${params.id}`).then((res) => {
+            setData(res.data.data);
+            setIsloading(false);
         });
+        console.log(data);
     }, []);
-    useEffect(() => {
-        setIsLoading(false);
-    }, [data]);
+
     if (isLoading) {
-        return <h1>Loading</h1>;
+        return <Loading />;
     } else {
         return (
-            <div className="container mx-auto">
-                <h1 className="p-5 mb-3 leading-5 text-3xl font-semibold">Gói khám</h1>
+            <div className="container mx-auto pt-5 px-4 md:px-10">
+                <div className="">
+                    <h1 className="my-3 lg:my-5 text-3xl font-bold">{data.name}</h1>
+                    <div className="my-4 rich-text" dangerouslySetInnerHTML={{ __html: data.description }}></div>
+                </div>
                 <div>
-                    {data.map((item) => (
-                        <Item key={item._id} data={item} />
-                    ))}
+                    <select
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="border border-gray-400 p-2 text-base focus:outline-none cursor-pointer hover:border-cyan-900"
+                    >
+                        <option key={'TC'} value={''}>
+                            Tất cả
+                        </option>
+                        {locations.map((location) => (
+                            <option key={location.code} value={location.name}>
+                                {location.name}
+                            </option>
+                        ))}
+                    </select>
+                    {location !== ''
+                        ? data.healthPackages.map(
+                              (doctor) =>
+                                  doctor.hospital.location.province === location && (
+                                      <BookingItem key={doctor._id} data={doctor} />
+                                  ),
+                          )
+                        : data.healthPackages.map((doctor) => <BookingItem key={doctor._id} data={doctor} />)}
                 </div>
             </div>
         );
