@@ -17,7 +17,6 @@ function Specialty() {
             setData(res.data.data);
             setIsloading(false);
         });
-        console.log(data);
     }, []);
 
     if (isLoading) {

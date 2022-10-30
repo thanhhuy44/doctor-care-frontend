@@ -23,7 +23,6 @@ function AddSpecialty() {
     const [imageUrl, setImageUrl] = useState();
 
     const onFinish = (values) => {
-        console.log(values.avatar.file.originFileObj);
         axios
             .post(
                 'http://localhost:3030/api/specialty/create',

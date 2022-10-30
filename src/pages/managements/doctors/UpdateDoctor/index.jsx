@@ -50,7 +50,6 @@ function UpdateDoctor() {
         });
     }, []);
     const onFinish = (values) => {
-        console.log('Success:', values.avatar);
         axios
             .post(
                 `http://localhost:3030/api/doctor/update/${params.id}`,
@@ -68,9 +67,7 @@ function UpdateDoctor() {
             });
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    const onFinishFailed = (errorInfo) => {};
 
     if (isLoading) {
         <h1>is loading</h1>;

@@ -27,7 +27,6 @@ function Booking() {
     } = useForm();
 
     const data = location.state;
-    console.log(data);
 
     const handleClick = (values) => {
         if (data.data.typeMedical === 1) {

@@ -6,7 +6,6 @@ import { message } from 'antd';
 function Admin() {
     const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
     const birthDay = new Date(adminInfo.birth);
-    console.log(birthDay);
     return (
         <div className="mt-4 flex justify-center min-h-full ">
             <div className="content flex flex-col items-center">

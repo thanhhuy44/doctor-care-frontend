@@ -50,7 +50,6 @@ function BookingItem({ data }) {
                 );
             }),
         );
-        console.log(data);
     }, []);
     useEffect(() => {
         if (bookingOnDate.length > 0) {

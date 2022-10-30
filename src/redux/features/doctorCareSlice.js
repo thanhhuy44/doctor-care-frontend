@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 
 const initialState = {
     auth: 'Thanh Huy',
     isLogin: JSON.parse(localStorage.getItem('isLogin')) || false,
     adminInfo: JSON.parse(localStorage.getItem('adminInfo')) || null,
+    roleLogin: JSON.parse(localStorage.getItem('roleLogin')) || null,
 };
 
 const doctorCareSlice = createSlice({
@@ -19,9 +19,13 @@ const doctorCareSlice = createSlice({
             state.adminInfo = action.payload;
             localStorage.setItem('adminInfo', JSON.stringify(action.payload));
         },
+        setRoleLogin: (state, action) => {
+            state.roleLogin = action.payload;
+            localStorage.setItem('roleLogin', JSON.stringify(action.payload));
+        },
     },
 });
 
-export const { setLogIn, setAdminInfo } = doctorCareSlice.actions;
+export const { setLogIn, setAdminInfo, setRoleLogin } = doctorCareSlice.actions;
 
 export default doctorCareSlice.reducer;

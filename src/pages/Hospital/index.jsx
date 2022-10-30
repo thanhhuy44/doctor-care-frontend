@@ -18,7 +18,6 @@ function Hospital() {
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/hospital/${id}`).then((res) => {
-            console.log(res.data.data);
             setData(res.data.data);
             setIsLoading(false);
         });

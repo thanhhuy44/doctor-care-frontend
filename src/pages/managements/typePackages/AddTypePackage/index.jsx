@@ -23,7 +23,6 @@ function AddTypePackage() {
     const [imageUrl, setImageUrl] = useState();
 
     const onFinish = (values) => {
-        console.log(values.avatar.file.originFileObj);
         axios
             .post(
                 'http://localhost:3030/api/type-package/create',
