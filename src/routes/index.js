@@ -1,6 +1,5 @@
 import Home from '~/pages/Home';
 import Admin from '~/pages/Admin';
-import Category from '~/pages/Category';
 import DetailDoctor from '~/pages/DetailDoctor';
 import Booking from '~/pages/Booking';
 import Login from '~/pages/Login';
@@ -23,11 +22,11 @@ import Specialty from '~/pages/Specialty';
 import ManagementSpecialty from '~/pages/managements/ManagementSpecialty';
 import ManagementPackage from '~/pages/managements/ManagementPackage';
 import UpdateDoctor from '~/pages/managements/doctors/UpdateDoctor';
-import UpdateHospital from '~/pages/managements/hospitals/UpdateHospital/UpdateHospital';
-import AddSpecialty from '~/pages/managements/specialties/AddSpecialty/AddSpecialty';
-import AddTypePackage from '~/pages/managements/typePackages/AddTypePackage/AddTypePackage';
+import UpdateHospital from '~/pages/managements/hospitals/UpdateHospital';
+import AddSpecialty from '~/pages/managements/specialties/AddSpecialty';
+import AddTypePackage from '~/pages/managements/typePackages/AddTypePackage';
 import AddPackage from '~/pages/managements/packages/AddPackage';
-import ManagementBooking from '~/pages/managements/ManagementBooking/ManagementBooking';
+import ManagementBooking from '~/pages/managements/ManagementBooking';
 import AllTypePackages from '~/pages/AllTypePackage';
 
 const publicRoutes = [
@@ -56,10 +55,6 @@ const publicRoutes = [
         component: AllPackages,
     },
     {
-        path: '/category',
-        component: Category,
-    },
-    {
         path: '/detaildoctor',
         component: DetailDoctor,
     },
@@ -78,24 +73,6 @@ const publicRoutes = [
         layout: SingleLayout,
     },
 
-    {
-        path: '/admin/quan-ly-admin',
-        component: ManagementAdmin,
-        layout: ManagementLayout,
-    },
-
-    {
-        path: '/admin/type-package/add',
-        component: AddTypePackage,
-        layout: ManagementLayout,
-    },
-
-    {
-        path: '/admin/booking',
-        component: ManagementBooking,
-        layout: ManagementLayout,
-    },
-
     //page detail
     {
         path: '/hospital/:name/:id',
@@ -109,7 +86,7 @@ const publicRoutes = [
     },
 
     {
-        path: '/package/:name/:id',
+        path: '/health-package/:name/:id',
         component: Package,
         layout: MainLayout,
     },
@@ -175,6 +152,23 @@ const privateRoutes = [
     {
         path: '/admin/package/add',
         component: AddPackage,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/quan-ly-admin',
+        component: ManagementAdmin,
+        layout: ManagementLayout,
+    },
+
+    {
+        path: '/admin/type-package/add',
+        component: AddTypePackage,
+        layout: ManagementLayout,
+    },
+
+    {
+        path: '/admin/booking',
+        component: ManagementBooking,
         layout: ManagementLayout,
     },
 ];

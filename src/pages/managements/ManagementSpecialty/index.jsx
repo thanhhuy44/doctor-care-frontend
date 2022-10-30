@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import styles from './ManagementSpecialty.module.scss';
-import ObjectItem from '~/components/ObjectItem';
 import Button from '~/components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlusCircle } from '@fortawesome/free-solid-svg-icons';

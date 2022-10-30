@@ -17,7 +17,6 @@ function AllPackages() {
             setData(res.data.data);
             setIsloading(false);
         });
-        console.log(data);
     }, []);
 
     if (isLoading) {
@@ -50,7 +49,9 @@ function AllPackages() {
                                       <BookingItem key={doctor._id} data={doctor} />
                                   ),
                           )
-                        : data.healthPackages.map((doctor) => <BookingItem key={doctor._id} data={doctor} />)}
+                        : data.healthPackages.map((healthPackage) => (
+                              <BookingItem key={healthPackage._id} data={healthPackage} />
+                          ))}
                 </div>
             </div>
         );

@@ -2,9 +2,8 @@ import { faCalendar, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DatePicker } from 'antd';
 import moment from 'moment';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import Button from '../Button/Button';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const shifts = [
     { sequence: 1, timeStart: 8, timeEnd: 9 },
@@ -39,7 +38,35 @@ function BookingItem({ data }) {
     const [dateValue, setDateValue] = useState(
         `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() + 1}`,
     );
-    console.log(data);
+    const [bookingOnDate, setBookingOnDate] = useState([]);
+    const [alreadyBooking, setAlreadyBooking] = useState(shifts);
+    useEffect(() => {
+        setBookingOnDate(
+            data.booking.filter((booking) => {
+                return (
+                    moment(booking.date).date() === moment(dateValue).date() &&
+                    moment(booking.date).month() === moment(dateValue).month() &&
+                    moment(booking.date).year() === moment(dateValue).year()
+                );
+            }),
+        );
+        console.log(data);
+    }, []);
+    useEffect(() => {
+        if (bookingOnDate.length > 0) {
+            bookingOnDate.forEach((booking) => {
+                alreadyBooking.forEach((alBooking) => {
+                    if (booking.time === alBooking.sequence) {
+                        setAlreadyBooking(
+                            alreadyBooking.filter((item) => {
+                                return item.sequence !== alBooking.sequence;
+                            }),
+                        );
+                    }
+                });
+            });
+        }
+    }, [dateValue, bookingOnDate, alreadyBooking]);
 
     return (
         <div className="flex flex-col md:flex-row md:items-start shadow-lg rounded-md mb-4">
@@ -54,7 +81,9 @@ function BookingItem({ data }) {
                     </Link>
                 </div>
                 <div className="sm:pl-5 text-gray-900 text-center sm:text-left">
-                    <h3 className="mb-4 sm:mb-0 text-xl font-medium text-cyan-700">{data.name}</h3>
+                    <Link to={data.link} className="mb-4 sm:mb-0 text-xl font-medium text-cyan-700">
+                        {data.name}
+                    </Link>
                     <div
                         className="mt-1 text-justify sm:text-left"
                         dangerouslySetInnerHTML={{ __html: data.shortDescription }}
@@ -71,6 +100,23 @@ function BookingItem({ data }) {
                     format="DD-MM-yyyy"
                     onChange={(e) => {
                         setDateValue(moment(e).format('yyyy-MM-DD'));
+                        setAlreadyBooking(shifts);
+                        if (
+                            moment(e).unix() >=
+                            moment(
+                                `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() + 1}`,
+                            ).unix()
+                        ) {
+                            setBookingOnDate(
+                                data.booking.filter((booking) => {
+                                    return (
+                                        moment(booking.date).date() === moment(e).date() &&
+                                        moment(booking.date).month() === moment(e).month() &&
+                                        moment(booking.date).year() === moment(e).year()
+                                    );
+                                }),
+                            );
+                        }
                     }}
                 />
                 <div className="my-5">
@@ -80,7 +126,7 @@ function BookingItem({ data }) {
                     </p>
                     {new Date(dateValue).getTime() > new Date().getTime() ? (
                         <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-start ">
-                            {shifts.map((shift) => (
+                            {alreadyBooking.map((shift) => (
                                 <Link
                                     state={{
                                         shift,
@@ -109,7 +155,7 @@ function BookingItem({ data }) {
                 </div>
                 <div className="border-t border-gray-500 py-2 flex items-center">
                     <h4 className="font-semibold mr-2 uppercase">Giá khám</h4>
-                    <p>500000 đ</p>
+                    <p>{data.price} VNĐ</p>
                 </div>
             </div>
         </div>

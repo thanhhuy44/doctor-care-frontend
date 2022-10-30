@@ -27,35 +27,67 @@ function Booking() {
     } = useForm();
 
     const data = location.state;
+    console.log(data);
 
     const handleClick = (values) => {
-        axios
-            .post('http://localhost:3030/api/booking/create', {
-                name: values.name,
-                numberPhone: values.numberPhone,
-                email: values.email,
-                address: values.address,
-                doctor: data.data._id,
-                date: data.dateValue,
-                time: data.shift.sequence,
-                reason: values.reason,
-            })
-            .then((res) => {
-                if (res.data.errCode === 0) {
-                    notification.open({
-                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
-                        message: 'Thành công',
-                        description: res.data.message,
-                    });
-                    navigate('/');
-                } else {
-                    notification.open({
-                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-                        message: 'Lỗi',
-                        description: res.data.message,
-                    });
-                }
-            });
+        if (data.data.typeMedical === 1) {
+            axios
+                .post('http://localhost:3030/api/booking/create', {
+                    name: values.name,
+                    numberPhone: values.numberPhone,
+                    email: values.email,
+                    address: values.address,
+                    doctor: data.data._id,
+                    date: data.dateValue,
+                    time: data.shift.sequence,
+                    reason: values.reason,
+                })
+                .then((res) => {
+                    if (res.data.errCode === 0) {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                            message: 'Thành công',
+                            description: res.data.message,
+                        });
+                        navigate('/');
+                    } else {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                            message: 'Lỗi',
+                            description: res.data.message,
+                        });
+                    }
+                });
+        }
+        if (data.data.typeMedical === 2) {
+            axios
+                .post('http://localhost:3030/api/booking/create', {
+                    name: values.name,
+                    numberPhone: values.numberPhone,
+                    email: values.email,
+                    address: values.address,
+                    package: data.data._id,
+                    date: data.dateValue,
+                    time: data.shift.sequence,
+                    reason: values.reason,
+                })
+                .then((res) => {
+                    if (res.data.errCode === 0) {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                            message: 'Thành công',
+                            description: res.data.message,
+                        });
+                        navigate('/');
+                    } else {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                            message: 'Lỗi',
+                            description: res.data.message,
+                        });
+                    }
+                });
+        }
     };
 
     return (

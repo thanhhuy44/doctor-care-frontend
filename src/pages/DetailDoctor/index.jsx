@@ -56,10 +56,11 @@ function DetailDoctor() {
         `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() + 1}`,
     );
     const [bookingOnDate, setBookingOnDate] = useState([]);
+    const [alreadyBooking, setAlreadyBooking] = useState(shifts);
+
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${id}`).then((res) => {
             setData(res.data.data);
-            setIsLoading(false);
             setBookingOnDate(
                 res.data.data.booking.filter((booking) => {
                     return (
@@ -69,14 +70,38 @@ function DetailDoctor() {
                     );
                 }),
             );
-            console.log(bookingOnDate);
+            // res.data.data.booking.filter((booking) => {
+            //     return (
+            //         moment(booking.date).date() === moment(dateValue).date() &&
+            //         moment(booking.date).month() === moment(dateValue).month() &&
+            //         moment(booking.date).year() === moment(dateValue).year()
+            //     );
+            // })
+            setIsLoading(false);
         });
     }, []);
+
+    useEffect(() => {
+        if (bookingOnDate.length > 0) {
+            bookingOnDate.forEach((booking) => {
+                alreadyBooking.forEach((alBooking) => {
+                    if (booking.time === alBooking.sequence) {
+                        setAlreadyBooking(
+                            alreadyBooking.filter((item) => {
+                                return item.sequence !== alBooking.sequence;
+                            }),
+                        );
+                    }
+                });
+            });
+        }
+    }, [dateValue, bookingOnDate, alreadyBooking]);
+
     if (isLoading) {
         return <Loading />;
     } else {
         return (
-            <div className="container mx-auto py-8">
+            <div className="container mx-auto px-4 py-8">
                 <div className="flex items-center flex-col md:flex-row">
                     <div className="text-center max-w-[200px] aspect-square rounded-full overflow-hidden shadow-md object-contain">
                         <img className="block aspect-square object-cover" src={data.image} alt="doctor" />
@@ -97,15 +122,25 @@ function DetailDoctor() {
                             format="DD-MM-yyyy"
                             onChange={(e) => {
                                 setDateValue(moment(e).format('yyyy-MM-DD'));
-                                setBookingOnDate(
-                                    data.booking.filter((booking) => {
-                                        return (
-                                            moment(booking.date).date() === moment(e).date() &&
-                                            moment(booking.date).month() === moment(e).month() &&
-                                            moment(booking.date).year() === moment(e).year()
-                                        );
-                                    }),
-                                );
+                                setAlreadyBooking(shifts);
+                                if (
+                                    moment(e).unix() >=
+                                    moment(
+                                        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
+                                            new Date().getDate() + 1
+                                        }`,
+                                    ).unix()
+                                ) {
+                                    setBookingOnDate(
+                                        data.booking.filter((booking) => {
+                                            return (
+                                                moment(booking.date).date() === moment(e).date() &&
+                                                moment(booking.date).month() === moment(e).month() &&
+                                                moment(booking.date).year() === moment(e).year()
+                                            );
+                                        }),
+                                    );
+                                }
                             }}
                         />
                         <div className="my-5">
@@ -114,8 +149,8 @@ function DetailDoctor() {
                                 Lịch khám
                             </p>
                             {new Date(dateValue).getTime() > new Date().getTime() ? (
-                                <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-start ">
-                                    {shifts.map((shift, index) => (
+                                <div className="my-2 overflow-x-auto flex items-center flex-wrap justify-center md:justify-start ">
+                                    {alreadyBooking.map((shift, index) => (
                                         <Link
                                             state={{
                                                 shift,
@@ -147,7 +182,7 @@ function DetailDoctor() {
                         <div className="mt-2 flex items-end ">
                             <p className="font-base font-normal">
                                 {' '}
-                                Giá khám: <span className="font-semibold text-orange-500">{data.price}</span> đ
+                                Giá khám: <span className="font-semibold text-orange-500">{data.price}</span> VNĐ
                             </p>
                         </div>
                     </div>
