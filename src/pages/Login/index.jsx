@@ -3,15 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setAdminInfo, setLogIn } from '~/redux/features/doctorCareSlice';
+import { setAdminInfo, setLogIn, setRoleLogin } from '~/redux/features/doctorCareSlice';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function Login() {
+    const dispatch = useDispatch();
     const [role, setRole] = useState('admin');
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const onFinish = (values) => {
         if (values.role === 'admin') {
@@ -19,6 +19,7 @@ function Login() {
                 if (res.data.errCode === 0) {
                     dispatch(setLogIn(true));
                     dispatch(setAdminInfo(res.data.data));
+                    dispatch(setRoleLogin(role));
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
@@ -41,6 +42,7 @@ function Login() {
                 if (res.data.errCode === 0) {
                     dispatch(setLogIn(true));
                     dispatch(setAdminInfo(res.data.data));
+                    dispatch(setRoleLogin(role));
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
