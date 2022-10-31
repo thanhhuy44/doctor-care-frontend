@@ -5,7 +5,8 @@ import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { notification } from 'antd';
+import { notification, Pagination } from 'antd';
+import Loading from '~/pages/Loading';
 
 function ManagementDoctor() {
     const navigate = useNavigate();
@@ -15,14 +16,8 @@ function ManagementDoctor() {
     const [curSpecialty, setCurSpecialty] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/doctors').then((res) => {
-            setData(res.data.data);
-            setIsLoading(false);
-        });
-    }, []);
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
@@ -36,28 +31,28 @@ function ManagementDoctor() {
     }, []);
 
     useEffect(() => {
-        curHospital === '' &&
-            curSpecialty === '' &&
-            axios.get('http://localhost:3030/api/doctors').then((res) => {
-                setData(res.data.data);
-            });
-        curHospital !== '' &&
-            curSpecialty === '' &&
-            axios.get(`http://localhost:3030/api/doctors?hospital=${curHospital}`).then((res) => {
-                setData(res.data.data);
-            });
-        curHospital === '' &&
-            curSpecialty !== '' &&
-            axios.get(`http://localhost:3030/api/doctors?specialty=${curSpecialty}`).then((res) => {
-                setData(res.data.data);
-            });
-        curHospital !== '' &&
-            curSpecialty !== '' &&
-            axios
-                .get(`http://localhost:3030/api/doctors?hospital=${curHospital}&specialty=${curSpecialty}`)
-                .then((res) => {
-                    setData(res.data.data);
-                });
+        axios.get('http://localhost:3030/api/doctors').then((res) => {
+            setData(res.data.data);
+            setPageData(
+                res.data.data
+                    .filter((doctor) => {
+                        if (curHospital === '' && curSpecialty === '') {
+                            return doctor;
+                        }
+                        if (curHospital !== '' && curSpecialty === '') {
+                            return doctor.hospital._id === curHospital;
+                        }
+                        if (curHospital === '' && curSpecialty !== '') {
+                            return doctor.specialty._id === curSpecialty;
+                        }
+                        if (curHospital !== '' && curSpecialty !== '') {
+                            return doctor.specialty._id === curSpecialty && doctor.hospital._id === curHospital;
+                        }
+                    })
+                    .slice(0, 10),
+            );
+            setIsLoading(false);
+        });
     }, [curHospital, curSpecialty]);
 
     const handleUpdate = (id) => {
@@ -95,7 +90,7 @@ function ManagementDoctor() {
     };
 
     if (isLoading) {
-        return <h1>Is Loading</h1>;
+        return <Loading />;
     } else {
         return (
             <div>
@@ -157,7 +152,7 @@ function ManagementDoctor() {
                     </div>
                 </div>
                 <div className="mt-5">
-                    {data.map((doctor) => (
+                    {pageData.map((doctor) => (
                         <ObjectItem
                             update={() => {
                                 handleUpdate(doctor._id);
@@ -178,6 +173,20 @@ function ManagementDoctor() {
                             <FontAwesomeIcon icon={faPlusCircle} />
                         </Button>
                     </div>
+                </div>
+                <div className="my-4 flex justify-center">
+                    <Pagination
+                        onChange={(page) => {
+                            let newPageData = [];
+                            for (let index = page * 10 - 10; index < page * 10; index++) {
+                                data[index] && newPageData.push(data[index]);
+                            }
+                            setPageData(newPageData);
+                        }}
+                        pageSize={10}
+                        defaultCurrent={1}
+                        total={data.length}
+                    />
                 </div>
             </div>
         );

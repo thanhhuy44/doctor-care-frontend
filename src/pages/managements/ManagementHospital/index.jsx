@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
+import location from '~/assets/location/local.json';
 
 function ManagementHospital() {
     const navigate = useNavigate();
@@ -13,18 +14,30 @@ function ManagementHospital() {
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [isLoading, setIsloading] = useState(true);
+    const [province, setProvince] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
             setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+            setPageData(
+                res.data.data
+                    .filter((hospital) => {
+                        if (province === '') {
+                            return hospital;
+                        } else {
+                            return hospital.location.province === province;
+                        }
+                    })
+                    .slice(0, 10),
+            );
             setIsloading(false);
         });
-    }, []);
+    }, [province]);
 
     const handleSearchHospital = (keyword) => {
         axios.post(`http://localhost:3030/api/hospital/search?keyword=${keyword}`).then((res) => {
-            console.log(res.data);
+            setData(res.data.data);
+            setPageData(res.data.data.slice(0, 10));
         });
     };
 
@@ -65,11 +78,20 @@ function ManagementHospital() {
                             <label htmlFor="specialtySelect" className="text-base font-medium mr-3">
                                 Địa điểm
                             </label>
-                            <select id="specialtySelect">
-                                <option>Tất cả</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            <select
+                                id="specialtySelect"
+                                onChange={(e) => {
+                                    setProvince(e.target.value);
+                                }}
+                            >
+                                <option key={1256} value="">
+                                    Tất cả
+                                </option>
+                                {location.map((location) => (
+                                    <option key={location.id} value={location.name}>
+                                        {location.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>

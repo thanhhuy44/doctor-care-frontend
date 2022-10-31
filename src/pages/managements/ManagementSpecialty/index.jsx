@@ -5,17 +5,19 @@ import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { notification } from 'antd';
+import { notification, Pagination } from 'antd';
 import Loading from '~/pages/Loading';
 
 function ManagementSpecialty() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     useEffect(() => {
         axios.get('http://localhost:3030/api/specialties').then((res) => {
             setData(res.data.data);
+            setPageData(res.data.data.slice(0, 10));
             setIsLoading(false);
         });
     }, []);
@@ -77,7 +79,7 @@ function ManagementSpecialty() {
                     </div>
                 </div>
                 <div className="mt-5">
-                    {data.map((specialty) => (
+                    {pageData.map((specialty) => (
                         <ObjectItem
                             update={() => {
                                 handleUpdate(specialty._id);
@@ -98,6 +100,20 @@ function ManagementSpecialty() {
                             <FontAwesomeIcon icon={faPlusCircle} />
                         </Button>
                     </div>
+                </div>
+                <div className="my-4 flex justify-center">
+                    <Pagination
+                        onChange={(page) => {
+                            let newPageData = [];
+                            for (let index = page * 10 - 10; index < page * 10; index++) {
+                                data[index] && newPageData.push(data[index]);
+                            }
+                            setPageData(newPageData);
+                        }}
+                        pageSize={10}
+                        defaultCurrent={1}
+                        total={data.length}
+                    />
                 </div>
             </div>
         );

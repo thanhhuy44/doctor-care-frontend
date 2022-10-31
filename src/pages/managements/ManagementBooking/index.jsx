@@ -5,59 +5,52 @@ import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { DatePicker, Pagination } from 'antd';
+import moment from 'moment';
+import Loading from '~/pages/Loading';
 
 function ManagementBooking() {
     const navigate = useNavigate();
-    const [hospital, setHospital] = useState([]);
-    const [specialty, setSpecialty] = useState([]);
-    const [curHospital, setCurHospital] = useState('');
-    const [curSpecialty, setCurSpecialty] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/bookings').then((res) => {
-            setData(res.data.data);
-            setIsLoading(false);
-        });
-    }, []);
-
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/doctors').then((res) => {
-            setHospital(res.data.data);
-        });
-    }, []);
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/packages').then((res) => {
-            setSpecialty(res.data.data);
-        });
-    }, []);
+    const [date, setDate] = useState(moment());
 
     // useEffect(() => {
-    //     curHospital === '' &&
-    //         curSpecialty === '' &&
-    //         axios.get('http://localhost:3030/api/doctors').then((res) => {
-    //             setData(res.data.data);
-    //         });
-    //     curHospital !== '' &&
-    //         curSpecialty === '' &&
-    //         axios.get(`http://localhost:3030/api/doctors?hospital=${curHospital}`).then((res) => {
-    //             setData(res.data.data);
-    //         });
-    //     curHospital === '' &&
-    //         curSpecialty !== '' &&
-    //         axios.get(`http://localhost:3030/api/doctors?specialty=${curSpecialty}`).then((res) => {
-    //             setData(res.data.data);
-    //         });
-    //     curHospital !== '' &&
-    //         curSpecialty !== '' &&
-    //         axios
-    //             .get(`http://localhost:3030/api/doctors?hospital=${curHospital}&specialty=${curSpecialty}`)
-    //             .then((res) => {
-    //                 setData(res.data.data);
-    //             });
-    // }, [curHospital, curSpecialty]);
+    //     axios.get('http://localhost:3030/api/bookings').then((res) => {
+    //         setData(res.data.data);
+    //         setPageData(res.data.data.slice(0, 10));
+    //         setIsLoading(false);
+    //     });
+    // }, []);
+
+    useEffect(() => {
+        setIsLoading(true);
+        axios.get('http://localhost:3030/api/bookings').then((res) => {
+            setData(
+                res.data.data.filter((booking) => {
+                    return (
+                        moment(booking.date).date() === moment(date).date() &&
+                        moment(booking.date).month() === moment(date).month() &&
+                        moment(booking.date).year() === moment(date).year()
+                    );
+                }),
+            );
+            setPageData(
+                res.data.data
+                    .filter((booking) => {
+                        return (
+                            moment(booking.date).date() === moment(date).date() &&
+                            moment(booking.date).month() === moment(date).month() &&
+                            moment(booking.date).year() === moment(date).year()
+                        );
+                    })
+                    .slice(0, 10),
+            );
+            setIsLoading(false);
+        });
+    }, [date]);
 
     const handleUpdate = (id) => {
         navigate(`/admin/doctor/update/${id}`);
@@ -81,50 +74,27 @@ function ManagementBooking() {
         axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
             setData(res.data.data);
         });
-        setCurHospital('');
-        setCurSpecialty('');
     };
 
     if (isLoading) {
-        return <h1>Is Loading</h1>;
+        return <Loading />;
     } else {
         return (
             <div>
                 <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
                     <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
-                        <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
-                            <label htmlFor="hospitalSelect" className="font-medium mr-3">
-                                Bác sĩ
-                            </label>
-                            <select
-                                value={curHospital}
-                                onChange={(e) => {
-                                    setCurHospital(e.target.value);
-                                    setSearchValue('');
-                                }}
-                                id="hospitalSelect"
-                            >
-                                <option value="">Tất cả</option>
-                                {hospital &&
-                                    hospital.map((option) => <option value={option._id}>{option.name}</option>)}
-                            </select>
-                        </div>
-                        <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
+                        <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap items-center">
                             <label htmlFor="specialtySelect" className="font-medium mr-3">
-                                Gói khám
+                                Ngày
                             </label>
-                            <select
-                                value={curSpecialty}
+                            <DatePicker
                                 onChange={(e) => {
-                                    setCurSpecialty(e.target.value);
-                                    setSearchValue('');
+                                    setDate(e);
                                 }}
-                                id="specialtySelect"
-                            >
-                                <option value="">Tất cả</option>
-                                {specialty &&
-                                    specialty.map((option) => <option value={option._id}>{option.name}</option>)}
-                            </select>
+                                defaultValue={date}
+                                format={'DD-MM-YYYY'}
+                                allowClear={false}
+                            />
                         </div>
                     </div>
                     <div className="flex items-center md:justify-end w-full flex-1">
@@ -148,27 +118,32 @@ function ManagementBooking() {
                     </div>
                 </div>
                 <div className="mt-5">
-                    {data.map((doctor) => (
+                    {pageData.map((booking) => (
                         <ObjectItem
                             update={() => {
-                                handleUpdate(doctor._id);
+                                handleUpdate(booking._id);
                             }}
                             remove={() => {
-                                handleRemove(doctor._id);
+                                handleRemove(booking._id);
                             }}
-                            key={doctor._id}
-                            data={doctor}
+                            key={booking._id}
+                            data={booking}
                         />
                     ))}
-                    <div className="py-3 flex">
-                        <Button
-                            type="link"
-                            to="/admin/doctor/add"
-                            className="bg-transparent mx-auto text-[40px] text-orange-900 hover:text-cyan-700"
-                        >
-                            <FontAwesomeIcon icon={faPlusCircle} />
-                        </Button>
-                    </div>
+                </div>
+                <div className="my-8 flex justify-center">
+                    <Pagination
+                        onChange={(page) => {
+                            let newPageData = [];
+                            for (let index = page * 10 - 10; index < page * 10; index++) {
+                                data[index] && newPageData.push(data[index]);
+                            }
+                            setPageData(newPageData);
+                        }}
+                        pageSize={10}
+                        defaultCurrent={1}
+                        total={data.length}
+                    />
                 </div>
             </div>
         );

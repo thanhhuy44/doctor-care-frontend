@@ -5,19 +5,55 @@ import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { notification } from 'antd';
+import { notification, Pagination } from 'antd';
+import Loading from '~/pages/Loading';
 
 function ManagementPackage() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
+    const [pageData, setPageData] = useState([]);
     const [isLoading, setIsloading] = useState(true);
+    const [hospitals, setHospitals] = useState([]);
+    const [typePackages, setTypePackages] = useState([]);
+    const [hospitalFilter, setHospitalFilter] = useState('');
+    const [typePackageFilter, setTypePackageFilter] = useState('');
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/hospitals').then((res) => {
+            setHospitals(res.data.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/type-packages').then((res) => {
+            setTypePackages(res.data.data);
+        });
+    }, []);
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/packages').then((res) => {
             setData(res.data.data);
+            setPageData(
+                res.data.data
+                    .filter((item) => {
+                        if (hospitalFilter === '' && typePackageFilter === '') {
+                            return item;
+                        }
+                        if (hospitalFilter !== '' && typePackageFilter === '') {
+                            return item.hospital._id === hospitalFilter;
+                        }
+                        if (hospitalFilter === '' && typePackageFilter !== '') {
+                            return item.typePackage === typePackageFilter;
+                        }
+                        if (hospitalFilter === '' && typePackageFilter !== '') {
+                            return item.hospital._id === hospitalFilter && item.typePackage === typePackageFilter;
+                        }
+                    })
+                    .slice(0, 10),
+            );
             setIsloading(false);
         });
-    }, []);
+    }, [hospitalFilter, typePackageFilter]);
 
     const handleUpdatePackage = (id) => {
         navigate(`/admin/package/update/${id}`);
@@ -46,32 +82,40 @@ function ManagementPackage() {
     };
 
     if (isLoading) {
-        <h1>Is Loading</h1>;
+        <Loading />;
     } else {
         return (
             <div>
                 <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
                     <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
-                            <label htmlFor="specialtySelect" className="text-base font-medium mr-3">
+                            <label htmlFor="hospitalSelect" className="text-base font-medium mr-3">
                                 Cơ sở y tế
                             </label>
-                            <select id="specialtySelect">
-                                <option>Tất cả</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            <select id="hospitalSelect" onChange={(e) => setHospitalFilter(e.target.value)}>
+                                <option key={11111} value={''}>
+                                    Tất cả
+                                </option>
+                                {hospitals.map((hospital) => (
+                                    <option value={hospital._id} key={hospital._id}>
+                                        {hospital.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
-                            <label htmlFor="specialtySelect" className="text-base font-medium mr-3">
+                            <label htmlFor="typePackageSelect" className="text-base font-medium mr-3">
                                 Loại gói khám
                             </label>
-                            <select id="specialtySelect">
-                                <option>Tất cả</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            <select id="typePackageSelect" onChange={(e) => setTypePackageFilter(e.target.value)}>
+                                <option key={1111123} value={''}>
+                                    Tất cả
+                                </option>
+                                {typePackages.map((typePackage) => (
+                                    <option value={typePackage._id} key={typePackage._id}>
+                                        {typePackage.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
@@ -92,7 +136,7 @@ function ManagementPackage() {
                     </div>
                 </div>
                 <div className="mt-5">
-                    {data.map((item) => (
+                    {pageData.map((item) => (
                         <ObjectItem
                             data={item}
                             key={item._id}
@@ -113,6 +157,20 @@ function ManagementPackage() {
                             <FontAwesomeIcon icon={faPlusCircle} />
                         </Button>
                     </div>
+                </div>
+                <div className="my-4 flex justify-center">
+                    <Pagination
+                        onChange={(page) => {
+                            let newPageData = [];
+                            for (let index = page * 10 - 10; index < page * 10; index++) {
+                                data[index] && newPageData.push(data[index]);
+                            }
+                            setPageData(newPageData);
+                        }}
+                        pageSize={10}
+                        defaultCurrent={1}
+                        total={data.length}
+                    />
                 </div>
             </div>
         );
