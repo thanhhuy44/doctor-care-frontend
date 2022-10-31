@@ -1,9 +1,11 @@
-import { Form, Input, Upload, Button, Typography } from 'antd';
+import { Form, Input, Upload, Button, Typography, notification } from 'antd';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -36,10 +38,18 @@ function AddSpecialty() {
             )
             .then((res) => {
                 if (res.data.errCode === 0) {
-                    alert(res.data.message);
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                        message: 'Thành công',
+                        description: res.data.message,
+                    });
                     navigate('/admin/doctor/add');
                 } else {
-                    alert(res.data.message);
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.data.message,
+                    });
                     form.resetFields();
                 }
             });

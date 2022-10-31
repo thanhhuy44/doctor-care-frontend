@@ -24,40 +24,40 @@ function ManagementBooking() {
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
+        axios.get('http://localhost:3030/api/doctors').then((res) => {
             setHospital(res.data.data);
         });
     }, []);
     useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
+        axios.get('http://localhost:3030/api/packages').then((res) => {
             setSpecialty(res.data.data);
         });
     }, []);
 
-    useEffect(() => {
-        curHospital === '' &&
-            curSpecialty === '' &&
-            axios.get('http://localhost:3030/api/doctors').then((res) => {
-                setData(res.data.data);
-            });
-        curHospital !== '' &&
-            curSpecialty === '' &&
-            axios.get(`http://localhost:3030/api/doctors?hospital=${curHospital}`).then((res) => {
-                setData(res.data.data);
-            });
-        curHospital === '' &&
-            curSpecialty !== '' &&
-            axios.get(`http://localhost:3030/api/doctors?specialty=${curSpecialty}`).then((res) => {
-                setData(res.data.data);
-            });
-        curHospital !== '' &&
-            curSpecialty !== '' &&
-            axios
-                .get(`http://localhost:3030/api/doctors?hospital=${curHospital}&specialty=${curSpecialty}`)
-                .then((res) => {
-                    setData(res.data.data);
-                });
-    }, [curHospital, curSpecialty]);
+    // useEffect(() => {
+    //     curHospital === '' &&
+    //         curSpecialty === '' &&
+    //         axios.get('http://localhost:3030/api/doctors').then((res) => {
+    //             setData(res.data.data);
+    //         });
+    //     curHospital !== '' &&
+    //         curSpecialty === '' &&
+    //         axios.get(`http://localhost:3030/api/doctors?hospital=${curHospital}`).then((res) => {
+    //             setData(res.data.data);
+    //         });
+    //     curHospital === '' &&
+    //         curSpecialty !== '' &&
+    //         axios.get(`http://localhost:3030/api/doctors?specialty=${curSpecialty}`).then((res) => {
+    //             setData(res.data.data);
+    //         });
+    //     curHospital !== '' &&
+    //         curSpecialty !== '' &&
+    //         axios
+    //             .get(`http://localhost:3030/api/doctors?hospital=${curHospital}&specialty=${curSpecialty}`)
+    //             .then((res) => {
+    //                 setData(res.data.data);
+    //             });
+    // }, [curHospital, curSpecialty]);
 
     const handleUpdate = (id) => {
         navigate(`/admin/doctor/update/${id}`);
@@ -94,7 +94,7 @@ function ManagementBooking() {
                     <div className="flex items-start md:items-end flex-col md:flex-row  mb-4 md:mb-0 flex-1">
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
                             <label htmlFor="hospitalSelect" className="font-medium mr-3">
-                                Bệnh viện
+                                Bác sĩ
                             </label>
                             <select
                                 value={curHospital}
@@ -111,7 +111,7 @@ function ManagementBooking() {
                         </div>
                         <div className="text-base mr-7 mb-2 md:mb-0 flex flex-nowrap">
                             <label htmlFor="specialtySelect" className="font-medium mr-3">
-                                Chuyên khoa
+                                Gói khám
                             </label>
                             <select
                                 value={curSpecialty}

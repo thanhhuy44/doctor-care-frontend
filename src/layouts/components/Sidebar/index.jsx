@@ -17,19 +17,28 @@ function Sidebar() {
                 </NavLink> */}
                 <NavLink to="/admin/doctors" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faUserDoctor} className={cx('icon')} />
-                    <span className={cx('text')}>Quản lý bác sĩ</span>
+                    <span className={cx('text')}>Bác sĩ</span>
                 </NavLink>
                 <NavLink to="/admin/hospitals" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faHospital} className={cx('icon')} />
-                    <span className={cx('text')}>Quản lý bệnh viện</span>
+                    <span className={cx('text')}>Cơ sở y tế</span>
+                </NavLink>
+                <NavLink to="/admin/specialties" className={(nav) => cx('item', { active: nav.isActive })}>
+                    <FontAwesomeIcon icon={faKitMedical} className={cx('icon')} />
+                    <span className={cx('text')}>Chuyên khoa</span>
+                </NavLink>
+                <NavLink to="/admin/type-packages" className={(nav) => cx('item', { active: nav.isActive })}>
+                    <FontAwesomeIcon icon={faKitMedical} className={cx('icon')} />
+                    <span className={cx('text')}>Loại gói khám</span>
                 </NavLink>
                 <NavLink to="/admin/packages" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faKitMedical} className={cx('icon')} />
-                    <span className={cx('text')}>Quản lý gói khám</span>
+                    <span className={cx('text')}>Gói khám</span>
                 </NavLink>
+
                 <NavLink to="/admin/booking" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faFile} className={cx('icon')} />
-                    <span className={cx('text')}>Quản lý đơn hàng</span>
+                    <span className={cx('text')}>Đơn khám bệnh</span>
                 </NavLink>
                 {/* <NavLink to="/admin/quan-ly-admin" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faFolder} className={cx('icon')} />

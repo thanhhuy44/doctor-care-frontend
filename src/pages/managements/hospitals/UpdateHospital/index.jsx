@@ -80,6 +80,7 @@ function UpdateHospital() {
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: res.data.message,
                     });
+                    window.location.reload();
                 }
             });
     };

@@ -28,6 +28,10 @@ import AddTypePackage from '~/pages/managements/typePackages/AddTypePackage';
 import AddPackage from '~/pages/managements/packages/AddPackage';
 import ManagementBooking from '~/pages/managements/ManagementBooking';
 import AllTypePackages from '~/pages/AllTypePackage';
+import ManagementTypePackage from '~/pages/managements/ManagementTypePackage';
+import UpdateSpecialty from '~/pages/managements/specialties/UpdateSpecialty';
+import UpdateTypePackage from '~/pages/managements/typePackages/UpdateTypePackage';
+import UpdatePackage from '~/pages/managements/packages/UpdatePackage';
 
 const publicRoutes = [
     {
@@ -145,6 +149,11 @@ const privateRoutes = [
         layout: ManagementLayout,
     },
     {
+        path: '/admin/specialty/update/:id',
+        component: UpdateSpecialty,
+        layout: ManagementLayout,
+    },
+    {
         path: '/admin/packages',
         component: ManagementPackage,
         layout: ManagementLayout,
@@ -155,17 +164,30 @@ const privateRoutes = [
         layout: ManagementLayout,
     },
     {
+        path: '/admin/package/update/:id',
+        component: UpdatePackage,
+        layout: ManagementLayout,
+    },
+    {
         path: '/admin/quan-ly-admin',
         component: ManagementAdmin,
         layout: ManagementLayout,
     },
-
+    {
+        path: '/admin/type-packages',
+        component: ManagementTypePackage,
+        layout: ManagementLayout,
+    },
     {
         path: '/admin/type-package/add',
         component: AddTypePackage,
         layout: ManagementLayout,
     },
-
+    {
+        path: '/admin/type-package/update/:id',
+        component: UpdateTypePackage,
+        layout: ManagementLayout,
+    },
     {
         path: '/admin/booking',
         component: ManagementBooking,
