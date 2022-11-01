@@ -101,7 +101,7 @@ const publicRoutes = [
     },
 ];
 
-const privateRoutes = [
+const adminRoutes = [
     {
         path: '/admin',
         component: Admin,
@@ -195,4 +195,32 @@ const privateRoutes = [
     },
 ];
 
-export { publicRoutes, privateRoutes };
+const doctorRoutes = [
+    {
+        path: '/doctor/management',
+        component: Admin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/doctor/management/update-info/:id',
+        component: UpdateDoctor,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/doctor/management/orders',
+        component: ManagementBooking,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/doctor/management/rating',
+        component: ManagementBooking,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/doctor/management/support',
+        component: ManagementBooking,
+        layout: ManagementLayout,
+    },
+];
+
+export { publicRoutes, adminRoutes, doctorRoutes };

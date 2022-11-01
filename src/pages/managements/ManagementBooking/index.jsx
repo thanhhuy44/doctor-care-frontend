@@ -16,15 +16,6 @@ function ManagementBooking() {
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [date, setDate] = useState(moment());
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:3030/api/bookings').then((res) => {
-    //         setData(res.data.data);
-    //         setPageData(res.data.data.slice(0, 10));
-    //         setIsLoading(false);
-    //     });
-    // }, []);
-
     useEffect(() => {
         setIsLoading(true);
         axios.get('http://localhost:3030/api/bookings').then((res) => {

@@ -2,7 +2,7 @@ import { Button, Radio, Form, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAdminInfo, setLogIn, setRoleLogin } from '~/redux/features/doctorCareSlice';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ function Login() {
     const dispatch = useDispatch();
     const [role, setRole] = useState('admin');
     const navigate = useNavigate();
-
+    const [form] = Form.useForm();
     const onFinish = (values) => {
         if (values.role === 'admin') {
             axios.post('http://localhost:3030/api/admin/login', values).then((res) => {
@@ -27,6 +27,7 @@ function Login() {
                     });
                     if (window.location.pathname === '/login') {
                         navigate('/admin');
+                        // values.role === 'doctor' && navigate('/management/doctor');
                     }
                 } else {
                     notification.open({
@@ -49,9 +50,7 @@ function Login() {
                         description: res.data.message,
                     });
                     if (window.location.pathname === '/login') {
-                        if (values.role === 1) {
-                            navigate('/admin');
-                        }
+                        navigate('/doctor/management');
                     }
                 } else {
                     notification.open({
@@ -139,7 +138,11 @@ function Login() {
                         ]}
                         label="Ai đang đăng nhập?"
                     >
-                        <Radio.Group onChange={(e) => setRole(e.target.value)}>
+                        <Radio.Group
+                            onChange={(e) => {
+                                setRole(e.target.value);
+                            }}
+                        >
                             <Radio value={'admin'}>Quản trị hệ thống</Radio>
                             <Radio value={'doctor'}>Bác sĩ</Radio>
                         </Radio.Group>

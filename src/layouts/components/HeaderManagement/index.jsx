@@ -1,5 +1,5 @@
 import images from '~/assets';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,12 +7,15 @@ import { Popover } from 'antd';
 import { setAdminInfo, setLogIn } from '~/redux/features/doctorCareSlice';
 
 function HeaderManagement({ displaySidebar }) {
+    const navigate = useNavigate();
     const isLogin = useSelector((state) => state.doctorCare.isLogin);
     const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
     const dispatch = useDispatch();
     const handleLogout = () => {
         dispatch(setLogIn(false));
         dispatch(setAdminInfo({}));
+        localStorage.clear();
+        navigate('/login');
     };
 
     return (

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publicRoutes, privateRoutes } from '~/routes';
+import { publicRoutes, adminRoutes, doctorRoutes } from '~/routes';
 import MainLayout from '~/layouts/MainLayout';
 import 'antd/dist/antd.min.css';
 import 'react-quill/dist/quill.snow.css';
@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 
 function App() {
     const isLogin = useSelector((state) => state.doctorCare.isLogin);
+    const roleLogin = useSelector((state) => state.doctorCare.roleLogin);
     return (
         <Router>
             <div className="App">
@@ -33,8 +34,8 @@ function App() {
                             />
                         );
                     })}
-                    {isLogin === true
-                        ? privateRoutes.map((route, index) => {
+                    {isLogin === true && roleLogin === 'admin'
+                        ? adminRoutes.map((route, index) => {
                               let Layout;
                               if (!route.layout) {
                                   Layout = MainLayout;
@@ -54,7 +55,32 @@ function App() {
                                   />
                               );
                           })
-                        : privateRoutes.map((route, index) => {
+                        : adminRoutes.map((route, index) => {
+                              return <Route key={index} path={route.path} element={<Login />} />;
+                          })}
+
+                    {isLogin === true && roleLogin === 'doctor'
+                        ? doctorRoutes.map((route, index) => {
+                              let Layout;
+                              if (!route.layout) {
+                                  Layout = MainLayout;
+                              } else {
+                                  Layout = route.layout;
+                              }
+                              let Page = route.component;
+                              return (
+                                  <Route
+                                      key={index}
+                                      path={route.path}
+                                      element={
+                                          <Layout>
+                                              <Page />
+                                          </Layout>
+                                      }
+                                  />
+                              );
+                          })
+                        : doctorRoutes.map((route, index) => {
                               return <Route key={index} path={route.path} element={<Login />} />;
                           })}
                     <Route key={28062001} path={'*'} element={<Error />} />
