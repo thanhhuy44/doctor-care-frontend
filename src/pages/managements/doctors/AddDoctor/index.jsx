@@ -86,7 +86,6 @@ function AddDoctor() {
                 margin: '0 auto',
             }}
             name="basic"
-            initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"

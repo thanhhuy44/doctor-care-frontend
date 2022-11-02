@@ -1,66 +1,107 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusCircle, faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { DatePicker, Pagination } from 'antd';
+import { DatePicker, notification, Pagination } from 'antd';
 import moment from 'moment';
 import Loading from '~/pages/Loading';
+import { useSelector } from 'react-redux';
 
 function ManagementBooking() {
-    const navigate = useNavigate();
+    const roleLogin = useSelector((state) => state.doctorCare.roleLogin);
+    const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([]);
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [date, setDate] = useState(moment());
+
+    function compare(a, b) {
+        if (a.time < b.time) {
+            return -1;
+        }
+        if (a.time > b.time) {
+            return 1;
+        }
+        return 0;
+    }
+
     useEffect(() => {
-        setIsLoading(true);
-        axios.get('http://localhost:3030/api/bookings').then((res) => {
-            setData(
-                res.data.data.filter((booking) => {
-                    return (
-                        moment(booking.date).date() === moment(date).date() &&
-                        moment(booking.date).month() === moment(date).month() &&
-                        moment(booking.date).year() === moment(date).year()
-                    );
-                }),
-            );
-            setPageData(
-                res.data.data
-                    .filter((booking) => {
+        if (roleLogin === 'admin') {
+            axios.get('http://localhost:3030/api/bookings').then((res) => {
+                setData(
+                    res.data.data.filter((booking) => {
                         return (
                             moment(booking.date).date() === moment(date).date() &&
                             moment(booking.date).month() === moment(date).month() &&
                             moment(booking.date).year() === moment(date).year()
                         );
-                    })
-                    .slice(0, 10),
-            );
-            setIsLoading(false);
-        });
-    }, [date]);
-
-    const handleUpdate = (id) => {
-        navigate(`/admin/doctor/update/${id}`);
-    };
+                    }),
+                );
+                setPageData(
+                    res.data.data
+                        .filter((booking) => {
+                            return (
+                                moment(booking.date).date() === moment(date).date() &&
+                                moment(booking.date).month() === moment(date).month() &&
+                                moment(booking.date).year() === moment(date).year()
+                            );
+                        })
+                        .slice(0, 10),
+                );
+                setIsLoading(false);
+            });
+        }
+        if (roleLogin === 'doctor') {
+            axios.get(`http://localhost:3030/api/doctor/${adminInfo._id}`).then((res) => {
+                setData(
+                    res.data.data?.booking.filter((booking) => {
+                        return (
+                            moment(booking.date).date() === moment(date).date() &&
+                            moment(booking.date).month() === moment(date).month() &&
+                            moment(booking.date).year() === moment(date).year()
+                        );
+                    }),
+                );
+                setPageData(
+                    res.data.data?.booking
+                        .filter((booking) => {
+                            return (
+                                moment(booking.date).date() === moment(date).date() &&
+                                moment(booking.date).month() === moment(date).month() &&
+                                moment(booking.date).year() === moment(date).year()
+                            );
+                        })
+                        .slice(0, 10),
+                );
+                setIsLoading(false);
+            });
+        }
+    }, [adminInfo._id, date, roleLogin]);
 
     const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/doctor/delete/${id}`).then((res) => {
+        axios.post(`http://localhost:3030/api/booking/delete/${id}`).then((res) => {
             if (res.data.errCode === 0) {
-                alert(res.data.message);
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                    message: 'Thành công',
+                    description: res.data.message,
+                });
                 const newData = data.filter((doctor) => {
                     return doctor._id !== id;
                 });
                 setData(newData);
             } else {
-                alert(res.data.message);
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: 'Lỗi',
+                    description: res.data.message,
+                });
             }
         });
     };
-
     const handleSearch = () => {
         axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
             setData(res.data.data);
@@ -88,54 +129,70 @@ function ManagementBooking() {
                             />
                         </div>
                     </div>
-                    <div className="flex items-center md:justify-end w-full flex-1">
-                        <label className="font-medium mr-3  hidden md:block" htmlFor="searchInput">
-                            Tìm kiếm
-                        </label>
-                        <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
-                            <input
-                                value={searchValue}
-                                onChange={(e) => {
-                                    setSearchValue(e.target.value);
-                                }}
-                                id="searchInput"
-                                className="bg-transparent flex-1"
-                                placeholder="Nhập tên khách hàng..."
-                            />
-                            <Button onClick={handleSearch} className="bg-transparent">
-                                <FontAwesomeIcon icon={faSearch} />
-                            </Button>
+                    {roleLogin === 'admin' && (
+                        <div className="flex items-center md:justify-end w-full flex-1">
+                            <label className="font-medium mr-3  hidden md:block" htmlFor="searchInput">
+                                Tìm kiếm
+                            </label>
+                            <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
+                                <input
+                                    value={searchValue}
+                                    onChange={(e) => {
+                                        setSearchValue(e.target.value);
+                                    }}
+                                    id="searchInput"
+                                    className="bg-transparent flex-1"
+                                    placeholder="Nhập tên khách hàng..."
+                                />
+                                <Button onClick={handleSearch} className="bg-transparent">
+                                    <FontAwesomeIcon icon={faSearch} />
+                                </Button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div className="mt-5">
-                    {pageData.map((booking) => (
-                        <ObjectItem
-                            update={() => {
-                                handleUpdate(booking._id);
+                    {roleLogin === 'admin' &&
+                        pageData.map((booking) => (
+                            <ObjectItem
+                                remove={() => {
+                                    handleRemove(booking?._id);
+                                }}
+                                key={booking._id}
+                                data={booking}
+                                phoneNumber={true}
+                                email={true}
+                            />
+                        ))}
+                    {roleLogin === 'doctor' &&
+                        pageData
+                            ?.sort(compare)
+                            .map((booking) => (
+                                <ObjectItem
+                                    key={booking._id}
+                                    data={booking}
+                                    phoneNumber={true}
+                                    email={true}
+                                    shift={true}
+                                />
+                            ))}
+                </div>
+                {data?.length > 10 && (
+                    <div className="my-8 flex justify-center">
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
                             }}
-                            remove={() => {
-                                handleRemove(booking._id);
-                            }}
-                            key={booking._id}
-                            data={booking}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
                         />
-                    ))}
-                </div>
-                <div className="my-8 flex justify-center">
-                    <Pagination
-                        onChange={(page) => {
-                            let newPageData = [];
-                            for (let index = page * 10 - 10; index < page * 10; index++) {
-                                data[index] && newPageData.push(data[index]);
-                            }
-                            setPageData(newPageData);
-                        }}
-                        pageSize={10}
-                        defaultCurrent={1}
-                        total={data.length}
-                    />
-                </div>
+                    </div>
+                )}
             </div>
         );
     }

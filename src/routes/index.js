@@ -32,6 +32,7 @@ import ManagementTypePackage from '~/pages/managements/ManagementTypePackage';
 import UpdateSpecialty from '~/pages/managements/specialties/UpdateSpecialty';
 import UpdateTypePackage from '~/pages/managements/typePackages/UpdateTypePackage';
 import UpdatePackage from '~/pages/managements/packages/UpdatePackage';
+import ManagementRating from '~/pages/managements/ManagementRating';
 
 const publicRoutes = [
     {
@@ -213,7 +214,7 @@ const doctorRoutes = [
     },
     {
         path: '/doctor/management/rating',
-        component: ManagementBooking,
+        component: ManagementRating,
         layout: ManagementLayout,
     },
     {

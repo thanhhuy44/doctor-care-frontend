@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import moment from 'moment';
-import { DatePicker } from 'antd';
+import { Button, DatePicker } from 'antd';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReviewModal from '~/components/Modal/ReviewModal';
 
 const shifts = [
     { sequence: 1, timeStart: 8, timeEnd: 9 },
@@ -57,6 +58,7 @@ function DetailDoctor() {
     );
     const [bookingOnDate, setBookingOnDate] = useState([]);
     const [alreadyBooking, setAlreadyBooking] = useState(shifts);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${id}`).then((res) => {
@@ -79,7 +81,7 @@ function DetailDoctor() {
             // })
             setIsLoading(false);
         });
-    }, []);
+    }, [dateValue, id]);
 
     useEffect(() => {
         if (bookingOnDate.length > 0) {
@@ -96,6 +98,10 @@ function DetailDoctor() {
             });
         }
     }, [dateValue, bookingOnDate, alreadyBooking]);
+
+    const handleSubmitModal = (values) => {
+        console.log(values);
+    };
 
     if (isLoading) {
         return <Loading />;
@@ -199,7 +205,17 @@ function DetailDoctor() {
                         <Item />
                         <Item />
                     </div>
+                    <Button
+                        onClick={() => {
+                            setModalOpen(true);
+                        }}
+                        className="mt-4 w-full"
+                        type="primary"
+                    >
+                        Viết đánh giá
+                    </Button>
                 </div>
+                <ReviewModal modalOpen={modalOpen} setModalOpen={setModalOpen} handleSubmit={handleSubmitModal} />
             </div>
         );
     }
