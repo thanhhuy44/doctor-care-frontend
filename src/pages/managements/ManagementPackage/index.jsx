@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle, faWarning } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,7 @@ function ManagementPackage() {
     const [typePackages, setTypePackages] = useState([]);
     const [hospitalFilter, setHospitalFilter] = useState('');
     const [typePackageFilter, setTypePackageFilter] = useState('');
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
@@ -81,6 +82,34 @@ function ManagementPackage() {
         });
     };
 
+    const handleSearch = () => {
+        axios.post(`http://localhost:3030/api/package/search?keyword=${searchValue}`).then((res) => {
+            if (res.data.errCode === 0) {
+                if (res.data.data.length > 0) {
+                    setData(res.data.data);
+                    setPageData(res.data.data.slice(0, 10));
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                        message: 'Thành công',
+                        description: res.data.message,
+                    });
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
+                        message: 'Thông báo',
+                        description: 'Không có kết quả trùng khớp với tìm kiếm',
+                    });
+                }
+            } else {
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: 'Lỗi',
+                    description: res.data.message,
+                });
+            }
+        });
+    };
+
     if (isLoading) {
         <Loading />;
     } else {
@@ -92,7 +121,13 @@ function ManagementPackage() {
                             <label htmlFor="hospitalSelect" className="text-base font-medium mr-3">
                                 Cơ sở y tế
                             </label>
-                            <select id="hospitalSelect" onChange={(e) => setHospitalFilter(e.target.value)}>
+                            <select
+                                id="hospitalSelect"
+                                onChange={(e) => {
+                                    setHospitalFilter(e.target.value);
+                                    setSearchValue('');
+                                }}
+                            >
                                 <option key={11111} value={''}>
                                     Tất cả
                                 </option>
@@ -107,7 +142,13 @@ function ManagementPackage() {
                             <label htmlFor="typePackageSelect" className="text-base font-medium mr-3">
                                 Loại gói khám
                             </label>
-                            <select id="typePackageSelect" onChange={(e) => setTypePackageFilter(e.target.value)}>
+                            <select
+                                id="typePackageSelect"
+                                onChange={(e) => {
+                                    setTypePackageFilter(e.target.value);
+                                    setSearchValue('');
+                                }}
+                            >
                                 <option key={1111123} value={''}>
                                     Tất cả
                                 </option>
@@ -125,11 +166,18 @@ function ManagementPackage() {
                         </label>
                         <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
                             <input
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
                                 id="searchInput"
                                 className="bg-transparent flex-1"
                                 placeholder="Nhập tên gói khám..."
                             />
-                            <Button className="bg-transparent">
+                            <Button
+                                className="bg-transparent"
+                                onClick={() => {
+                                    handleSearch();
+                                }}
+                            >
                                 <FontAwesomeIcon icon={faSearch} />
                             </Button>
                         </div>
@@ -159,18 +207,20 @@ function ManagementPackage() {
                     </div>
                 </div>
                 <div className="my-4 flex justify-center">
-                    <Pagination
-                        onChange={(page) => {
-                            let newPageData = [];
-                            for (let index = page * 10 - 10; index < page * 10; index++) {
-                                data[index] && newPageData.push(data[index]);
-                            }
-                            setPageData(newPageData);
-                        }}
-                        pageSize={10}
-                        defaultCurrent={1}
-                        total={data.length}
-                    />
+                    {data.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
             </div>
         );

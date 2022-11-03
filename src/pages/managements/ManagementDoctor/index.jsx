@@ -84,6 +84,7 @@ function ManagementDoctor() {
     const handleSearch = () => {
         axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
             setData(res.data.data);
+            setPageData(res.data.data.slice(0, 10));
         });
         setCurHospital('');
         setCurSpecialty('');
@@ -107,6 +108,9 @@ function ManagementDoctor() {
                                     setSearchValue('');
                                 }}
                                 id="hospitalSelect"
+                                style={{
+                                    width: '200px',
+                                }}
                             >
                                 <option value="">Tất cả</option>
                                 {hospital &&
@@ -124,6 +128,9 @@ function ManagementDoctor() {
                                     setSearchValue('');
                                 }}
                                 id="specialtySelect"
+                                style={{
+                                    width: '200px',
+                                }}
                             >
                                 <option value="">Tất cả</option>
                                 {specialty &&
@@ -175,18 +182,20 @@ function ManagementDoctor() {
                     </div>
                 </div>
                 <div className="my-4 flex justify-center">
-                    <Pagination
-                        onChange={(page) => {
-                            let newPageData = [];
-                            for (let index = page * 10 - 10; index < page * 10; index++) {
-                                data[index] && newPageData.push(data[index]);
-                            }
-                            setPageData(newPageData);
-                        }}
-                        pageSize={10}
-                        defaultCurrent={1}
-                        total={data.length}
-                    />
+                    {data.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
             </div>
         );

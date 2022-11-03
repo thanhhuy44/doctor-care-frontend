@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle, faWarning } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
@@ -23,7 +23,33 @@ function ManagementSpecialty() {
     }, []);
 
     const handleSearch = () => {
-        console.log(searchValue);
+        if (searchValue.trim() !== '') {
+            axios.post(`http://localhost:3030/api/specialty/search?keyword=${searchValue}`).then((res) => {
+                if (res.data.errCode === 0) {
+                    if (res.data.data.length > 0) {
+                        setData(res.data.data);
+                        setPageData(res.data.data.slice(0, 10));
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                            message: 'Thành công',
+                            description: res.data.message,
+                        });
+                    } else {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
+                            message: 'Thông báo',
+                            description: 'Không có kết quả trùng khớp với tìm kiếm',
+                        });
+                    }
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.data.message,
+                    });
+                }
+            });
+        }
     };
 
     const handleUpdate = (id) => {
@@ -70,7 +96,7 @@ function ManagementSpecialty() {
                                 }}
                                 id="searchInput"
                                 className="bg-transparent flex-1"
-                                placeholder="Nhập tên loại gói khám..."
+                                placeholder="Nhập tên loại chuyên khoa..."
                             />
                             <Button onClick={handleSearch} className="bg-transparent">
                                 <FontAwesomeIcon icon={faSearch} />
@@ -102,18 +128,20 @@ function ManagementSpecialty() {
                     </div>
                 </div>
                 <div className="my-4 flex justify-center">
-                    <Pagination
-                        onChange={(page) => {
-                            let newPageData = [];
-                            for (let index = page * 10 - 10; index < page * 10; index++) {
-                                data[index] && newPageData.push(data[index]);
-                            }
-                            setPageData(newPageData);
-                        }}
-                        pageSize={10}
-                        defaultCurrent={1}
-                        total={data.length}
-                    />
+                    {data.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
             </div>
         );

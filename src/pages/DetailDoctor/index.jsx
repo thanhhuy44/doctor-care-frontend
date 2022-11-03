@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import moment from 'moment';
-import { Button, DatePicker } from 'antd';
-import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { Button, DatePicker, notification } from 'antd';
+import { faCalendar, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReviewModal from '~/components/Modal/ReviewModal';
 
@@ -100,7 +100,37 @@ function DetailDoctor() {
     }, [dateValue, bookingOnDate, alreadyBooking]);
 
     const handleSubmitModal = (values) => {
-        console.log(values);
+        data.booking.forEach((booking) => {
+            if (values.email === booking.email || values.phoneNumber === booking.numberPhone) {
+                axios
+                    .post(
+                        'http://localhost:3030/api/review/create',
+                        {
+                            doctor: data._id,
+                            ...values,
+                        },
+                        {
+                            headers: { 'Content-Type': 'multipart/form-data' },
+                        },
+                    )
+                    .then((res) => {
+                        if (res.data.errCode === 0) {
+                            notification.open({
+                                icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                                message: 'Thành công',
+                                description: res.data.message,
+                            });
+                            setModalOpen(false);
+                        } else {
+                            notification.open({
+                                icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                                message: 'Lỗi',
+                                description: res.data.message,
+                            });
+                        }
+                    });
+            }
+        });
     };
 
     if (isLoading) {
@@ -215,7 +245,12 @@ function DetailDoctor() {
                         Viết đánh giá
                     </Button>
                 </div>
-                <ReviewModal modalOpen={modalOpen} setModalOpen={setModalOpen} handleSubmit={handleSubmitModal} />
+                <ReviewModal
+                    id={data._id}
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    handleSubmit={handleSubmitModal}
+                />
             </div>
         );
     }

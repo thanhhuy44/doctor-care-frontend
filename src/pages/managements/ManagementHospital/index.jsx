@@ -82,6 +82,7 @@ function ManagementHospital() {
                                 id="specialtySelect"
                                 onChange={(e) => {
                                     setProvince(e.target.value);
+                                    setSearchValue('');
                                 }}
                             >
                                 <option key={1256} value="">
@@ -144,18 +145,20 @@ function ManagementHospital() {
                     </div>
                 </div>
                 <div className="my-4 flex justify-center">
-                    <Pagination
-                        onChange={(page) => {
-                            let newPageData = [];
-                            for (let index = page * 10 - 10; index < page * 10; index++) {
-                                data[index] && newPageData.push(data[index]);
-                            }
-                            setPageData(newPageData);
-                        }}
-                        pageSize={10}
-                        defaultCurrent={1}
-                        total={data.length}
-                    />
+                    {data.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
             </div>
         );

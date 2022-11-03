@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusCircle, faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
@@ -81,27 +81,6 @@ function ManagementBooking() {
         }
     }, [adminInfo._id, date, roleLogin]);
 
-    const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/booking/delete/${id}`).then((res) => {
-            if (res.data.errCode === 0) {
-                notification.open({
-                    icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
-                    message: 'Thành công',
-                    description: res.data.message,
-                });
-                const newData = data.filter((doctor) => {
-                    return doctor._id !== id;
-                });
-                setData(newData);
-            } else {
-                notification.open({
-                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-                    message: 'Lỗi',
-                    description: res.data.message,
-                });
-            }
-        });
-    };
     const handleSearch = () => {
         axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
             setData(res.data.data);
@@ -153,29 +132,36 @@ function ManagementBooking() {
                 </div>
                 <div className="mt-5">
                     {roleLogin === 'admin' &&
-                        pageData.map((booking) => (
-                            <ObjectItem
-                                remove={() => {
-                                    handleRemove(booking?._id);
-                                }}
-                                key={booking._id}
-                                data={booking}
-                                phoneNumber={true}
-                                email={true}
-                            />
-                        ))}
+                        pageData.map(
+                            (booking) =>
+                                booking.status === 'on-confirm' && (
+                                    <ObjectItem
+                                        key={booking._id}
+                                        data={booking}
+                                        phoneNumber={true}
+                                        email={true}
+                                        select={'admin'}
+                                    />
+                                ),
+                        )}
                     {roleLogin === 'doctor' &&
                         pageData
                             ?.sort(compare)
-                            .map((booking) => (
-                                <ObjectItem
-                                    key={booking._id}
-                                    data={booking}
-                                    phoneNumber={true}
-                                    email={true}
-                                    shift={true}
-                                />
-                            ))}
+                            .map(
+                                (booking) =>
+                                    (booking.status === 'confirm' ||
+                                        booking.status === 'done' ||
+                                        booking.status === 'cancel') && (
+                                        <ObjectItem
+                                            key={booking._id}
+                                            data={booking}
+                                            phoneNumber={true}
+                                            email={true}
+                                            shift={true}
+                                            select={'doctor'}
+                                        />
+                                    ),
+                            )}
                 </div>
                 {data?.length > 10 && (
                     <div className="my-8 flex justify-center">
