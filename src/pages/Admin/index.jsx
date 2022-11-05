@@ -7,7 +7,7 @@ function Admin() {
     const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
     const birthDay = new Date(adminInfo.birth);
     return (
-        <div className="mt-4 flex justify-center min-h-full ">
+        <div className="mt-[50px] flex justify-center min-h-full ">
             <div className="content flex flex-col items-center">
                 <img
                     src={adminInfo.image}

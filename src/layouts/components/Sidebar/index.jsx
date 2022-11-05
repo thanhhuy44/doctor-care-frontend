@@ -1,5 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFile, faFolder, faHospital, faKitMedical, faUser, faUserDoctor } from '@fortawesome/free-solid-svg-icons';
+import {
+    faFile,
+    faFolder,
+    faHospital,
+    faKey,
+    faKitMedical,
+    faUser,
+    faUserDoctor,
+} from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.scss';
@@ -14,10 +22,10 @@ function Sidebar() {
     if (roleLogin === 'admin') {
         return (
             <div className={cx('sidebar')}>
-                {/* <NavLink to="/admin/detail" replace className={(nav) => cx('item', { active: nav.isActive })}>
-                    <FontAwesomeIcon icon={faUser} className={cx('icon')} />
-                    <span className={cx('text')}>Thông tin cá nhân</span>
-                </NavLink> */}
+                <NavLink to="/admin/change-password" className={(nav) => cx('item', { active: nav.isActive })}>
+                    <FontAwesomeIcon icon={faKey} className={cx('icon')} />
+                    <span className={cx('text')}>Đổi mật khẩu</span>
+                </NavLink>
                 <NavLink to="/admin/doctors" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faUserDoctor} className={cx('icon')} />
                     <span className={cx('text')}>Bác sĩ</span>
@@ -43,6 +51,11 @@ function Sidebar() {
                     <FontAwesomeIcon icon={faFile} className={cx('icon')} />
                     <span className={cx('text')}>Đơn khám bệnh</span>
                 </NavLink>
+
+                <NavLink to="/admin/posts" className={(nav) => cx('item', { active: nav.isActive })}>
+                    <FontAwesomeIcon icon={faFile} className={cx('icon')} />
+                    <span className={cx('text')}>Bài viết</span>
+                </NavLink>
                 {/* <NavLink to="/admin/quan-ly-admin" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faFolder} className={cx('icon')} />
                     <span className={cx('text')}>Quản trị viên</span>
@@ -53,6 +66,13 @@ function Sidebar() {
     if (roleLogin === 'doctor') {
         return (
             <div className={cx('sidebar')}>
+                <NavLink
+                    to="/doctor/management/change-password"
+                    className={(nav) => cx('item', { active: nav.isActive })}
+                >
+                    <FontAwesomeIcon icon={faKey} className={cx('icon')} />
+                    <span className={cx('text')}>Đổi mật khẩu</span>
+                </NavLink>
                 <NavLink
                     to={`/doctor/management/update-info/${adminInfo._id}`}
                     className={(nav) => cx('item', { active: nav.isActive })}

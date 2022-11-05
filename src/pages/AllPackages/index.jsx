@@ -5,17 +5,20 @@ import { useParams } from 'react-router-dom';
 import BookingItem from '~/components/BookingItem';
 import Loading from '../Loading';
 import locations from '~/assets/location/local.json';
+import { Pagination } from 'antd';
 
 function AllPackages() {
     const params = useParams();
     const [isLoading, setIsloading] = useState(true);
     const [location, setLocation] = useState('');
     const [data, setData] = useState();
+    const [pageData, setPageData] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/type-package/${params.id}`).then((res) => {
             setData(res.data.data);
             setIsloading(false);
+            setPageData(res.data.data.healthPackages.slice(0, 10));
         });
     }, []);
 
@@ -43,15 +46,29 @@ function AllPackages() {
                         ))}
                     </select>
                     {location !== ''
-                        ? data.healthPackages.map(
+                        ? pageData.map(
                               (doctor) =>
                                   doctor.hospital.location.province === location && (
                                       <BookingItem key={doctor._id} data={doctor} />
                                   ),
                           )
-                        : data.healthPackages.map((healthPackage) => (
-                              <BookingItem key={healthPackage._id} data={healthPackage} />
-                          ))}
+                        : pageData.map((healthPackage) => <BookingItem key={healthPackage._id} data={healthPackage} />)}
+                </div>
+                <div className="my-4 flex justify-center">
+                    {data.healthPackages.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
             </div>
         );

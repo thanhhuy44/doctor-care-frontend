@@ -7,6 +7,7 @@ import SlideShow from '~/components/SlideShow';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loading from '../Loading';
+import { Link } from 'react-router-dom';
 
 function Home() {
     const [data, setData] = useState([]);
@@ -20,10 +21,6 @@ function Home() {
         });
     }, []);
 
-    const handleSearch = () => {
-        console.log(searchValue);
-    };
-
     if (isLoading) {
         return <Loading />;
     } else {
@@ -31,21 +28,21 @@ function Home() {
             <div>
                 <div className="block  relative w-full object-cover">
                     <div className="block">
-                        <img className="w-full block max-h-[80vh] object-cover" src={background} alt="background" />
+                        <img className="w-full block max-h-[800px] object-cover" src={background} alt="background" />
                     </div>
                     <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center bg-black/50 ">
-                        <h1 className="text-center text-2xl sm:text-4xl leading-6 font-semibold text-white uppercase drop-shadow sm:mb-5 leading-16">
+                        <h1 className="text-center text-2xl sm:text-4xl font-semibold text-white uppercase drop-shadow sm:mb-5 leading-9">
                             NỀN TẢNG Y TẾ
                             <br />
                             CHĂM SÓC SỨC KHỎE TOÀN DIỆN
                         </h1>
                         <div className="flex items-center mt-3 mx-2 sm:mx-0 rounded-3xl overflow-hidden shadow-2xl bg-white">
-                            <button
-                                onClick={handleSearch}
+                            <Link
+                                to={`/search?keyword=${searchValue}`}
                                 className="bg-transparent text-xl sm:text-2xl p-2 sm:py-3 sm:px-4  cursor-pointer hover:opacity-75"
                             >
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </button>
+                            </Link>
                             <input
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
@@ -78,12 +75,6 @@ function Home() {
                         <SlideShow numberOfSlide={4} data={section.data} className="-mx-4" />
                     </Section>
                 ))}
-
-                {/* <Section dots={true} />
-                <Section autoplaySpeed={1000} />
-                <Section />
-                <Section />
-                <Section /> */}
             </div>
         );
     }

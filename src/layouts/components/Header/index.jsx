@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../Navbar';
-import images from '~/assets';
+import logo from '~/assets/images/logo.png';
 
 function Header() {
     const [displayNavbar, setDisplayNavbar] = useState(false);
@@ -19,17 +19,11 @@ function Header() {
                 </div>
                 <div className="w-52 h-full">
                     <Link to="/" className="w-full h-full">
-                        <img className="w-full h-full" src={images.logo} alt="logo" />
+                        <img className="w-full h-full py-2" src={logo} alt="logo" />
                     </Link>
                 </div>
                 <div className="mx-12 flex-1 hidden lg:block">
                     <Navbar />
-                </div>
-                <div className="cursor-pointer text-3xl px-3 hover:text-cyan-600">
-                    <Link to="/login">
-                        {/* <span className={cx('text')}>Hỗ trợ</span> */}
-                        <FontAwesomeIcon icon={faUser} />
-                    </Link>
                 </div>
             </div>
             <div

@@ -2,6 +2,7 @@ import { faCheck, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import images from '~/assets';
+import logo from '~/assets/images/logo.png';
 
 function Footer() {
     return (
@@ -9,7 +10,7 @@ function Footer() {
             <div className="container mx-auto py-8 px-2 grid grid-cols-1 lg:grid-cols-2 ">
                 <div className="mb-8 lg:mb-0">
                     <Link to="/" className="block mb-4">
-                        <img className="block w-[200px]" src={images.logo} alt="logo" />
+                        <img className="block w-[200px]" src={logo} alt="logo" />
                     </Link>
                     <h3 className="font-semibold text-xl">Công ty Cổ phần Công nghệ BookingCare</h3>
                     <p>

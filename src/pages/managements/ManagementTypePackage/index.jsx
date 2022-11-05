@@ -66,6 +66,7 @@ function ManagementTypePackage() {
                     return doctor._id !== id;
                 });
                 setData(newData);
+                setPageData(newData.slice(0, 10));
             } else {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,

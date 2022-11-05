@@ -8,14 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import Loading from '~/pages/Loading';
 
-function ManagementSpecialty() {
+function ManagementPost() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([]);
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
+        axios.get('http://localhost:3030/api/posts').then((res) => {
             setData(res.data.data);
             setPageData(res.data.data.slice(0, 10));
             setIsLoading(false);
@@ -24,7 +24,7 @@ function ManagementSpecialty() {
 
     const handleSearch = () => {
         if (searchValue.trim() !== '') {
-            axios.post(`http://localhost:3030/api/specialty/search?keyword=${searchValue}`).then((res) => {
+            axios.post(`http://localhost:3030/api/post/search?keyword=${searchValue}`).then((res) => {
                 if (res.data.errCode === 0) {
                     if (res.data.data.length > 0) {
                         setData(res.data.data);
@@ -53,19 +53,19 @@ function ManagementSpecialty() {
     };
 
     const handleUpdate = (id) => {
-        navigate(`/admin/specialty/update/${id}`);
+        navigate(`/admin/post/update/${id}`);
     };
 
     const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/specialty/delete/${id}`).then((res) => {
+        axios.post(`http://localhost:3030/api/post/delete/${id}`).then((res) => {
             if (res.data.errCode === 0) {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                     message: 'Thành công',
                     description: res.data.message,
                 });
-                const newData = data.filter((specialty) => {
-                    return specialty._id !== id;
+                const newData = data.filter((post) => {
+                    return post._id !== id;
                 });
                 setData(newData);
                 setPageData(newData.slice(0, 10));
@@ -97,7 +97,7 @@ function ManagementSpecialty() {
                                 }}
                                 id="searchInput"
                                 className="bg-transparent flex-1"
-                                placeholder="Nhập tên loại chuyên khoa..."
+                                placeholder="Nhập tên bài viết..."
                             />
                             <Button onClick={handleSearch} className="bg-transparent">
                                 <FontAwesomeIcon icon={faSearch} />
@@ -106,22 +106,22 @@ function ManagementSpecialty() {
                     </div>
                 </div>
                 <div className="mt-5">
-                    {pageData.map((specialty) => (
+                    {pageData.map((post) => (
                         <ObjectItem
                             update={() => {
-                                handleUpdate(specialty._id);
+                                handleUpdate(post._id);
                             }}
                             remove={() => {
-                                handleRemove(specialty._id);
+                                handleRemove(post._id);
                             }}
-                            key={specialty._id}
-                            data={specialty}
+                            key={post._id}
+                            data={post}
                         />
                     ))}
                     <div className="py-3 flex">
                         <Button
                             type="link"
-                            to="/admin/specialty/add"
+                            to="/admin/post/add"
                             className="bg-transparent mx-auto text-[40px] text-orange-900 hover:text-cyan-700"
                         >
                             <FontAwesomeIcon icon={faPlusCircle} />
@@ -149,4 +149,4 @@ function ManagementSpecialty() {
     }
 }
 
-export default ManagementSpecialty;
+export default ManagementPost;

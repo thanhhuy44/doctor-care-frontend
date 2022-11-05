@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Item from '~/components/Item';
+import { Pagination } from 'antd';
 
 function AllHospitals() {
     const [data, setData] = useState([]);
+    const [pageData, setPageData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            const result = res.data.data;
-
-            setData(result);
+            setData(res.data.data);
+            setPageData(res.data.data.slice(0, 10));
         });
     }, []);
     useEffect(() => {
@@ -23,9 +24,25 @@ function AllHospitals() {
             <div className="container mx-auto">
                 <h1 className="p-5 mb-3 leading-5 text-3xl font-semibold">Cơ sở y tế</h1>
                 <div>
-                    {data.map((item) => (
+                    {pageData.map((item) => (
                         <Item key={item._id} data={item} />
                     ))}
+                </div>
+                <div className="my-4 flex justify-center">
+                    {data.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
             </div>
         );

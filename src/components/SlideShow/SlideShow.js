@@ -33,9 +33,16 @@ function SlideShow({ children, numberOfSlide, dots, autoplaySpeed, className, da
                 <SwiperSlide key={index}>
                     <div className="block">
                         <div>
-                            <Link to={slide.link} className="block w-full rounded overflow-hidden shadow-sm">
+                            <Link
+                                to={slide.link}
+                                style={{
+                                    boxShadow:
+                                        'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px',
+                                }}
+                                className="block w-full rounded overflow-hidden"
+                            >
                                 <img
-                                    className="w-full block h-[240px] object-cover"
+                                    className="w-full block object-cover"
                                     alt={slide.alias}
                                     src={slide.image || slide.banner}
                                 />

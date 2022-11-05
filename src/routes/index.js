@@ -3,8 +3,6 @@ import Admin from '~/pages/Admin';
 import DetailDoctor from '~/pages/DetailDoctor';
 import Booking from '~/pages/Booking';
 import Login from '~/pages/Login';
-import Signup from '~/pages/Signup';
-import SingleLayout from '~/layouts/SingleLayout';
 import ManagementLayout from '~/layouts/ManagementLayout';
 import Hospital from '~/pages/Hospital';
 import ManagementDoctor from '~/pages/managements/ManagementDoctor';
@@ -34,11 +32,24 @@ import UpdateTypePackage from '~/pages/managements/typePackages/UpdateTypePackag
 import UpdatePackage from '~/pages/managements/packages/UpdatePackage';
 import ManagementRating from '~/pages/managements/ManagementRating';
 import Support from '~/pages/Support';
+import ManagementPost from '~/pages/managements/ManagementPost';
+import AddPost from '~/pages/managements/post/AddPost';
+import UpdatePost from '~/pages/managements/post/UpdatePost';
+import Search from '~/pages/Search';
+import ChangePassword from '~/pages/managements/ChangePassword';
 
 const publicRoutes = [
     {
         path: '/',
         component: Home,
+    },
+    {
+        path: '/login',
+        component: Login,
+    },
+    {
+        path: '/search',
+        component: Search,
     },
     {
         path: '/doctors',
@@ -67,16 +78,6 @@ const publicRoutes = [
     {
         path: '/booking',
         component: Booking,
-    },
-    {
-        path: '/login',
-        component: Login,
-        layout: SingleLayout,
-    },
-    {
-        path: '/signup',
-        component: Signup,
-        layout: SingleLayout,
     },
 
     //page detail
@@ -195,6 +196,26 @@ const adminRoutes = [
         component: ManagementBooking,
         layout: ManagementLayout,
     },
+    {
+        path: '/admin/posts',
+        component: ManagementPost,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/post/add',
+        component: AddPost,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/post/update/:id',
+        component: UpdatePost,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/change-password',
+        component: ChangePassword,
+        layout: ManagementLayout,
+    },
 ];
 
 const doctorRoutes = [
@@ -221,6 +242,11 @@ const doctorRoutes = [
     {
         path: '/doctor/management/support',
         component: Support,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/doctor/management/change-password',
+        component: ChangePassword,
         layout: ManagementLayout,
     },
 ];

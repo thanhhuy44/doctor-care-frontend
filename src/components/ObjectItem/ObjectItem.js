@@ -71,17 +71,28 @@ function ObjectItem({ data, update, remove, phoneNumber, email, shift, comment, 
             } ${statusBooking === 'delete' && 'hidden'} rounded-lg mb-3 flex items-center justify-between`}
         >
             <div className="flex-1 flex items-center">
-                {data.image ? (
-                    <img className="block w-[50px] aspect-square rounded-full mr-3" src={data.image} alt={data.alias} />
+                {data.image || data.banner ? (
+                    <img
+                        className="block w-[50px] aspect-square rounded-full mr-3"
+                        src={data.image || data.banner}
+                        alt={data.alias}
+                    />
                 ) : (
                     <FontAwesomeIcon icon={faUser} className="mr-2 text-base" />
                 )}
-                <h5 className="text-base font-semibold">{data.name || data.firstName + ' ' + data.lastName}</h5>
+                <h5 className="text-base font-semibold">{data.name || data.title}</h5>
             </div>
             {phoneNumber && (
                 <div className="hidden flex-1 md:flex items-center">
                     <p>
                         <FontAwesomeIcon icon={faPhone} /> {data?.numberPhone}
+                    </p>
+                </div>
+            )}
+            {data.artist && (
+                <div className="hidden flex-1 md:flex items-center">
+                    <p>
+                        <FontAwesomeIcon icon={faUser} /> {data?.artist}
                     </p>
                 </div>
             )}
