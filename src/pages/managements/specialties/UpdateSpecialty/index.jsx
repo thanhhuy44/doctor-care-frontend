@@ -73,7 +73,7 @@ function UpdateSpecialty() {
     }, []);
 
     if (isLoading) {
-        return Loading;
+        return <Loading />;
     } else {
         return (
             <Form

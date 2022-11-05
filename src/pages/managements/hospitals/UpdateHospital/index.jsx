@@ -7,6 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import location from '~/assets/location/local.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import Loading from '~/pages/Loading';
 
 const addressOptions = location.map((item) => {
     return {
@@ -103,7 +104,7 @@ function UpdateHospital() {
     }, []);
 
     if (isLoading) {
-        return <h1>Is Loading</h1>;
+        return <Loading />;
     } else {
         return (
             <Form

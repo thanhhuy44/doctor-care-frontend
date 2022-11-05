@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import Loading from '~/pages/Loading';
 
 const { Option } = Select;
 
@@ -70,7 +71,7 @@ function UpdateDoctor() {
     const onFinishFailed = (errorInfo) => {};
 
     if (isLoading) {
-        <h1>is loading</h1>;
+        <Loading />;
     } else {
         return (
             <Form

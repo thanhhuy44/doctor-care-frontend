@@ -80,7 +80,7 @@ function ManagementPost() {
     };
 
     if (isLoading) {
-        return Loading;
+        return <Loading />;
     } else {
         return (
             <div>

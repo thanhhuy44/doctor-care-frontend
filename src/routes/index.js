@@ -37,6 +37,8 @@ import AddPost from '~/pages/managements/post/AddPost';
 import UpdatePost from '~/pages/managements/post/UpdatePost';
 import Search from '~/pages/Search';
 import ChangePassword from '~/pages/managements/ChangePassword';
+import AddAdmin from '~/pages/managements/admin/AddAdmin';
+import UpdateAdmin from '~/pages/managements/admin/UpdateAdmin';
 
 const publicRoutes = [
     {
@@ -214,6 +216,21 @@ const adminRoutes = [
     {
         path: '/admin/change-password',
         component: ChangePassword,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/management',
+        component: ManagementAdmin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/add',
+        component: AddAdmin,
+        layout: ManagementLayout,
+    },
+    {
+        path: '/admin/update/:id',
+        component: UpdateAdmin,
         layout: ManagementLayout,
     },
 ];

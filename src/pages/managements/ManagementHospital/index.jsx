@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import location from '~/assets/location/local.json';
+import Loading from '~/pages/Loading';
 
 function ManagementHospital() {
     const navigate = useNavigate();
@@ -68,7 +69,7 @@ function ManagementHospital() {
     };
 
     if (isLoading) {
-        <h1>Is Loading</h1>;
+        <Loading />;
     } else {
         return (
             <div>

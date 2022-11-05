@@ -7,12 +7,13 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
+import Loading from '~/pages/Loading';
 
 function ManagementRating() {
     const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
 
     const [searchValue, setSearchValue] = useState('');
-    const [data, setData] = useState([]);
+    const [data, setData] = useState();
     const [pageData, setPageData] = useState([]);
 
     const handleSearch = () => {
@@ -26,7 +27,7 @@ function ManagementRating() {
         });
     }, [adminInfo._id]);
 
-    return (
+    return data ? (
         <div>
             <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
                 <div className="flex items-center md:justify-end w-full flex-1">
@@ -71,6 +72,8 @@ function ManagementRating() {
                 </div>
             )}
         </div>
+    ) : (
+        <Loading />
     );
 }
 

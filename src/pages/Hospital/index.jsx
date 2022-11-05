@@ -7,6 +7,7 @@ import Section from '~/components/Section';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Loading from '../Loading';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +25,7 @@ function Hospital() {
     }, []);
 
     if (isLoading) {
-        return <h1>Is Loading</h1>;
+        return <Loading />;
     } else {
         return (
             <div className="block">
@@ -43,59 +44,7 @@ function Hospital() {
                     </div>
                 </div>
                 <div className="mt-7">
-                    {/* <div className={cx('section')}>
-                        <h4 className={cx('section-title')}>GIỚI THIỆU</h4>
-                        <p className={cx('section-content')}>
-                            Bệnh viện Việt Đức là một trong 5 bệnh viện tuyến Trung ương, hạng đặc biệt của Việt Nam. Bệnh
-                            viện có lịch sử trên 100 năm, bề dày truyền thống danh tiếng, là cái nôi của ngành ngoại khoa
-                            Việt Nam gắn liền với những thành tựu Y học quan trọng của đất nước. Việt Đức là địa chỉ uy tín
-                            hàng đầu về ngoại khoa, tiến hành khám bệnh, chữa bệnh và thực hiện các kỹ thuật chụp chiếu, xét
-                            nghiệm, thăm dò chức năng cơ bản và chuyên sâu hàng ngày cho người dân. Bệnh viện có đội ngũ y
-                            bác sĩ hùng hậu, nhiều người kiêm là cán bộ giảng dạy tại Đại học Y khoa Hà Nội hoặc Khoa Y Dược
-                            - Đại học Quốc gia Hà Nội. Trong số họ nhiều người là chuyên gia đầu ngành và bác sĩ giàu kinh
-                            nghiệm ở các chuyên khoa khác nhau.{' '}
-                        </p>
-                    </div>
-                    <div className={cx('section')}>
-                        <h4 className={cx('section-title')}>GIỚI THIỆU</h4>
-                        <p className={cx('section-content')}>
-                            Bệnh viện Việt Đức là một trong 5 bệnh viện tuyến Trung ương, hạng đặc biệt của Việt Nam. Bệnh
-                            viện có lịch sử trên 100 năm, bề dày truyền thống danh tiếng, là cái nôi của ngành ngoại khoa
-                            Việt Nam gắn liền với những thành tựu Y học quan trọng của đất nước. Việt Đức là địa chỉ uy tín
-                            hàng đầu về ngoại khoa, tiến hành khám bệnh, chữa bệnh và thực hiện các kỹ thuật chụp chiếu, xét
-                            nghiệm, thăm dò chức năng cơ bản và chuyên sâu hàng ngày cho người dân. Bệnh viện có đội ngũ y
-                            bác sĩ hùng hậu, nhiều người kiêm là cán bộ giảng dạy tại Đại học Y khoa Hà Nội hoặc Khoa Y Dược
-                            - Đại học Quốc gia Hà Nội. Trong số họ nhiều người là chuyên gia đầu ngành và bác sĩ giàu kinh
-                            nghiệm ở các chuyên khoa khác nhau.{' '}
-                        </p>
-                    </div>
-                    <div className={cx('section')}>
-                        <h4 className={cx('section-title')}>GIỚI THIỆU</h4>
-                        <p className={cx('section-content')}>
-                            Bệnh viện Việt Đức là một trong 5 bệnh viện tuyến Trung ương, hạng đặc biệt của Việt Nam. Bệnh
-                            viện có lịch sử trên 100 năm, bề dày truyền thống danh tiếng, là cái nôi của ngành ngoại khoa
-                            Việt Nam gắn liền với những thành tựu Y học quan trọng của đất nước. Việt Đức là địa chỉ uy tín
-                            hàng đầu về ngoại khoa, tiến hành khám bệnh, chữa bệnh và thực hiện các kỹ thuật chụp chiếu, xét
-                            nghiệm, thăm dò chức năng cơ bản và chuyên sâu hàng ngày cho người dân. Bệnh viện có đội ngũ y
-                            bác sĩ hùng hậu, nhiều người kiêm là cán bộ giảng dạy tại Đại học Y khoa Hà Nội hoặc Khoa Y Dược
-                            - Đại học Quốc gia Hà Nội. Trong số họ nhiều người là chuyên gia đầu ngành và bác sĩ giàu kinh
-                            nghiệm ở các chuyên khoa khác nhau.{' '}
-                        </p>
-                    </div>
-                    <div className={cx('section')}>
-                        <h4 className={cx('section-title')}>GIỚI THIỆU</h4>
-                        <p className={cx('section-content')}>
-                            Bệnh viện Việt Đức là một trong 5 bệnh viện tuyến Trung ương, hạng đặc biệt của Việt Nam. Bệnh
-                            viện có lịch sử trên 100 năm, bề dày truyền thống danh tiếng, là cái nôi của ngành ngoại khoa
-                            Việt Nam gắn liền với những thành tựu Y học quan trọng của đất nước. Việt Đức là địa chỉ uy tín
-                            hàng đầu về ngoại khoa, tiến hành khám bệnh, chữa bệnh và thực hiện các kỹ thuật chụp chiếu, xét
-                            nghiệm, thăm dò chức năng cơ bản và chuyên sâu hàng ngày cho người dân. Bệnh viện có đội ngũ y
-                            bác sĩ hùng hậu, nhiều người kiêm là cán bộ giảng dạy tại Đại học Y khoa Hà Nội hoặc Khoa Y Dược
-                            - Đại học Quốc gia Hà Nội. Trong số họ nhiều người là chuyên gia đầu ngành và bác sĩ giàu kinh
-                            nghiệm ở các chuyên khoa khác nhau.{' '}
-                        </p>
-                    </div> */}
-                    <Section bgColor="gray">
+                    <Section>
                         <h4 className={cx('section-title')}>GIỚI THIỆU</h4>
                         <div className="" dangerouslySetInnerHTML={{ __html: data.description }}></div>
                     </Section>
@@ -103,7 +52,7 @@ function Hospital() {
                         <h4 className={cx('section-title')}>Lợi thế chuyên môn</h4>
                         <div className="" dangerouslySetInnerHTML={{ __html: data.strengths }}></div>
                     </Section>
-                    <Section bgColor="gray">
+                    <Section>
                         <h4 className={cx('section-title')}>Trang thiết bị</h4>
                         <div className="" dangerouslySetInnerHTML={{ __html: data.equipments }}></div>
                     </Section>
@@ -111,11 +60,6 @@ function Hospital() {
                         <h4 className={cx('section-title')}>quy trình khám bệnh</h4>
                         <div className="" dangerouslySetInnerHTML={{ __html: data.procedure }}></div>
                     </Section>
-                </div>
-                <div className="container mx-auto py-3 border-t border-gray-500">
-                    <Button type="primary" size="full" className="p-3">
-                        Chọn chuyên khoa
-                    </Button>
                 </div>
             </div>
         );

@@ -1,48 +1,157 @@
-import classNames from 'classnames/bind';
-import styles from './ManagementAdmin.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle, faWarning } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
-
-const cx = classNames.bind(styles);
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { notification, Pagination } from 'antd';
+import Loading from '~/pages/Loading';
 
 function ManagementAdmin() {
-    return (
-        <div className={cx('container')}>
-            <div className={cx('control')}>
-                <div className={cx('filter')}></div>
-                <div className={cx('search')}>
-                    <label className={cx('label')} htmlFor="searchInput">
-                        Tìm kiếm
-                    </label>
-                    <div className={cx('search-area')}>
-                        <input
-                            id="searchInput"
-                            className={cx('search-input')}
-                            placeholder="Nhập tên quản trị viên..."
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState([]);
+    const [pageData, setPageData] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
+    useEffect(() => {
+        axios.get('http://localhost:3030/api/admins').then((res) => {
+            setData(res.data.data);
+            setPageData(res.data.data.slice(0, 10));
+            setIsLoading(false);
+        });
+    }, []);
+
+    const handleSearch = () => {
+        if (searchValue.trim() !== '') {
+            axios.post(`http://localhost:3030/api/admin/search?keyword=${searchValue}`).then((res) => {
+                if (res.data.errCode === 0) {
+                    if (res.data.data.length > 0) {
+                        setData(res.data.data);
+                        setPageData(res.data.data.slice(0, 10));
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                            message: 'Thành công',
+                            description: res.data.message,
+                        });
+                    } else {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
+                            message: 'Thông báo',
+                            description: 'Không có kết quả trùng khớp với tìm kiếm',
+                        });
+                    }
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.data.message,
+                    });
+                }
+            });
+        } else {
+            axios.get('http://localhost:3030/api/admins').then((res) => {
+                setData(res.data.data);
+                setPageData(res.data.data.slice(0, 10));
+            });
+        }
+    };
+
+    const handleUpdate = (id) => {
+        navigate(`/admin/update/${id}`);
+    };
+
+    const handleRemove = (id) => {
+        axios.post(`http://localhost:3030/api/admin/delete/${id}`).then((res) => {
+            if (res.data.errCode === 0) {
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                    message: 'Thành công',
+                    description: res.data.message,
+                });
+                const newData = data.filter((admin) => {
+                    return admin._id !== id;
+                });
+                setData(newData);
+                setPageData(newData.slice(0, 10));
+            } else {
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: 'Lỗi',
+                    description: res.data.message,
+                });
+            }
+        });
+    };
+    if (isLoading) {
+        return <Loading />;
+    } else {
+        return (
+            <div>
+                <div className="py-3 flex flex-col items-start md:flex-row md:items-center justify-between border-b border-gray-900">
+                    <div className="flex items-center md:justify-end w-full flex-1">
+                        <label className="font-medium mr-3  hidden md:block" htmlFor="searchInput">
+                            Tìm kiếm
+                        </label>
+                        <div className="py-1 px-2 bg-gray-50 rounded w-full md:w-[220px] flex items-center flex-nowrap">
+                            <input
+                                value={searchValue}
+                                onChange={(e) => {
+                                    setSearchValue(e.target.value);
+                                }}
+                                id="searchInput"
+                                className="bg-transparent flex-1"
+                                placeholder="Nhập tên quản trị viên..."
+                            />
+                            <Button onClick={handleSearch} className="bg-transparent">
+                                <FontAwesomeIcon icon={faSearch} />
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-5">
+                    {pageData.map((post) => (
+                        <ObjectItem
+                            update={() => {
+                                handleUpdate(post._id);
+                            }}
+                            remove={() => {
+                                handleRemove(post._id);
+                            }}
+                            key={post._id}
+                            data={post}
+                            email
                         />
-                        <Button className={cx('search-btn')}>
-                            <FontAwesomeIcon icon={faSearch} />
+                    ))}
+                    <div className="py-3 flex">
+                        <Button
+                            type="link"
+                            to="/admin/add"
+                            className="bg-transparent mx-auto text-[40px] text-orange-900 hover:text-cyan-700"
+                        >
+                            <FontAwesomeIcon icon={faPlusCircle} />
                         </Button>
                     </div>
                 </div>
-            </div>
-            <div className={cx('content')}>
-                <div>
-                    <ObjectItem />
-                    <ObjectItem />
-                    <ObjectItem />
-                    <ObjectItem />
+                <div className="my-4 flex justify-center">
+                    {data.length > 10 && (
+                        <Pagination
+                            onChange={(page) => {
+                                let newPageData = [];
+                                for (let index = page * 10 - 10; index < page * 10; index++) {
+                                    data[index] && newPageData.push(data[index]);
+                                }
+                                setPageData(newPageData);
+                            }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={data.length}
+                        />
+                    )}
                 </div>
-                <div className={cx('add')}>
-                    <Button type="link" to="/admin/doctor/add" className={cx('add-btn')}>
-                        <FontAwesomeIcon icon={faPlusCircle} />
-                    </Button>
-                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default ManagementAdmin;
