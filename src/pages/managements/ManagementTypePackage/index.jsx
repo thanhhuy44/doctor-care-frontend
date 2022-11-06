@@ -14,6 +14,7 @@ function ManagementTypePackage() {
     const [data, setData] = useState([]);
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
+    const [pageSize, setPageSize] = useState(1);
     useEffect(() => {
         axios.get('http://localhost:3030/api/type-packages').then((res) => {
             setData(res.data.data);
@@ -33,6 +34,7 @@ function ManagementTypePackage() {
                     });
                     setData(res.data.data);
                     setPageData(res.data.data.slice(0, 10));
+                    setPageSize(1);
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
@@ -135,7 +137,9 @@ function ManagementTypePackage() {
                                     data[index] && newPageData.push(data[index]);
                                 }
                                 setPageData(newPageData);
+                                setPageSize(page);
                             }}
+                            current={pageSize}
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}

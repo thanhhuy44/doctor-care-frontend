@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import moment from 'moment';
-import { DatePicker } from 'antd';
-import { faCalendar, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Button, DatePicker, notification, Pagination } from 'antd';
+import { faCalendar, faCheckCircle, faLocationDot, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReviewModal from '~/components/Modal/ReviewModal';
 
 const shifts = [
     { sequence: 1, timeStart: 8, timeEnd: 9 },
@@ -36,6 +37,15 @@ const shifts = [
     },
 ];
 
+const Item = ({ name, content }) => {
+    return (
+        <div className="py-2 border-b-[0.5px] border-gray-300">
+            <h4 className="text-base mb-1 font-semibold">{name}</h4>
+            <p className="text-sm font-normal text-gray-600">{content}</p>
+        </div>
+    );
+};
+
 function Package() {
     const params = useParams();
     const id = params?.id;
@@ -46,6 +56,10 @@ function Package() {
     );
     const [bookingOnDate, setBookingOnDate] = useState([]);
     const [alreadyBooking, setAlreadyBooking] = useState(shifts);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [reviews, setReviews] = useState([]);
+    const [pageReviews, setPageReviews] = useState([]);
+    const [page, setPage] = useState(1);
     useEffect(() => {
         axios.get(`http://localhost:3030/api/package/${id}`).then((res) => {
             setData(res.data.data);
@@ -58,6 +72,7 @@ function Package() {
                     );
                 }),
             );
+            setReviews(res.data.data.reviews);
             setIsLoading(false);
         });
     }, []);
@@ -77,6 +92,62 @@ function Package() {
             });
         }
     }, [dateValue, bookingOnDate, alreadyBooking]);
+
+    useEffect(() => {
+        let newPageData = [];
+        for (let index = page * 10 - 10; index < page * 10; index++) {
+            reviews[index] && newPageData.push(reviews[index]);
+        }
+        setPageReviews(newPageData);
+    }, [page, reviews]);
+
+    const handleSubmitModal = (values) => {
+        for (let i = 0; i < data.booking.length; i++) {
+            if (values.email === data.booking[i].email || values.phoneNumber === data.booking[i].numberPhone) {
+                axios
+                    .post(
+                        'http://localhost:3030/api/review/create',
+                        {
+                            package: data._id,
+                            ...values,
+                        },
+                        {
+                            headers: { 'Content-Type': 'multipart/form-data' },
+                        },
+                    )
+                    .then((res) => {
+                        if (res.data.errCode === 0) {
+                            notification.open({
+                                icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                                message: 'Thành công',
+                                description: res.data.message,
+                            });
+                            setReviews([...reviews, res.data.data]);
+                            setModalOpen(false);
+                        } else {
+                            notification.open({
+                                icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                                message: 'Lỗi',
+                                description: res.data.message,
+                            });
+                        }
+                    });
+                break;
+            }
+            if (
+                i === data.booking.length - 1 &&
+                values.email !== data.booking[i].email &&
+                values.phoneNumber !== data.booking[i].numberPhone
+            ) {
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: 'Lỗi',
+                    description: 'Không thể đánh giá!',
+                });
+            }
+        }
+    };
+
     if (isLoading) {
         return <Loading />;
     } else {
@@ -181,6 +252,48 @@ function Package() {
                         dangerouslySetInnerHTML={{ __html: data.description }}
                     ></div>
                 </div>
+                <div className="mx-3 lg:mx-0 border-t border-gray-300 py-4">
+                    <p className="text-xl font-semibold uppercase block pb-[10px]">
+                        Phản hồi của bệnh nhân sau khi đi khám
+                    </p>
+                    <div className="">
+                        {pageReviews.map((review) => (
+                            <Item key={review._id} name={review.name} content={review.content} />
+                        ))}
+                        {reviews.length > 10 && (
+                            <div className="flex justify-center my-4">
+                                <Pagination
+                                    onChange={(page) => {
+                                        setPage(page);
+                                        let newPageData = [];
+                                        for (let index = page * 10 - 10; index < page * 10; index++) {
+                                            reviews[index] && newPageData.push(reviews[index]);
+                                        }
+                                        setPageReviews(newPageData);
+                                    }}
+                                    pageSize={10}
+                                    defaultCurrent={1}
+                                    total={reviews.length}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <Button
+                        onClick={() => {
+                            setModalOpen(true);
+                        }}
+                        className="mt-4 w-full"
+                        type="primary"
+                    >
+                        Viết đánh giá
+                    </Button>
+                </div>
+                <ReviewModal
+                    id={data._id}
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    handleSubmit={handleSubmitModal}
+                />
             </div>
         );
     }

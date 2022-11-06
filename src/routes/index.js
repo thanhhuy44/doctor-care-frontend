@@ -39,6 +39,7 @@ import Search from '~/pages/Search';
 import ChangePassword from '~/pages/managements/ChangePassword';
 import AddAdmin from '~/pages/managements/admin/AddAdmin';
 import UpdateAdmin from '~/pages/managements/admin/UpdateAdmin';
+import Post from '~/pages/Post';
 
 const publicRoutes = [
     {
@@ -102,6 +103,11 @@ const publicRoutes = [
     {
         path: '/specialty/:name/:id',
         component: Specialty,
+        layout: MainLayout,
+    },
+    {
+        path: '/post/:name/:id',
+        component: Post,
         layout: MainLayout,
     },
 ];

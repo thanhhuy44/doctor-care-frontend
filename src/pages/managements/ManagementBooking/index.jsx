@@ -17,6 +17,7 @@ function ManagementBooking() {
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [date, setDate] = useState(moment());
+    const [pageSize, setPageSize] = useState(1);
 
     function compare(a, b) {
         if (a.time < b.time) {
@@ -171,11 +172,13 @@ function ManagementBooking() {
                                 for (let index = page * 10 - 10; index < page * 10; index++) {
                                     data[index] && newPageData.push(data[index]);
                                 }
+                                setPageSize(page);
                                 setPageData(newPageData);
                             }}
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}
+                            current={pageSize}
                         />
                     </div>
                 )}

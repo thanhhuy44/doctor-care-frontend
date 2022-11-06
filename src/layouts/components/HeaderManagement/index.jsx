@@ -32,6 +32,7 @@ function HeaderManagement({ displaySidebar }) {
                     {isLogin ? (
                         <div className="flex items-center cursor-pointer">
                             <Popover
+                                placement="bottom"
                                 content={
                                     <div className="cursor-pointer hover:text-cyan-700" onClick={handleLogout}>
                                         <p>

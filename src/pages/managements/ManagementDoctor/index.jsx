@@ -18,6 +18,7 @@ function ManagementDoctor() {
     const [data, setData] = useState([]);
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
+    const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
@@ -86,6 +87,7 @@ function ManagementDoctor() {
         axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
             setData(res.data.data);
             setPageData(res.data.data.slice(0, 10));
+            setPageSize(1);
         });
         setCurHospital('');
         setCurSpecialty('');
@@ -186,12 +188,14 @@ function ManagementDoctor() {
                     {data.length > 10 && (
                         <Pagination
                             onChange={(page) => {
+                                setPageSize(page);
                                 let newPageData = [];
                                 for (let index = page * 10 - 10; index < page * 10; index++) {
                                     data[index] && newPageData.push(data[index]);
                                 }
                                 setPageData(newPageData);
                             }}
+                            current={pageSize}
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}

@@ -81,18 +81,18 @@ function Sidebar() {
         return (
             <div className={cx('sidebar')}>
                 <NavLink
-                    to="/doctor/management/change-password"
-                    className={(nav) => cx('item', { active: nav.isActive })}
-                >
-                    <FontAwesomeIcon icon={faKey} className={cx('icon')} />
-                    <span className={cx('text')}>Đổi mật khẩu</span>
-                </NavLink>
-                <NavLink
                     to={`/doctor/management/update-info/${adminInfo._id}`}
                     className={(nav) => cx('item', { active: nav.isActive })}
                 >
                     <FontAwesomeIcon icon={faUserDoctor} className={cx('icon')} />
                     <span className={cx('text')}>Chỉnh sửa thông tin</span>
+                </NavLink>
+                <NavLink
+                    to="/doctor/management/change-password"
+                    className={(nav) => cx('item', { active: nav.isActive })}
+                >
+                    <FontAwesomeIcon icon={faKey} className={cx('icon')} />
+                    <span className={cx('text')}>Đổi mật khẩu</span>
                 </NavLink>
                 <NavLink to="/doctor/management/orders" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faFile} className={cx('icon')} />
@@ -112,7 +112,7 @@ function Sidebar() {
                         dispatch(setLogIn(false));
                         localStorage.clear();
                     }}
-                    className={(nav) => cx('item logout', { active: nav.isActive }) + ' border-t mt-20 text-red-500'}
+                    className={(nav) => cx('item', { active: nav.isActive }) + ' border-t mt-20 text-red-500'}
                 >
                     <FontAwesomeIcon icon={faRightFromBracket} className={cx('icon')} />
                     <span className={cx('text')}>Đăng xuất</span>

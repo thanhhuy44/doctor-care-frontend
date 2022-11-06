@@ -61,8 +61,12 @@ function UpdatePackage() {
             });
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+    const onFinishFailed = () => {
+        notification.open({
+            icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+            message: 'Lỗi',
+            description: 'Vui lòng điền đầy đủ thông tin!',
+        });
     };
 
     useEffect(() => {

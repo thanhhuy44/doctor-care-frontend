@@ -18,6 +18,7 @@ function ManagementPackage() {
     const [hospitalFilter, setHospitalFilter] = useState('');
     const [typePackageFilter, setTypePackageFilter] = useState('');
     const [searchValue, setSearchValue] = useState('');
+    const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
@@ -89,6 +90,7 @@ function ManagementPackage() {
                 if (res.data.data.length > 0) {
                     setData(res.data.data);
                     setPageData(res.data.data.slice(0, 10));
+                    setPageSize(1);
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
@@ -211,12 +213,14 @@ function ManagementPackage() {
                     {data.length > 10 && (
                         <Pagination
                             onChange={(page) => {
+                                setPageSize(page);
                                 let newPageData = [];
                                 for (let index = page * 10 - 10; index < page * 10; index++) {
                                     data[index] && newPageData.push(data[index]);
                                 }
                                 setPageData(newPageData);
                             }}
+                            current={pageSize}
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}

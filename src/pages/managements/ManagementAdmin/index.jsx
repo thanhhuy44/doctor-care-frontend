@@ -14,6 +14,7 @@ function ManagementAdmin() {
     const [data, setData] = useState([]);
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
+    const [pageSize, setPageSize] = useState(1);
     useEffect(() => {
         axios.get('http://localhost:3030/api/admins').then((res) => {
             setData(res.data.data);
@@ -74,6 +75,7 @@ function ManagementAdmin() {
                 });
                 setData(newData);
                 setPageData(newData.slice(0, 10));
+                setPageSize(1);
             } else {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
@@ -137,6 +139,7 @@ function ManagementAdmin() {
                     {data.length > 10 && (
                         <Pagination
                             onChange={(page) => {
+                                setPageSize(page);
                                 let newPageData = [];
                                 for (let index = page * 10 - 10; index < page * 10; index++) {
                                     data[index] && newPageData.push(data[index]);
@@ -146,6 +149,7 @@ function ManagementAdmin() {
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}
+                            current={pageSize}
                         />
                     )}
                 </div>

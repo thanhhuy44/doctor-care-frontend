@@ -16,6 +16,7 @@ function ManagementHospital() {
     const [searchValue, setSearchValue] = useState('');
     const [isLoading, setIsloading] = useState(true);
     const [province, setProvince] = useState('');
+    const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
         axios.get('http://localhost:3030/api/hospitals').then((res) => {
@@ -39,6 +40,7 @@ function ManagementHospital() {
         axios.post(`http://localhost:3030/api/hospital/search?keyword=${keyword}`).then((res) => {
             setData(res.data.data);
             setPageData(res.data.data.slice(0, 10));
+            setPageSize(1);
         });
     };
 
@@ -154,7 +156,9 @@ function ManagementHospital() {
                                     data[index] && newPageData.push(data[index]);
                                 }
                                 setPageData(newPageData);
+                                setPageSize(page);
                             }}
+                            current={pageSize}
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}

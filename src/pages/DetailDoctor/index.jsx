@@ -55,9 +55,10 @@ function DetailDoctor() {
     );
     const [bookingOnDate, setBookingOnDate] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [pageReviews, setPageReviews] = useState([]);
     const [alreadyBooking, setAlreadyBooking] = useState(shifts);
     const [modalOpen, setModalOpen] = useState(false);
-    const [commentExist, setCommentExist] = useState(false);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${id}`).then((res) => {
@@ -92,6 +93,14 @@ function DetailDoctor() {
         }
     }, [dateValue, bookingOnDate, alreadyBooking]);
 
+    useEffect(() => {
+        let newPageData = [];
+        for (let index = page * 10 - 10; index < page * 10; index++) {
+            reviews[index] && newPageData.push(reviews[index]);
+        }
+        setPageReviews(newPageData);
+    }, [page, reviews]);
+
     const handleSubmitModal = (values) => {
         for (let i = 0; i < data.booking.length; i++) {
             if (values.email === data.booking[i].email || values.phoneNumber === data.booking[i].numberPhone) {
@@ -125,12 +134,18 @@ function DetailDoctor() {
                     });
                 break;
             }
+            if (
+                i === data.booking.length - 1 &&
+                values.email !== data.booking[i].email &&
+                values.phoneNumber !== data.booking[i].numberPhone
+            ) {
+                notification.open({
+                    icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                    message: 'Lỗi',
+                    description: 'Không thể đánh giá!',
+                });
+            }
         }
-        // notification.open({
-        //     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-        //     message: 'Lỗi',
-        //     description: 'Không thể đánh giá!',
-        // });
     };
 
     if (isLoading) {
@@ -230,22 +245,25 @@ function DetailDoctor() {
                 <div className="mx-3 lg:mx-0 border-t border-gray-300 py-4">
                     <p className="mb-4 text-2xl font-semibold">Phản hồi của bệnh nhân sau khi đi khám</p>
                     <div className="">
-                        {reviews.map((review) => (
+                        {pageReviews.map((review) => (
                             <Item key={review._id} name={review.name} content={review.content} />
                         ))}
                         {reviews.length > 10 && (
-                            <Pagination
-                                onChange={(page) => {
-                                    let newPageData = [];
-                                    for (let index = page * 10 - 10; index < page * 10; index++) {
-                                        reviews[index] && newPageData.push(reviews[index]);
-                                    }
-                                    setReviews(newPageData);
-                                }}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={data.length}
-                            />
+                            <div className="flex justify-center my-4">
+                                <Pagination
+                                    onChange={(page) => {
+                                        setPage(page);
+                                        let newPageData = [];
+                                        for (let index = page * 10 - 10; index < page * 10; index++) {
+                                            reviews[index] && newPageData.push(reviews[index]);
+                                        }
+                                        setPageReviews(newPageData);
+                                    }}
+                                    pageSize={10}
+                                    defaultCurrent={1}
+                                    total={reviews.length}
+                                />
+                            </div>
                         )}
                     </div>
                     <Button

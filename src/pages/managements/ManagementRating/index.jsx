@@ -1,6 +1,6 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faSearch, faWarning, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Pagination } from 'antd';
+import { notification, Pagination } from 'antd';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -11,18 +11,48 @@ import Loading from '~/pages/Loading';
 
 function ManagementRating() {
     const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
-
     const [searchValue, setSearchValue] = useState('');
     const [data, setData] = useState();
     const [pageData, setPageData] = useState([]);
+    const [page, setPage] = useState(1);
 
     const handleSearch = () => {
-        console.log(searchValue);
+        if (searchValue.trim() !== '') {
+            axios
+                .post(`http://localhost:3030/api/review/search?keyword=${searchValue}&&doctor=${adminInfo._id}`)
+                .then((res) => {
+                    if (res.data.errCode === 0) {
+                        if (res.data.data.length > 0) {
+                            setData(res.data.data);
+                            setPageData(res.data.data.slice(0, 10));
+                            setPage(1);
+                            notification.open({
+                                icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                                message: 'Thành công',
+                                description: res.data.message,
+                            });
+                        } else {
+                            notification.open({
+                                icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
+                                message: 'Thông báo',
+                                description: 'Không có kết quả trùng khớp với tìm kiếm',
+                            });
+                        }
+                    } else {
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                            message: 'Lỗi',
+                            description: res.data.message,
+                        });
+                    }
+                });
+        }
     };
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${adminInfo._id}`).then((res) => {
-            setData(res.data.data);
+            setData(res.data.data.reviews);
+            console.log(res.data.data?.reviews.length);
             setPageData(res.data.data?.reviews.slice(0, 10));
         });
     }, [adminInfo._id]);
@@ -59,12 +89,14 @@ function ManagementRating() {
                 <div className="my-4 flex justify-center">
                     <Pagination
                         onChange={(page) => {
+                            setPage(page);
                             let newPageData = [];
                             for (let index = page * 10 - 10; index < page * 10; index++) {
                                 data[index] && newPageData.push(data[index]);
                             }
                             setPageData(newPageData);
                         }}
+                        current={page}
                         pageSize={10}
                         defaultCurrent={1}
                         total={data.length}

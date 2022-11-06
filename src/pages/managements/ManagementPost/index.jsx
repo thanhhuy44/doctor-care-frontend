@@ -14,6 +14,7 @@ function ManagementPost() {
     const [data, setData] = useState([]);
     const [pageData, setPageData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
+    const [pageSize, setPageSize] = useState(1);
     useEffect(() => {
         axios.get('http://localhost:3030/api/posts').then((res) => {
             setData(res.data.data);
@@ -29,6 +30,7 @@ function ManagementPost() {
                     if (res.data.data.length > 0) {
                         setData(res.data.data);
                         setPageData(res.data.data.slice(0, 10));
+                        setPageSize(1);
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
@@ -137,7 +139,9 @@ function ManagementPost() {
                                     data[index] && newPageData.push(data[index]);
                                 }
                                 setPageData(newPageData);
+                                setPageSize(page);
                             }}
+                            current={pageSize}
                             pageSize={10}
                             defaultCurrent={1}
                             total={data.length}
