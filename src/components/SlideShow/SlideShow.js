@@ -42,7 +42,7 @@ function SlideShow({ children, numberOfSlide, dots, autoplaySpeed, className, da
                                 className="block w-full rounded overflow-hidden"
                             >
                                 <img
-                                    className="w-full block object-cover"
+                                    className="w-full aspect-video block object-cover"
                                     alt={slide.alias}
                                     src={slide.image || slide.banner}
                                 />

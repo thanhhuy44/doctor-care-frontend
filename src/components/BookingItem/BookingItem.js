@@ -87,9 +87,11 @@ function BookingItem({ data }) {
                         className="mt-1 text-justify sm:text-left"
                         dangerouslySetInnerHTML={{ __html: data.shortDescription }}
                     ></div>
-                    <p className="mt-2 font-normal text-left">
-                        <FontAwesomeIcon icon={faLocationDot} /> {data.hospital.location.province}
-                    </p>
+                    {data.hospital.location && (
+                        <p className="mt-2 font-normal text-left">
+                            <FontAwesomeIcon icon={faLocationDot} /> {data?.hospital?.location?.province}
+                        </p>
+                    )}
                 </div>
             </div>
             <div className="booking flex-1 px-4 my-4 md:border-l-[0.5px] border-gray-700 text-gray-900 text-base">

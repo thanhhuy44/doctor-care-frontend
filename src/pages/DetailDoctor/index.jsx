@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import moment from 'moment';
-import { Button, DatePicker, notification } from 'antd';
+import { Button, DatePicker, notification, Pagination } from 'antd';
 import { faCalendar, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReviewModal from '~/components/Modal/ReviewModal';
@@ -36,14 +36,11 @@ const shifts = [
         timeEnd: 16,
     },
 ];
-const Item = () => {
+const Item = ({ name, content }) => {
     return (
         <div className="py-2 border-b-[0.5px] border-gray-300">
-            <h4 className="text-base mb-1 font-semibold">Trần Duy Thanh</h4>
-            <p className="text-sm font-normal text-gray-600">
-                {' '}
-                Mọi thứ đều rất tốt. Bác sĩ hỏi kỹ càng, chu đáo và nhẹ nhàng
-            </p>
+            <h4 className="text-base mb-1 font-semibold">{name}</h4>
+            <p className="text-sm font-normal text-gray-600">{content}</p>
         </div>
     );
 };
@@ -57,8 +54,10 @@ function DetailDoctor() {
         `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() + 1}`,
     );
     const [bookingOnDate, setBookingOnDate] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const [alreadyBooking, setAlreadyBooking] = useState(shifts);
     const [modalOpen, setModalOpen] = useState(false);
+    const [commentExist, setCommentExist] = useState(false);
 
     useEffect(() => {
         axios.get(`http://localhost:3030/api/doctor/${id}`).then((res) => {
@@ -72,13 +71,7 @@ function DetailDoctor() {
                     );
                 }),
             );
-            // res.data.data.booking.filter((booking) => {
-            //     return (
-            //         moment(booking.date).date() === moment(dateValue).date() &&
-            //         moment(booking.date).month() === moment(dateValue).month() &&
-            //         moment(booking.date).year() === moment(dateValue).year()
-            //     );
-            // })
+            setReviews(res.data.data.reviews);
             setIsLoading(false);
         });
     }, [dateValue, id]);
@@ -100,8 +93,8 @@ function DetailDoctor() {
     }, [dateValue, bookingOnDate, alreadyBooking]);
 
     const handleSubmitModal = (values) => {
-        data.booking.forEach((booking) => {
-            if (values.email === booking.email || values.phoneNumber === booking.numberPhone) {
+        for (let i = 0; i < data.booking.length; i++) {
+            if (values.email === data.booking[i].email || values.phoneNumber === data.booking[i].numberPhone) {
                 axios
                     .post(
                         'http://localhost:3030/api/review/create',
@@ -120,6 +113,7 @@ function DetailDoctor() {
                                 message: 'Thành công',
                                 description: res.data.message,
                             });
+                            setReviews([...reviews, res.data.data]);
                             setModalOpen(false);
                         } else {
                             notification.open({
@@ -129,8 +123,14 @@ function DetailDoctor() {
                             });
                         }
                     });
+                break;
             }
-        });
+        }
+        // notification.open({
+        //     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+        //     message: 'Lỗi',
+        //     description: 'Không thể đánh giá!',
+        // });
     };
 
     if (isLoading) {
@@ -230,10 +230,23 @@ function DetailDoctor() {
                 <div className="mx-3 lg:mx-0 border-t border-gray-300 py-4">
                     <p className="mb-4 text-2xl font-semibold">Phản hồi của bệnh nhân sau khi đi khám</p>
                     <div className="">
-                        <Item />
-                        <Item />
-                        <Item />
-                        <Item />
+                        {reviews.map((review) => (
+                            <Item key={review._id} name={review.name} content={review.content} />
+                        ))}
+                        {reviews.length > 10 && (
+                            <Pagination
+                                onChange={(page) => {
+                                    let newPageData = [];
+                                    for (let index = page * 10 - 10; index < page * 10; index++) {
+                                        reviews[index] && newPageData.push(reviews[index]);
+                                    }
+                                    setReviews(newPageData);
+                                }}
+                                pageSize={10}
+                                defaultCurrent={1}
+                                total={data.length}
+                            />
+                        )}
                     </div>
                     <Button
                         onClick={() => {

@@ -1,9 +1,15 @@
 import { Button, Form, Input, Modal } from 'antd';
+import { useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 
 function ReviewModal({ modalOpen, setModalOpen, handleSubmit }) {
     const [form] = Form.useForm();
+    useEffect(() => {
+        if (modalOpen === true) {
+            form.resetFields();
+        }
+    }, [modalOpen]);
     return (
         <Modal
             title="Viết đánh giá cho bác sĩ"

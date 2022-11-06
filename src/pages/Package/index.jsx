@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import moment from 'moment';
 import { DatePicker } from 'antd';
-import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const shifts = [
@@ -88,10 +88,10 @@ function Package() {
                     </div>
                     <div className="m-5">
                         <h3 className="mb-3 text-3xl font-semibold">{data.name}</h3>
-                        <p
-                            className="text-base font-medium leading-6"
-                            dangerouslySetInnerHTML={{ __html: data.hospital.name }}
-                        ></p>
+                        <p className="text-base font-medium leading-6">
+                            <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
+                            {data.hospital.name}
+                        </p>
                     </div>
                 </div>
                 <div className="my-10 flex items-start flex-col lg:flex-row">
@@ -167,10 +167,20 @@ function Package() {
                         </div>
                     </div>
                 </div>
-                <div
-                    className="mx-3 text-lg lg:mx-0 border-t border-gray-300 py-4 rich-text"
-                    dangerouslySetInnerHTML={{ __html: data.description }}
-                ></div>
+                <div className="mt-8">
+                    <h5 className="text-xl font-semibold uppercase block pb-[10px]">Giới thiệu gói khám</h5>
+                    <div
+                        className="mx-3 text-lg lg:mx-0 border-t border-gray-300 py-4 rich-text"
+                        dangerouslySetInnerHTML={{ __html: data.description }}
+                    ></div>
+                </div>
+                <div className="mt-8">
+                    <h5 className="text-xl font-semibold uppercase block pb-[10px]">Danh mục gói khám</h5>
+                    <div
+                        className="mx-3 text-lg lg:mx-0 border-t border-gray-300 py-4 rich-text"
+                        dangerouslySetInnerHTML={{ __html: data.description }}
+                    ></div>
+                </div>
             </div>
         );
     }
