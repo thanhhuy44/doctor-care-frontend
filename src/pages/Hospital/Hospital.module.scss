@@ -1,16 +1,25 @@
 .section {
-    @apply mb-5;
+    margin-bottom: 20px;
 }
 .section-title {
-    @apply text-xl font-semibold uppercase block pb-[10px] border-b border-gray-500;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: block;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(107 114 128);
 }
 .section-content {
-    @apply py-3 text-sm font-normal leading-4;
+    padding: 12px 0;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
 }
 
 .footer {
-    @apply py-3 border-t border-gray-500;
-    // box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgb(107 114 128);
 }
 
 .btn {

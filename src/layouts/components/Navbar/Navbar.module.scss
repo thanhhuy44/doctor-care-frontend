@@ -1,15 +1,28 @@
 .item {
-    @apply flex-1 text-stone-900 hover:text-blue-700 px-4 py-4 lg:py-0;
+    flex: 1;
+    color: rgb(28 25 23);
+    padding: 16px;
+    &:hover {
+        color: rgb(29 78 216);
+    }
+    @media (min-width: 1024px) {
+        padding: 0 16px;
+    }
 }
 
 .active {
-    @apply text-blue-700;
+    color: rgb(29 78 216);
 }
 
 .heading {
-    @apply text-lg font-bold;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 700;
 }
 
 .description {
-    @apply mt-2 text-xs font-light;
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 300;
 }

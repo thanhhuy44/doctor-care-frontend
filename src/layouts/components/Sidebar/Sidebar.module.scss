@@ -1,16 +1,23 @@
 .sidebar {
-    @apply min-h-full block;
+    min-height: 100%;
+    display: block;
 }
 .item {
-    @apply py-3 pr-5 pl-3 flex items-center border-l-[4px] border-transparent;
+    padding: 12px 15px 12px 15px;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid transparent;
 }
 .item.active {
-    @apply border-gray-600 bg-blue-400;
+    border-color: rgb(75 85 99);
+    background-color: rgb(96 165 250);
 }
 
 .icon {
-    @apply mr-2 min-w-[32px];
+    margin-right: 8px;
+    min-width: 32px;
 }
 .text {
-    @apply text-base font-medium;
+    font-size: 16px;
+    font-weight: 500;
 }
