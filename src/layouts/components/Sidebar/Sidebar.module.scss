@@ -1,5 +1,5 @@
 .sidebar {
-    @apply min-h-full flex flex-col;
+    @apply min-h-full block;
 }
 .item {
     @apply py-3 pr-5 pl-3 flex items-center border-l-[4px] border-transparent;
