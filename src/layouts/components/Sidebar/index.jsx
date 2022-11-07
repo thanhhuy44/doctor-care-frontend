@@ -10,6 +10,7 @@ import {
     faKitMedical,
     faPenNib,
     faRightFromBracket,
+    faUser,
     faUserDoctor,
     faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +28,13 @@ function Sidebar() {
     if (roleLogin === 'admin') {
         return (
             <div className={cx('sidebar')}>
+                <NavLink
+                    to={`/admin/update/${adminInfo._id}`}
+                    className={(nav) => cx('item', { active: nav.isActive })}
+                >
+                    <FontAwesomeIcon icon={faUser} className={cx('icon')} />
+                    <span className={cx('text')}>Chỉnh sửa thông tin</span>
+                </NavLink>
                 <NavLink to="/admin/change-password" className={(nav) => cx('item', { active: nav.isActive })}>
                     <FontAwesomeIcon icon={faKey} className={cx('icon')} />
                     <span className={cx('text')}>Đổi mật khẩu</span>

@@ -1,12 +1,12 @@
 import { Form, Input, InputNumber, Select, Upload, Button, DatePicker, Typography } from 'antd';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 const { Option } = Select;
 
@@ -32,28 +32,28 @@ function UpdateDoctor() {
     const [imageUrl, setImageUrl] = useState();
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setHospital(res.data.data);
+        request.get('/hospitals').then((res) => {
+            setHospital(res.data);
         });
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
-            setSpecialties(res.data.data);
+        request.get('/specialties').then((res) => {
+            setSpecialties(res.data);
         });
     }, []);
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/doctor/${params.id}`).then((res) => {
-            setData(res.data.data);
-            setImageUrl(res.data.data.image);
+        request.get(`/doctor/${params.id}`).then((res) => {
+            setData(res.data);
+            setImageUrl(res.data.image);
             setIsLoading(false);
         });
     }, []);
     const onFinish = (values) => {
-        axios
+        request
             .post(
-                `http://localhost:3030/api/doctor/update/${params.id}`,
+                `/doctor/update/${params.id}`,
                 {
                     image: values.avatar ? values.avatar.file.originFileObj : data.image,
                     ...values,
@@ -63,7 +63,7 @@ function UpdateDoctor() {
                 },
             )
             .then((res) => {
-                alert(res.data.message);
+                alert(res.message);
                 navigate('/admin/doctors');
             });
     };

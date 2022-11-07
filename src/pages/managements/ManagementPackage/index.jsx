@@ -3,7 +3,7 @@ import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle, faWarning } from 
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import request from '~/utils';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import Loading from '~/pages/Loading';
@@ -21,22 +21,22 @@ function ManagementPackage() {
     const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setHospitals(res.data.data);
+        request.get('/hospitals').then((res) => {
+            setHospitals(res.data);
         });
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/type-packages').then((res) => {
-            setTypePackages(res.data.data);
+        request.get('/type-packages').then((res) => {
+            setTypePackages(res.data);
         });
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/packages').then((res) => {
-            setData(res.data.data);
+        request.get('/packages').then((res) => {
+            setData(res.data);
             setPageData(
-                res.data.data
+                res.data
                     .filter((item) => {
                         if (hospitalFilter === '' && typePackageFilter === '') {
                             return item;
@@ -62,12 +62,12 @@ function ManagementPackage() {
     };
 
     const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/package/delete/${id}`).then((res) => {
-            if (res.data.errCode === 0) {
+        request.post(`/package/delete/${id}`).then((res) => {
+            if (res.errCode === 0) {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                     message: 'Thành công',
-                    description: res.data.message,
+                    description: res.message,
                 });
                 const newData = data.filter((doctor) => {
                     return doctor._id !== id;
@@ -78,23 +78,23 @@ function ManagementPackage() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });
     };
 
     const handleSearch = () => {
-        axios.post(`http://localhost:3030/api/package/search?keyword=${searchValue}`).then((res) => {
-            if (res.data.errCode === 0) {
-                if (res.data.data.length > 0) {
-                    setData(res.data.data);
-                    setPageData(res.data.data.slice(0, 10));
+        request.post(`/package/search?keyword=${searchValue}`).then((res) => {
+            if (res.errCode === 0) {
+                if (res.data.length > 0) {
+                    setData(res.data);
+                    setPageData(res.data.slice(0, 10));
                     setPageSize(1);
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                 } else {
                     notification.open({
@@ -107,14 +107,14 @@ function ManagementPackage() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });
     };
 
     if (isLoading) {
-        <Loading />;
+        return <Loading />;
     } else {
         return (
             <div>

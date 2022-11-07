@@ -1,13 +1,13 @@
 import { Form, Input, Upload, Button, Typography, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -29,16 +29,16 @@ function UpdatePost() {
     const [imageUrl, setImageUrl] = useState();
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/post/${params.id}`).then((res) => {
-            setData(res.data.data);
-            setImageUrl(res.data.data.banner);
+        request.get(`/post/${params.id}`).then((res) => {
+            setData(res.data);
+            setImageUrl(res.data.banner);
         });
     });
 
     const onFinish = (values) => {
-        axios
+        request
             .post(
-                `http://localhost:3030/api/post/update/${params.id}`,
+                `/post/update/${params.id}`,
                 {
                     banner: values.avatar ? values.avatar.file.originFileObj : data.banner,
                     ...values,
@@ -48,18 +48,18 @@ function UpdatePost() {
                 },
             )
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     navigate('/admin/posts');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     window.location.reload();
                 }

@@ -1,10 +1,10 @@
-import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BookingItem from '~/components/BookingItem';
 import Loading from '../Loading';
 import locations from '~/assets/location/local.json';
+import request from '~/utils';
 
 function Specialty() {
     const params = useParams();
@@ -13,8 +13,8 @@ function Specialty() {
     const [data, setData] = useState();
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/specialty/${params.id}`).then((res) => {
-            setData(res.data.data);
+        request.get(`/specialty/${params.id}`).then((res) => {
+            setData(res.data);
             setIsloading(false);
         });
     }, []);

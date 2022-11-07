@@ -1,6 +1,5 @@
 import { Form, Input, Upload, Button, Typography, notification } from 'antd';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
@@ -8,6 +7,7 @@ import { useEffect } from 'react';
 import Loading from '~/pages/Loading';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import request from '~/utils';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -30,9 +30,9 @@ function UpdateSpecialty() {
     const [data, setData] = useState({});
 
     const onFinish = (values) => {
-        axios
+        request
             .post(
-                `http://localhost:3030/api/specialty/update/${params.id}`,
+                `/specialty/update/${params.id}`,
                 {
                     image: values.avatar ? values.avatar.file.originFileObj : data.image,
                     ...values,
@@ -42,18 +42,18 @@ function UpdateSpecialty() {
                 },
             )
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     navigate('/admin/specialties');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     window.location.reload();
                 }
@@ -69,9 +69,9 @@ function UpdateSpecialty() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/specialty/${params.id}`).then((res) => {
-            setData(res.data.data);
-            setImageUrl(res.data.data.image);
+        request.get(`/specialty/${params.id}`).then((res) => {
+            setData(res.data);
+            setImageUrl(res.data.image);
             setIsloading(false);
         });
     }, []);

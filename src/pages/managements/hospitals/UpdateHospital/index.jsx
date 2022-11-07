@@ -1,6 +1,5 @@
 import { Form, Input, Upload, Button, Typography, notification, Cascader } from 'antd';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
@@ -8,6 +7,7 @@ import location from '~/assets/location/local.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 const addressOptions = location.map((item) => {
     return {
@@ -65,21 +65,21 @@ function UpdateHospital() {
             formData.append('location', value);
         });
 
-        axios
-            .post(`http://localhost:3030/api/hospital/update/${params.id}`, formData, {
+        request
+            .post(`/hospital/update/${params.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     navigate('/admin/hospitals');
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
-                        message: res.data.message,
+                        message: res.message,
                     });
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-                        message: res.data.message,
+                        message: res.message,
                     });
                     window.location.reload();
                 }
@@ -95,10 +95,10 @@ function UpdateHospital() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/hospital/${params.id}`).then((res) => {
-            setData(res.data.data);
-            setImageUrl(res.data.data.image);
-            setLogoUrl(res.data.data.logo);
+        request.get(`/hospital/${params.id}`).then((res) => {
+            setData(res.data);
+            setImageUrl(res.data.image);
+            setLogoUrl(res.data.logo);
             setIsLoading(false);
         });
     }, []);

@@ -1,13 +1,13 @@
 import { faCheckCircle, faSearch, faWarning, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { notification, Pagination } from 'antd';
-import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 function ManagementRating() {
     const adminInfo = useSelector((state) => state.doctorCare.adminInfo);
@@ -18,42 +18,39 @@ function ManagementRating() {
 
     const handleSearch = () => {
         if (searchValue.trim() !== '') {
-            axios
-                .post(`http://localhost:3030/api/review/search?keyword=${searchValue}&&doctor=${adminInfo._id}`)
-                .then((res) => {
-                    if (res.data.errCode === 0) {
-                        if (res.data.data.length > 0) {
-                            setData(res.data.data);
-                            setPageData(res.data.data.slice(0, 10));
-                            setPage(1);
-                            notification.open({
-                                icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
-                                message: 'Thành công',
-                                description: res.data.message,
-                            });
-                        } else {
-                            notification.open({
-                                icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
-                                message: 'Thông báo',
-                                description: 'Không có kết quả trùng khớp với tìm kiếm',
-                            });
-                        }
+            request.post(`/review/search?keyword=${searchValue}&&doctor=${adminInfo._id}`).then((res) => {
+                if (res.errCode === 0) {
+                    if (res.data.length > 0) {
+                        setData(res.data);
+                        setPageData(res.data.slice(0, 10));
+                        setPage(1);
+                        notification.open({
+                            icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                            message: 'Thành công',
+                            description: res.message,
+                        });
                     } else {
                         notification.open({
-                            icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-                            message: 'Lỗi',
-                            description: res.data.message,
+                            icon: <FontAwesomeIcon icon={faWarning} className="text-yellow-700" />,
+                            message: 'Thông báo',
+                            description: 'Không có kết quả trùng khớp với tìm kiếm',
                         });
                     }
-                });
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.message,
+                    });
+                }
+            });
         }
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/doctor/${adminInfo._id}`).then((res) => {
-            setData(res.data.data.reviews);
-            console.log(res.data.data?.reviews.length);
-            setPageData(res.data.data?.reviews.slice(0, 10));
+        request.get(`/doctor/${adminInfo._id}`).then((res) => {
+            setData(res.data.reviews);
+            setPageData(res.data?.reviews.slice(0, 10));
         });
     }, [adminInfo._id]);
 

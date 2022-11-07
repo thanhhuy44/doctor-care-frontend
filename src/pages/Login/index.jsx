@@ -1,12 +1,12 @@
 import { Button, Radio, Form, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setAdminInfo, setLogIn, setRoleLogin } from '~/redux/features/doctorCareSlice';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import request from '~/utils';
 
 function Login() {
     const dispatch = useDispatch();
@@ -15,15 +15,15 @@ function Login() {
     const [form] = Form.useForm();
     const onFinish = (values) => {
         if (values.role === 'admin') {
-            axios.post('http://localhost:3030/api/admin/login', values).then((res) => {
-                if (res.data.errCode === 0) {
+            request.post('/admin/login', values).then((res) => {
+                if (res.errCode === 0) {
                     dispatch(setLogIn(true));
-                    dispatch(setAdminInfo(res.data.data));
+                    dispatch(setAdminInfo(res.data));
                     dispatch(setRoleLogin(role));
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     if (window.location.pathname === '/login') {
                         navigate('/admin');
@@ -33,21 +33,21 @@ function Login() {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                 }
             });
         }
         if (values.role === 'doctor') {
-            axios.post('http://localhost:3030/api/doctor/login', values).then((res) => {
-                if (res.data.errCode === 0) {
+            request.post('/doctor/login', values).then((res) => {
+                if (res.errCode === 0) {
                     dispatch(setLogIn(true));
-                    dispatch(setAdminInfo(res.data.data));
+                    dispatch(setAdminInfo(res.data));
                     dispatch(setRoleLogin(role));
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     if (window.location.pathname === '/login') {
                         navigate('/doctor/management');
@@ -56,7 +56,7 @@ function Login() {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                 }
             });

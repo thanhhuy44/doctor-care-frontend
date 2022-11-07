@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -6,6 +5,7 @@ import BookingItem from '~/components/BookingItem';
 import Loading from '../Loading';
 import locations from '~/assets/location/local.json';
 import { Pagination } from 'antd';
+import request from '~/utils';
 
 function AllPackages() {
     const params = useParams();
@@ -15,10 +15,10 @@ function AllPackages() {
     const [pageData, setPageData] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/type-package/${params.id}`).then((res) => {
-            setData(res.data.data);
+        request.get(`/type-package/${params.id}`).then((res) => {
+            setData(res.data);
             setIsloading(false);
-            setPageData(res.data.data.healthPackages.slice(0, 10));
+            setPageData(res.data.healthPackages.slice(0, 10));
         });
     }, []);
 

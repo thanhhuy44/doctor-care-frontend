@@ -1,12 +1,12 @@
 import { Form, Input, Upload, Button, Typography, Cascader, notification } from 'antd';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import location from '~/assets/location/local.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import request from '~/utils';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -64,23 +64,23 @@ function AddHospital() {
             formData.append('location', value);
         });
 
-        axios
-            .post('http://localhost:3030/api/hospital/create', formData, {
+        request
+            .post('/hospital/create', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     navigate('/admin/hospitals');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     form.resetFields();
                     setLogoUrl('');

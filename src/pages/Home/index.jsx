@@ -5,9 +5,9 @@ import images from '~/assets';
 import Section from '~/components/Section';
 import SlideShow from '~/components/SlideShow';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Loading from '../Loading';
 import { Link } from 'react-router-dom';
+import request from '~/utils';
 
 function Home() {
     const [data, setData] = useState([]);
@@ -15,8 +15,8 @@ function Home() {
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/home`).then((res) => {
-            setData(res.data.data);
+        request.get('/home').then((res) => {
+            setData(res.data);
             setIsLoading(false);
         });
     }, []);

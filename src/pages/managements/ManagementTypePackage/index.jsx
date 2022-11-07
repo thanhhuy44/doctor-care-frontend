@@ -3,10 +3,10 @@ import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle, faWarning } from 
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 function ManagementTypePackage() {
     const navigate = useNavigate();
@@ -16,24 +16,24 @@ function ManagementTypePackage() {
     const [searchValue, setSearchValue] = useState('');
     const [pageSize, setPageSize] = useState(1);
     useEffect(() => {
-        axios.get('http://localhost:3030/api/type-packages').then((res) => {
-            setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+        request.get('/type-packages').then((res) => {
+            setData(res.data);
+            setPageData(res.data.slice(0, 10));
             setIsLoading(false);
         });
     }, []);
 
     const handleSearch = () => {
-        axios.post(`http://localhost:3030/api/type-package/search?keyword=${searchValue}`).then((res) => {
-            if (res.data.errCode === 0) {
-                if (res.data.data.length > 0) {
+        request.post(`/type-package/search?keyword=${searchValue}`).then((res) => {
+            if (res.errCode === 0) {
+                if (res.data.length > 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
-                    setData(res.data.data);
-                    setPageData(res.data.data.slice(0, 10));
+                    setData(res.data);
+                    setPageData(res.data.slice(0, 10));
                     setPageSize(1);
                 } else {
                     notification.open({
@@ -46,7 +46,7 @@ function ManagementTypePackage() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });
@@ -57,12 +57,12 @@ function ManagementTypePackage() {
     };
 
     const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/type-package/delete/${id}`).then((res) => {
-            if (res.data.errCode === 0) {
+        request.post(`/type-package/delete/${id}`).then((res) => {
+            if (res.errCode === 0) {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                     message: 'Thành công',
-                    description: res.data.message,
+                    description: res.message,
                 });
                 const newData = data.filter((doctor) => {
                     return doctor._id !== id;
@@ -73,7 +73,7 @@ function ManagementTypePackage() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });

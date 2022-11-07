@@ -1,5 +1,4 @@
 import { Form, Input, Upload, Button, DatePicker, Typography, notification } from 'antd';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emailRegex, phoneNumberRegex } from '~/regex';
@@ -8,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import Loading from '~/pages/Loading';
 import moment from 'moment';
+import request from '~/utils';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -29,9 +29,9 @@ function UpdateAdmin() {
     const [imageUrl, setImageUrl] = useState();
 
     const onFinish = (values) => {
-        axios
+        request
             .post(
-                `http://localhost:3030/api/admin/update/${params.id}`,
+                `/admin/update/${params.id}`,
                 {
                     image: values.avatar ? values.avatar.file.originFileObj : data.image,
                     ...values,
@@ -41,18 +41,18 @@ function UpdateAdmin() {
                 },
             )
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     navigate('/admin/management');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     form.resetFields();
                 }
@@ -68,9 +68,9 @@ function UpdateAdmin() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/admin/${params.id}`).then((res) => {
-            setData(res.data.data);
-            setImageUrl(res.data.data.image);
+        request.get(`/admin/${params.id}`).then((res) => {
+            setData(res.data);
+            setImageUrl(res.data.image);
         });
     }, []);
     return data ? (
@@ -86,7 +86,7 @@ function UpdateAdmin() {
             layout="vertical"
         >
             <Typography.Title level={1} style={{ textAlign: 'center' }}>
-                Thêm Quản trị viên
+                Cập nhật thông tin quản trị viên
             </Typography.Title>
             <Form.Item label="Ảnh đại diện" name="avatar" valuePropName={'file'}>
                 <Upload

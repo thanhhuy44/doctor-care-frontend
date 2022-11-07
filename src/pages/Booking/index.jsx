@@ -12,10 +12,11 @@ import {
 import Button from '~/components/Button/Button';
 import { useForm, Controller } from 'react-hook-form';
 import { emailRegex, phoneNumberRegex } from '~/regex';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { notification } from 'antd';
+import request from '~/utils';
+import Loading from '../Loading';
 
 function Booking() {
     const navigate = useNavigate();
@@ -25,13 +26,14 @@ function Booking() {
         control,
         formState: { errors },
     } = useForm();
-
     const data = location.state;
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleClick = (values) => {
+        setIsLoading(true);
         if (data.data.typeMedical === 1) {
-            axios
-                .post('http://localhost:3030/api/booking/create', {
+            request
+                .post('/booking/create', {
                     name: values.name,
                     numberPhone: values.numberPhone,
                     email: values.email,
@@ -42,25 +44,26 @@ function Booking() {
                     reason: values.reason,
                 })
                 .then((res) => {
-                    if (res.data.errCode === 0) {
+                    setIsLoading(false);
+                    if (res.errCode === 0) {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                         navigate('/');
                     } else {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                             message: 'Lỗi',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     }
                 });
         }
         if (data.data.typeMedical === 2) {
-            axios
-                .post('http://localhost:3030/api/booking/create', {
+            request
+                .post('/booking/create', {
                     name: values.name,
                     numberPhone: values.numberPhone,
                     email: values.email,
@@ -71,25 +74,28 @@ function Booking() {
                     reason: values.reason,
                 })
                 .then((res) => {
-                    if (res.data.errCode === 0) {
+                    setIsLoading(false);
+                    if (res.errCode === 0) {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                         navigate('/');
                     } else {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                             message: 'Lỗi',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     }
                 });
         }
     };
 
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <div className="container p-5 max-w-[700px] mx-auto">
             <h2 className="mb-4 font-semibold text-2xl text-center">ĐẶT LỊCH KHÁM</h2>
             <div className="flex items-center flex-col lg:flex-row">

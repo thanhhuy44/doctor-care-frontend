@@ -3,10 +3,10 @@ import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle } from '@fortaweso
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 function ManagementDoctor() {
     const navigate = useNavigate();
@@ -21,21 +21,21 @@ function ManagementDoctor() {
     const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setHospital(res.data.data);
+        request.get('/hospitals').then((res) => {
+            setHospital(res.data);
         });
     }, []);
     useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
-            setSpecialty(res.data.data);
+        request.get('/specialties').then((res) => {
+            setSpecialty(res.data);
         });
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/doctors').then((res) => {
-            setData(res.data.data);
+        request.get('/doctors').then((res) => {
+            setData(res.data);
             setPageData(
-                res.data.data
+                res.data
                     .filter((doctor) => {
                         if (curHospital === '' && curSpecialty === '') {
                             return doctor;
@@ -61,12 +61,12 @@ function ManagementDoctor() {
     };
 
     const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/doctor/delete/${id}`).then((res) => {
-            if (res.data.errCode === 0) {
+        request.post(`/doctor/delete/${id}`).then((res) => {
+            if (res.errCode === 0) {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                     message: 'Thành công',
-                    description: res.data.message,
+                    description: res.message,
                 });
                 const newData = data.filter((doctor) => {
                     return doctor._id !== id;
@@ -77,16 +77,16 @@ function ManagementDoctor() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });
     };
 
     const handleSearch = () => {
-        axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
-            setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+        request.get(`/doctor/search?keyword=${searchValue}`).then((res) => {
+            setData(res.data);
+            setPageData(res.data.slice(0, 10));
             setPageSize(1);
         });
         setCurHospital('');

@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { DatePicker, notification, Pagination } from 'antd';
+import { DatePicker, Pagination } from 'antd';
 import moment from 'moment';
 import Loading from '~/pages/Loading';
 import { useSelector } from 'react-redux';
+import request from '~/utils';
 
 function ManagementBooking() {
     const roleLogin = useSelector((state) => state.doctorCare.roleLogin);
@@ -31,9 +31,9 @@ function ManagementBooking() {
 
     useEffect(() => {
         if (roleLogin === 'admin') {
-            axios.get('http://localhost:3030/api/bookings').then((res) => {
+            request.get('/bookings').then((res) => {
                 setData(
-                    res.data.data.filter((booking) => {
+                    res.data.filter((booking) => {
                         return (
                             moment(booking.date).date() === moment(date).date() &&
                             moment(booking.date).month() === moment(date).month() &&
@@ -42,7 +42,7 @@ function ManagementBooking() {
                     }),
                 );
                 setPageData(
-                    res.data.data
+                    res.data
                         .filter((booking) => {
                             return (
                                 moment(booking.date).date() === moment(date).date() &&
@@ -56,9 +56,9 @@ function ManagementBooking() {
             });
         }
         if (roleLogin === 'doctor') {
-            axios.get(`http://localhost:3030/api/doctor/${adminInfo._id}`).then((res) => {
+            request.get(`/doctor/${adminInfo._id}`).then((res) => {
                 setData(
-                    res.data.data?.booking.filter((booking) => {
+                    res.data?.booking.filter((booking) => {
                         return (
                             moment(booking.date).date() === moment(date).date() &&
                             moment(booking.date).month() === moment(date).month() &&
@@ -67,7 +67,7 @@ function ManagementBooking() {
                     }),
                 );
                 setPageData(
-                    res.data.data?.booking
+                    res.data?.booking
                         .filter((booking) => {
                             return (
                                 moment(booking.date).date() === moment(date).date() &&
@@ -83,8 +83,8 @@ function ManagementBooking() {
     }, [adminInfo._id, date, roleLogin]);
 
     const handleSearch = () => {
-        axios.get(`http://localhost:3030/api/doctor/search?keyword=${searchValue}`).then((res) => {
-            setData(res.data.data);
+        request.get(`/doctor/search?keyword=${searchValue}`).then((res) => {
+            setData(res.data);
         });
     };
 

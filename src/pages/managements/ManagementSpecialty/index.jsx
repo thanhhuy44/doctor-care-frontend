@@ -3,10 +3,10 @@ import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle, faWarning } from 
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 function ManagementSpecialty() {
     const navigate = useNavigate();
@@ -16,25 +16,25 @@ function ManagementSpecialty() {
     const [searchValue, setSearchValue] = useState('');
     const [pageSize, setPageSize] = useState(1);
     useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
-            setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+        request.get('/specialties').then((res) => {
+            setData(res.data);
+            setPageData(res.data.slice(0, 10));
             setIsLoading(false);
         });
     }, []);
 
     const handleSearch = () => {
         if (searchValue.trim() !== '') {
-            axios.post(`http://localhost:3030/api/specialty/search?keyword=${searchValue}`).then((res) => {
-                if (res.data.errCode === 0) {
-                    if (res.data.data.length > 0) {
-                        setData(res.data.data);
-                        setPageData(res.data.data.slice(0, 10));
+            request.post(`/specialty/search?keyword=${searchValue}`).then((res) => {
+                if (res.errCode === 0) {
+                    if (res.data.length > 0) {
+                        setData(res.data);
+                        setPageData(res.data.slice(0, 10));
                         setPageSize(1);
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     } else {
                         notification.open({
@@ -47,7 +47,7 @@ function ManagementSpecialty() {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                 }
             });
@@ -59,12 +59,12 @@ function ManagementSpecialty() {
     };
 
     const handleRemove = (id) => {
-        axios.post(`http://localhost:3030/api/specialty/delete/${id}`).then((res) => {
-            if (res.data.errCode === 0) {
+        request.post(`/specialty/delete/${id}`).then((res) => {
+            if (res.errCode === 0) {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                     message: 'Thành công',
-                    description: res.data.message,
+                    description: res.message,
                 });
                 const newData = data.filter((specialty) => {
                     return specialty._id !== id;
@@ -75,7 +75,7 @@ function ManagementSpecialty() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });

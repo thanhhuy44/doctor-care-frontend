@@ -1,15 +1,15 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Loading from '../Loading';
 import Item from '~/components/Item';
+import request from '~/utils';
 
 function Search() {
     const query = new URLSearchParams(window.location.search).get('keyword');
     const [data, setData] = useState();
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/search${window.location.search}`).then((res) => {
-            setData(res.data.data);
+        request.get(`/search${window.location.search}`).then((res) => {
+            setData(res.data);
         });
     }, []);
 

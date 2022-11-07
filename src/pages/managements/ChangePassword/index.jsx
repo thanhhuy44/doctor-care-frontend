@@ -2,9 +2,9 @@ import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, notification } from 'antd';
 import { Input } from 'antd';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import request from '~/utils';
 
 function ChangePassword() {
     const navigate = useNavigate();
@@ -12,47 +12,47 @@ function ChangePassword() {
     const roleLogin = useSelector((state) => state.doctorCare.roleLogin);
     const onFinish = (values) => {
         if (roleLogin === 'admin') {
-            axios
-                .post(`http://localhost:3030/api/admin/change-password/${adminInfo._id}`, {
+            request
+                .post(`/admin/change-password/${adminInfo._id}`, {
                     password: values.curPassword,
                     newPassword: values.newPassword,
                 })
                 .then((res) => {
-                    if (res.data.errCode === 0) {
+                    if (res.errCode === 0) {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                         navigate('/admin');
                     } else {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                             message: 'Lỗi',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     }
                 });
         }
         if (roleLogin === 'doctor') {
-            axios
-                .post(`http://localhost:3030/api/doctor/change-password/${adminInfo._id}`, {
+            request
+                .post(`/doctor/change-password/${adminInfo._id}`, {
                     password: values.curPassword,
                     newPassword: values.newPassword,
                 })
                 .then((res) => {
-                    if (res.data.errCode === 0) {
+                    if (res.errCode === 0) {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                         navigate('/doctor/management');
                     } else {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                             message: 'Lỗi',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     }
                 });

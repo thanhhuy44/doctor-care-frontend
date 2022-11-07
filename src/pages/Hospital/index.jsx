@@ -2,14 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import styles from './Hospital.module.scss';
-import Button from '~/components/Button/Button';
 import Section from '~/components/Section';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import BookingItem from '~/components/BookingItem';
 import { Pagination } from 'antd';
+import request from '~/utils';
 
 const cx = classNames.bind(styles);
 
@@ -22,10 +21,10 @@ function Hospital() {
     const id = params.id;
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/hospital/${id}`).then((res) => {
-            setData(res.data.data);
-            setDoctorData(res.data.data.doctors);
-            setPackageData(res.data.data.healthPackages);
+        request.get(`/hospital/${id}`).then((res) => {
+            setData(res.data);
+            setDoctorData(res.data.doctors);
+            setPackageData(res.data.healthPackages);
             setIsLoading(false);
         });
     }, []);

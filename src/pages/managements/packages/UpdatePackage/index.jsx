@@ -1,12 +1,12 @@
 import { Form, Input, Upload, Button, Typography, InputNumber, Select, notification } from 'antd';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import Loading from '~/pages/Loading';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import request from '~/utils';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -31,9 +31,9 @@ function UpdatePackage() {
     const [typePackages, setTypePackages] = useState([]);
 
     const onFinish = (values) => {
-        axios
+        request
             .post(
-                `http://localhost:3030/api/package/update/${params.id}`,
+                `/package/update/${params.id}`,
                 {
                     image: values.avatar ? values.avatar.file.originFileObj : data.image,
                     ...values,
@@ -43,18 +43,18 @@ function UpdatePackage() {
                 },
             )
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     navigate('/admin/packages');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     window.location.reload();
                 }
@@ -70,21 +70,21 @@ function UpdatePackage() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/package/${params.id}`).then((res) => {
-            setData(res.data.data);
-            setImageUrl(res.data.data.image);
+        request.get(`/package/${params.id}`).then((res) => {
+            setData(res.data);
+            setImageUrl(res.data.image);
             setIsLoading(false);
         });
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setHospitals(res.data.data);
+        request.get('/hospitals').then((res) => {
+            setHospitals(res.data);
         });
     }, []);
     useEffect(() => {
-        axios.get('http://localhost:3030/api/type-packages').then((res) => {
-            setTypePackages(res.data.data);
+        request.get('/type-packages').then((res) => {
+            setTypePackages(res.data);
         });
     }, []);
     if (isLoading) {

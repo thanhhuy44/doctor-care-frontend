@@ -3,11 +3,11 @@ import { faSearch, faPlusCircle, faCheckCircle, faXmarkCircle } from '@fortaweso
 import Button from '~/components/Button/Button';
 import ObjectItem from '~/components/ObjectItem';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification, Pagination } from 'antd';
 import location from '~/assets/location/local.json';
 import Loading from '~/pages/Loading';
+import request from '~/utils';
 
 function ManagementHospital() {
     const navigate = useNavigate();
@@ -19,10 +19,10 @@ function ManagementHospital() {
     const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/hospitals').then((res) => {
-            setData(res.data.data);
+        request.get('/hospitals').then((res) => {
+            setData(res.data);
             setPageData(
-                res.data.data
+                res.data
                     .filter((hospital) => {
                         if (province === '') {
                             return hospital;
@@ -37,9 +37,9 @@ function ManagementHospital() {
     }, [province]);
 
     const handleSearchHospital = (keyword) => {
-        axios.post(`http://localhost:3030/api/hospital/search?keyword=${keyword}`).then((res) => {
-            setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+        request.post(`/hospital/search?keyword=${keyword}`).then((res) => {
+            setData(res.data);
+            setPageData(res.data.slice(0, 10));
             setPageSize(1);
         });
     };
@@ -48,12 +48,12 @@ function ManagementHospital() {
         navigate(`/admin/hospital/update/${id}`);
     };
     const handleDeleteHospital = (id) => {
-        axios.post(`http://localhost:3030/api/hospital/delete/${id}`).then((res) => {
-            if (res.data.errCode === 0) {
+        request.post(`/hospital/delete/${id}`).then((res) => {
+            if (res.errCode === 0) {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                     message: 'Thành công',
-                    description: res.data.message,
+                    description: res.message,
                 });
                 const newData = data.filter((hospital) => {
                     return hospital._id !== id;
@@ -64,14 +64,14 @@ function ManagementHospital() {
                 notification.open({
                     icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                     message: 'Lỗi',
-                    description: res.data.message,
+                    description: res.message,
                 });
             }
         });
     };
 
     if (isLoading) {
-        <Loading />;
+        return <Loading />;
     } else {
         return (
             <div>

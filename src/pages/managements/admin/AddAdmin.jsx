@@ -1,11 +1,11 @@
 import { Form, Input, Upload, Button, DatePicker, Typography, notification } from 'antd';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 import { PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import request from '~/utils';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -25,9 +25,9 @@ function AddAdmin() {
     const [imageUrl, setImageUrl] = useState();
 
     const onFinish = (values) => {
-        axios
+        request
             .post(
-                'http://localhost:3030/api/admin/create',
+                '/admin/create',
                 {
                     image: values.avatar.file.originFileObj,
                     ...values,
@@ -37,18 +37,18 @@ function AddAdmin() {
                 },
             )
             .then((res) => {
-                if (res.data.errCode === 0) {
+                if (res.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     navigate('/admin/management');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.data.message,
+                        description: res.message,
                     });
                     form.resetFields();
                 }

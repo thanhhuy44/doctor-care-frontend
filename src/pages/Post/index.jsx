@@ -1,14 +1,14 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import request from '~/utils';
 import Loading from '../Loading';
 
 function Post() {
     const params = useParams();
     const [data, setData] = useState();
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/post/${params.id}`).then((res) => {
-            setData(res.data.data);
+        request.get(`/post/${params.id}`).then((res) => {
+            setData(res.data);
         });
     }, []);
     return data ? (

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Loading from '../Loading';
@@ -7,6 +6,7 @@ import { Button, DatePicker, notification, Pagination } from 'antd';
 import { faCalendar, faCheckCircle, faLocationDot, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReviewModal from '~/components/Modal/ReviewModal';
+import request from '~/utils';
 
 const shifts = [
     { sequence: 1, timeStart: 8, timeEnd: 9 },
@@ -61,10 +61,10 @@ function Package() {
     const [pageReviews, setPageReviews] = useState([]);
     const [page, setPage] = useState(1);
     useEffect(() => {
-        axios.get(`http://localhost:3030/api/package/${id}`).then((res) => {
-            setData(res.data.data);
+        request.get(`/package/${id}`).then((res) => {
+            setData(res.data);
             setBookingOnDate(
-                res.data.data.booking.filter((booking) => {
+                res.data.booking.filter((booking) => {
                     return (
                         moment(booking.date).date() === moment(dateValue).date() &&
                         moment(booking.date).month() === moment(dateValue).month() &&
@@ -72,7 +72,7 @@ function Package() {
                     );
                 }),
             );
-            setReviews(res.data.data.reviews);
+            setReviews(res.data.reviews);
             setIsLoading(false);
         });
     }, []);
@@ -104,9 +104,9 @@ function Package() {
     const handleSubmitModal = (values) => {
         for (let i = 0; i < data.booking.length; i++) {
             if (values.email === data.booking[i].email || values.phoneNumber === data.booking[i].numberPhone) {
-                axios
+                request
                     .post(
-                        'http://localhost:3030/api/review/create',
+                        '/review/create',
                         {
                             package: data._id,
                             ...values,
@@ -116,19 +116,19 @@ function Package() {
                         },
                     )
                     .then((res) => {
-                        if (res.data.errCode === 0) {
+                        if (res.errCode === 0) {
                             notification.open({
                                 icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                                 message: 'Thành công',
-                                description: res.data.message,
+                                description: res.message,
                             });
-                            setReviews([...reviews, res.data.data]);
+                            setReviews([...reviews, res.data]);
                             setModalOpen(false);
                         } else {
                             notification.open({
                                 icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                                 message: 'Lỗi',
-                                description: res.data.message,
+                                description: res.message,
                             });
                         }
                     });

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Item from '~/components/Item';
 import { Pagination } from 'antd';
+import request from '~/utils';
+import Loading from '../Loading';
 
 function AllSpecialties() {
     const [data, setData] = useState([]);
@@ -9,16 +10,14 @@ function AllSpecialties() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/specialties').then((res) => {
-            setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+        request.get('/specialties').then((res) => {
+            setData(res.data);
+            setPageData(res.data.slice(0, 10));
+            setIsLoading(false);
         });
     }, []);
-    useEffect(() => {
-        setIsLoading(false);
-    }, [data]);
     if (isLoading) {
-        return <h1>Loading</h1>;
+        return <Loading />;
     } else {
         return (
             <div className="container mx-auto">

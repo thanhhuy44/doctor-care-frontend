@@ -10,9 +10,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../Button/Button';
 import { notification, Popconfirm, Select } from 'antd';
-import axios from 'axios';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import request from '~/utils';
 
 function ObjectItem({ data, update, remove, phoneNumber, email, shift, comment, select }) {
     const roleLogin = useSelector((state) => state.doctorCare.roleLogin);
@@ -20,42 +20,42 @@ function ObjectItem({ data, update, remove, phoneNumber, email, shift, comment, 
 
     const handleChangeStatus = (value) => {
         if (value === 'delete') {
-            axios
-                .post(`http://localhost:3030/api/booking/delete/${data._id}`, {
+            request
+                .post(`/booking/delete/${data._id}`, {
                     status: value,
                 })
                 .then((res) => {
-                    if (res.data.errCode === 0) {
+                    if (res.errCode === 0) {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     } else {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                             message: 'Lỗi',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     }
                 });
         } else {
-            axios
-                .post(`http://localhost:3030/api/booking/update/${data._id}`, {
+            request
+                .post(`/booking/update/${data._id}`, {
                     status: value,
                 })
                 .then((res) => {
-                    if (res.data.errCode === 0) {
+                    if (res.errCode === 0) {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                             message: 'Thành công',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     } else {
                         notification.open({
                             icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                             message: 'Lỗi',
-                            description: res.data.message,
+                            description: res.message,
                         });
                     }
                 });

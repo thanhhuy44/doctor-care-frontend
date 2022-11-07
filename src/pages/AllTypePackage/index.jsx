@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Item from '~/components/Item';
 import Loading from '../Loading';
 import { Pagination } from 'antd';
+import request from '~/utils';
 
 function AllTypePackages() {
     const [data, setData] = useState([]);
@@ -10,14 +10,12 @@ function AllTypePackages() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/api/type-packages').then((res) => {
-            setData(res.data.data);
-            setPageData(res.data.data.slice(0, 10));
+        request.get('/type-packages').then((res) => {
+            setData(res.data);
+            setPageData(res.data.slice(0, 10));
+            setIsLoading(false);
         });
     }, []);
-    useEffect(() => {
-        setIsLoading(false);
-    }, [data]);
     if (isLoading) {
         return <Loading />;
     } else {
