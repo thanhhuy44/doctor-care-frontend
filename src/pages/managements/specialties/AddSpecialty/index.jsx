@@ -35,9 +35,6 @@ function AddSpecialty() {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Access-Control-Allow-Headers': '*',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': '*',
                     },
                 },
             )
