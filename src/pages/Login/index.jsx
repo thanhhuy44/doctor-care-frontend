@@ -12,7 +12,6 @@ function Login() {
     const dispatch = useDispatch();
     const [role, setRole] = useState('admin');
     const navigate = useNavigate();
-    const [form] = Form.useForm();
     const onFinish = (values) => {
         if (values.role === 'admin') {
             request.post('/admin/login', values).then((res) => {
