@@ -46,7 +46,7 @@ function AddSpecialty() {
                         message: 'Thành công',
                         description: res.data.message,
                     });
-                    navigate('/admin/doctor/add');
+                    navigate('/admin/specialties');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
