@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import request from '~/utils';
+import axios from 'axios';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -25,9 +26,9 @@ function AddTypePackage() {
     const [imageUrl, setImageUrl] = useState();
 
     const onFinish = (values) => {
-        request
+        axios
             .post(
-                '/type-package/create',
+                'http://localhost:3030/api/type-package/create',
                 {
                     image: values.avatar.file.originFileObj,
                     ...values,
@@ -37,18 +38,18 @@ function AddTypePackage() {
                 },
             )
             .then((res) => {
-                if (res.errCode === 0) {
+                if (res.data.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     navigate('/admin/type-packages');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     form.resetFields();
                 }

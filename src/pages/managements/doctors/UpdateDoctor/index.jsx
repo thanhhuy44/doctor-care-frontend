@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select, Upload, Button, DatePicker, Typography } from 'antd';
+import { Form, Input, InputNumber, Select, Upload, Button, DatePicker, Typography, notification } from 'antd';
 import { emailRegex, phoneNumberRegex } from '~/regex';
 import ReactQuill from 'react-quill';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Loading from '~/pages/Loading';
 import request from '~/utils';
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 
 const { Option } = Select;
 
@@ -51,9 +54,9 @@ function UpdateDoctor() {
         });
     }, []);
     const onFinish = (values) => {
-        request
+        axios
             .post(
-                `/doctor/update/${params.id}`,
+                `http://localhost:3030/api/doctor/update/${params.id}`,
                 {
                     image: values.avatar ? values.avatar.file.originFileObj : data.image,
                     ...values,
@@ -63,12 +66,30 @@ function UpdateDoctor() {
                 },
             )
             .then((res) => {
-                alert(res.message);
-                navigate('/admin/doctors');
+                if (res.data.errCode === 0) {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
+                        message: 'Thành công',
+                        description: res.data.message,
+                    });
+                    navigate('/admin/doctors');
+                } else {
+                    notification.open({
+                        icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+                        message: 'Lỗi',
+                        description: res.data.message,
+                    });
+                }
             });
     };
 
-    const onFinishFailed = (errorInfo) => {};
+    const onFinishFailed = (errorInfo) => {
+        notification.open({
+            icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
+            message: 'Lỗi',
+            description: 'Vui lòng điền đầy đủ thông tin!',
+        });
+    };
 
     if (isLoading) {
         <Loading />;

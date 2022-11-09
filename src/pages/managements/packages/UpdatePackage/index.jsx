@@ -7,6 +7,7 @@ import Loading from '~/pages/Loading';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import request from '~/utils';
+import axios from 'axios';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -31,9 +32,9 @@ function UpdatePackage() {
     const [typePackages, setTypePackages] = useState([]);
 
     const onFinish = (values) => {
-        request
+        axios
             .post(
-                `/package/update/${params.id}`,
+                `http://localhost:3030/api/package/update/${params.id}`,
                 {
                     image: values.avatar ? values.avatar.file.originFileObj : data.image,
                     ...values,
@@ -43,18 +44,18 @@ function UpdatePackage() {
                 },
             )
             .then((res) => {
-                if (res.errCode === 0) {
+                if (res.data.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     navigate('/admin/packages');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     window.location.reload();
                 }

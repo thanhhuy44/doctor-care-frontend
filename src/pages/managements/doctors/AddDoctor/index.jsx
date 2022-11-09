@@ -7,6 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import request from '~/utils';
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -41,9 +42,9 @@ function AddDoctor() {
     }, []);
 
     const onFinish = (values) => {
-        request
+        axios
             .post(
-                '/doctor/create',
+                'http://localhost:3030/api/doctor/create',
                 {
                     image: values.avatar.file.originFileObj,
                     ...values,
@@ -53,18 +54,18 @@ function AddDoctor() {
                 },
             )
             .then((res) => {
-                if (res.errCode === 0) {
+                if (res.data.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     navigate('/admin/doctors');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     form.resetFields();
                 }

@@ -8,6 +8,7 @@ import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react';
 import Loading from '~/pages/Loading';
 import request from '~/utils';
+import axios from 'axios';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -36,9 +37,9 @@ function UpdatePost() {
     });
 
     const onFinish = (values) => {
-        request
+        axios
             .post(
-                `/post/update/${params.id}`,
+                `http://localhost:3030/api/post/update/${params.id}`,
                 {
                     banner: values.avatar ? values.avatar.file.originFileObj : data.banner,
                     ...values,
@@ -48,18 +49,18 @@ function UpdatePost() {
                 },
             )
             .then((res) => {
-                if (res.errCode === 0) {
+                if (res.data.errCode === 0) {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
                         message: 'Thành công',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     navigate('/admin/posts');
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
                         message: 'Lỗi',
-                        description: res.message,
+                        description: res.data.message,
                     });
                     window.location.reload();
                 }

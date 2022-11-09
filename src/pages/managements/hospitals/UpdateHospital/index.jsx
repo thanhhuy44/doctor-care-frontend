@@ -66,20 +66,20 @@ function UpdateHospital() {
         });
 
         request
-            .post(`/hospital/update/${params.id}`, formData, {
+            .post(`http://localhost:3030/api/hospital/update/${params.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             .then((res) => {
-                if (res.errCode === 0) {
+                if (res.data.errCode === 0) {
                     navigate('/admin/hospitals');
                     notification.open({
                         icon: <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />,
-                        message: res.message,
+                        message: res.data.message,
                     });
                 } else {
                     notification.open({
                         icon: <FontAwesomeIcon icon={faXmarkCircle} className="text-red-700" />,
-                        message: res.message,
+                        message: res.data.message,
                     });
                     window.location.reload();
                 }
