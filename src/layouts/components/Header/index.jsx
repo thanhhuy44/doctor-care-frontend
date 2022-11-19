@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faQuestionCircle, faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../Navbar';
 import logo from '~/assets/images/logo.png';
 
@@ -24,6 +24,9 @@ function Header() {
                 </div>
                 <div className="mx-12 flex-1 hidden lg:block">
                     <Navbar />
+                </div>
+                <div className="p-3 text-3xl cursor-pointer hover:text-cyan-900 block">
+                    <FontAwesomeIcon icon={faQuestionCircle} />
                 </div>
             </div>
             <div
